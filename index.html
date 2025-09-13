@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>知識の水槽｜遊びながら知が泳ぐ</title>
+<meta name="description" content="イルカ・シャチ・メンダコ・クラゲ……海のように広がる知識を、検索とタグで素早く探索。スマホ最適のカード一覧で学べます。">
+<meta name="theme-color" content="#f6fbff">
+
+<!-- 基準パス（GitHub Pages の /quiz/ 配下） -->
+<base href="/quiz/">
+
+<!-- OG -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="知識の水槽">
+<meta property="og:description" content="海のように広がる知識を、検索とタグで素早く探索。スマホ最適のカード一覧で学べます。">
+<meta property="og:url" content="https://haisuikounozarigani.github.io/quiz/">
+<meta property="og:image" content="https://haisuikounozarigani.github.io/quiz/assets/hero/knowledge-aquarium-1080.png">
+
+<style>
+:root{
+  --accent:#4aa8ff; --accent2:#a48bff;
+  --bg1:#f6fbff; --bg2:#eef2ff;
+  --ink:#1e2a33; --muted:#5b6a75; --line:#e6edf6;
+  --card:#fff; --chip:#eaf3ff;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:system-ui,"Noto Sans JP",sans-serif;
+  color:var(--ink); background:linear-gradient(var(--bg1),var(--bg2));
+  -webkit-text-size-adjust:100%;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+header{position:relative; isolation:isolate}
+.nav{
+  position:absolute; inset:12px 12px auto 12px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+}
+.brand{
+  font-weight:700; border-radius:12px;
+  background:rgba(255,255,255,.75); backdrop-filter:blur(6px);
+  padding:8px 12px;
+}
+.nav .right a{
+  display:inline-block; padding:8px 12px; border-radius:12px;
+  background:rgba(74,168,255,.14); border:1px solid rgba(74,168,255,.35);
+}
+.hero{
+  min-height:56svh; display:grid; place-items:center; text-align:center;
+  padding:32px 16px;
+  color:#fff;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.25)),
+    url("assets/hero/knowledge-aquarium-1080.png") center/cover no-repeat;
+}
+h1{margin:0 0 6px; font-size:clamp(24px,6vw,42px); letter-spacing:.06em; text-shadow:0 2px 14px rgba(0,0,0,.28)}
+.sub{margin:0; color:#f5ecff; text-shadow:0 1px 6px rgba(0,0,0,.25)}
+
+.wrap{max-width:1120px; margin:-28px auto 64px; padding:0 16px}
+.panel{
+  background:var(--card); border:1px solid var(--line); border-radius:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,.08); padding:14px;
+}
+.controls{display:grid; gap:10px}
+.search{display:flex; gap:8px}
+input[type="search"]{
+  flex:1; padding:12px 14px; border:1px solid #cfe2ff; border-radius:12px; font-size:16px;
+}
+.btn{
+  appearance:none; border:1px solid #cfe2ff; background:var(--chip);
+  border-radius:12px; padding:10px 12px; font-size:14px; cursor:pointer;
+}
+.btn:focus-visible, .chip:focus-visible{outline:3px solid #98bfff; outline-offset:2px}
+.chips{display:flex; flex-wrap:wrap; gap:8px}
+.chip{
+  padding:8px 12px; border-radius:999px; background:var(--chip);
+  border:1px solid #cfe2ff; color:#234; cursor:pointer; user-select:none;
+}
+.chip.active{background:#dfe8ff; border-color:#7aa7ff; box-shadow:inset 0 0 0 2px #7aa7ff}
+
+.grid{
+  display:grid; gap:14px; margin-top:14px;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+}
+.card{
+  display:grid; grid-template-rows:auto 1fr auto;
+  background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden;
+  transition:transform .08s ease;
+}
+.card:focus-visible{outline:3px solid #98bfff; outline-offset:2px}
+.card:hover{transform:translateY(-2px)}
+.card img{width:100%; height:154px; object-fit:cover; background:#eef5ff}
+.p{padding:12px}
+.ttl{font-weight:700; margin:0 0 6px}
+.sub2{color:var(--muted); font-size:13px; margin:0 0 8px}
+.meta{display:flex; gap:6px; flex-wrap:wrap}
+.pill{
+  font-size:12px; padding:4px 8px; border-radius:999px;
+  background:#f2f6ff; border:1px solid #d8e7ff; color:#355;
+}
+.badge{
+  position:absolute; top:8px; left:8px; font-size:11px; font-weight:700;
+  padding:4px 8px; border-radius:999px; background:#ff5fb6; color:#fff;
+}
+.card .thumbwrap{position:relative}
+.hidden{display:none !important}
+
+.footer{max-width:1120px; margin:24px auto 64px; padding:0 16px; color:var(--muted); font-size:13px}
+
+@media (min-width:880px){
+  .hero{border-bottom-left-radius:28px; border-bottom-right-radius:28px}
+}
+</style>
+</head>
+<body>
+<header>
+  <nav class="nav" aria-label="グローバルナビ">
+    <div class="brand"><a href="/quiz/index.html" aria-label="知識の水槽トップへ">知識の水槽</a></div>
+    <div class="right">
+      <a href="/shindan/" aria-label="診断一覧へ">診断一覧</a>
+    </div>
+  </nav>
+  <div class="hero" role="img" aria-label="水の中に本を読む僕と生きものたちのヒーロー画像">
+    <div>
+      <h1>知識の水槽</h1>
+      <p class="sub">遊びながら知が泳ぐ、ゆめかわナレッジ</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="panel controls" aria-label="検索とタグ">
+    <div class="search">
+      <input id="q" type="search" placeholder="キーワード検索（例：メンダコ イルカ 認知）" aria-label="検索">
+      <button id="shareBtn" class="btn" type="button" aria-label="このページを共有">共有</button>
+      <button id="clearBtn" class="btn" type="button" aria-label="検索とタグをクリア">クリア</button>
+    </div>
+    <div class="chips" role="listbox" aria-label="タグ（スペース/エンターで切替）">
+      <button class="chip" data-tag="海" role="option" aria-selected="false">#海</button>
+      <button class="chip" data-tag="心理" role="option" aria-selected="false">#心理</button>
+      <button class="chip" data-tag="脳" role="option" aria-selected="false">#脳</button>
+      <button class="chip" data-tag="生活" role="option" aria-selected="false">#生活</button>
+      <button class="chip" data-tag="クイズ" role="option" aria-selected="false">#クイズ</button>
+      <button class="chip" data-tag="診断" role="option" aria-selected="false">#診断</button>
+    </div>
+  </section>
+
+  <section class="grid" id="grid" aria-live="polite">
+    <!-- カード：data-*でフィルタ可能。リンク先は必要に応じて作成 -->
+    <a class="card" href="posts/aquarium-animals.html"
+       data-tags="海" data-mins="4" data-updated="2025-09-13"
+       data-keywords="シャチ イルカ メンダコ クラゲ うんちく 種分類 ハクジラ">
+      <div class="thumbwrap">
+        <img loading="lazy" src="assets/thumbs/sea-animals.webp" alt="海のいきもの豆知識のサムネ">
+        <span class="badge" data-new>NEW</span>
+      </div>
+      <div class="p">
+        <div class="ttl">シャチ・イルカ・メンダコ・クラゲ豆知識</div>
+        <div class="sub2">水槽の住人たちの意外な共通点と違い。</div>
+        <div class="meta"><span class="pill">⏱4分</span><span class="pill">#海</span></div>
+      </div>
+    </a>
+
+    <a class="card" href="posts/sleep-hygiene.html"
+       data-tags="生活 心理 脳" data-mins="6" data-updated="2025-08-25"
+       data-keywords="睡眠 クロノタイプ 体内時計 衛生">
+      <div class="thumbwrap">
+        <img loading="lazy" src="assets/thumbs/sleep-basics.webp" alt="睡眠の基礎のサムネ">
+      </div>
+      <div class="p">
+        <div class="ttl">眠りの基礎：クロノタイプと整え方</div>
+        <div class="sub2">夜型/朝型の仕組みと今日からできるコツ。</div>
+        <div class="meta"><span class="pill">⏱6分</span><span class="pill">#生活</span><span class="pill">#心理</span></div>
+      </div>
+    </a>
+
+    <a class="card" href="posts/mini-quiz-heuristics.html"
+       data-tags="クイズ 心理 診断" data-mins="3" data-updated="2025-09-10"
+       data-keywords="3分クイズ 直感 ヒューリスティック 認知バイアス">
+      <div class="thumbwrap">
+        <img loading="lazy" src="assets/thumbs/mini-quiz.webp" alt="3分クイズのサムネ">
+      </div>
+      <div class="p">
+        <div class="ttl">3分クイズ：直感 vs 論理</div>
+        <div class="sub2">遊びながら認知のクセを知ろう。</div>
+        <div class="meta"><span class="pill">⏱3分</span><span class="pill">#クイズ</span><span class="pill">#心理</span></div>
+      </div>
+    </a>
+
+    <a class="card" href="posts/tools-reading-list.html"
+       data-tags="心理 脳" data-mins="5" data-updated="2025-07-30"
+       data-keywords="注意 集中 学習 ツール 読書">
+      <div class="thumbwrap">
+        <img loading="lazy" src="assets/thumbs/tools-reading.webp" alt="学習ツール集のサムネ">
+      </div>
+      <div class="p">
+        <div class="ttl">学びの道具箱：集中と記憶のミニ技</div>
+        <div class="sub2">スマホでも試せる小ワザを厳選。</div>
+        <div class="meta"><span class="pill">⏱5分</span><span class="pill">#心理</span><span class="pill">#脳</span></div>
+      </div>
+    </a>
+  </section>
+</main>
+
+<footer class="footer">
+  © 知識の水槽 / <a href="/shindan/">心の標本（診断一覧）</a> に戻る
+</footer>
+
+<script>
+/* -------- 検索＋タグ複合フィルタ / #tag=xxx 起動 / NEW判定 / 共有 -------- */
+const grid = document.getElementById('grid');
+const cards = [...grid.querySelectorAll('.card')];
+const q = document.getElementById('q');
+const chips = [...document.querySelectorAll('.chip')];
+const shareBtn = document.getElementById('shareBtn');
+const clearBtn = document.getElementById('clearBtn');
+
+/* NEW バッジ：更新日が14日以内 */
+const today = new Date();
+cards.forEach(c=>{
+  const upd = new Date(c.dataset.updated);
+  const diff = (today - upd) / (1000*60*60*24);
+  const badge = c.querySelector('[data-new]');
+  if(badge){ badge.style.display = diff<=14 ? 'inline-block' : 'none'; }
+});
+
+/* #tag=xxx 起動 */
+const initTag = (location.hash.startsWith('#tag=')) ? decodeURIComponent(location.hash.slice(5)) : '';
+if(initTag){
+  const chip = chips.find(x=>x.dataset.tag===initTag);
+  if(chip){ toggleChip(chip,true); }
+}
+
+/* 共有 */
+shareBtn.addEventListener('click', async ()=>{
+  const title = document.title;
+  const url = location.href;
+  const text = '知識の水槽｜遊びながら知が泳ぐ';
+  if(navigator.share){
+    try{ await navigator.share({title,text,url}); }catch(e){}
+  }else{
+    await navigator.clipboard.writeText(url);
+    shareBtn.textContent = 'URLコピー済';
+    setTimeout(()=>shareBtn.textContent='共有',1500);
+  }
+});
+
+/* クリア */
+clearBtn.addEventListener('click', ()=>{
+  q.value = ''; chips.forEach(c=>toggleChip(c,false));
+  history.replaceState({},'', location.pathname);
+  apply();
+});
+
+/* フィルタ適用 */
+q.addEventListener('input', apply);
+
+chips.forEach(chip=>{
+  chip.addEventListener('click', ()=>{ chip.classList.toggle('active'); chip.setAttribute('aria-selected', chip.classList.contains('active')); syncHash(); apply(); });
+  chip.addEventListener('keydown', e=>{
+    if(e.key===' '||e.key==='Enter'){ e.preventDefault(); chip.click(); }
+    if(e.key==='ArrowRight'){ e.preventDefault(); focusMove(1); }
+    if(e.key==='ArrowLeft'){ e.preventDefault(); focusMove(-1); }
+  });
+});
+
+function focusMove(delta){
+  const idx = chips.indexOf(document.activeElement);
+  if(idx>-1){ const nx=(idx+delta+chips.length)%chips.length; chips[nx].focus(); }
+}
+
+function toggleChip(chip,on){
+  chip.classList.toggle('active', !!on);
+  chip.setAttribute('aria-selected', !!on);
+}
+
+function syncHash(){
+  const act = chips.filter(c=>c.classList.contains('active')).map(c=>c.dataset.tag);
+  const first = act[0];
+  if(first){ history.replaceState({},'', '#tag='+encodeURIComponent(first)); }
+  else{ history.replaceState({},'', location.pathname + location.search); }
+}
+
+function apply(){
+  const kw = q.value.trim().toLowerCase();
+  const act = chips.filter(c=>c.classList.contains('active')).map(c=>c.dataset.tag);
+  let shown = 0;
+  cards.forEach(card=>{
+    const tags = (card.dataset.tags||'').split(' ').filter(Boolean);
+    const text = (card.textContent + ' ' + (card.dataset.keywords||'')).toLowerCase();
+    const okTag = act.length ? act.every(t=>tags.includes(t)) : true;
+    const okKw = kw ? text.includes(kw) : true;
+    const show = okTag && okKw;
+    card.classList.toggle('hidden', !show);
+    if(show) shown++;
+  });
+  grid.setAttribute('aria-label', `検索結果 ${shown} 件`);
+}
+apply();
+
+/* Esc で検索クリア */
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ q.value=''; apply(); }
+});
+</script>
+</body>
+</html>
