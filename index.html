@@ -1,310 +1,315 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>知識の水槽｜遊びながら知が泳ぐ</title>
-<meta name="description" content="イルカ・シャチ・メンダコ・クラゲ……海のように広がる知識を、検索とタグで素早く探索。スマホ最適のカード一覧で学べます。">
-<meta name="theme-color" content="#f6fbff">
-
-<!-- 基準パス（GitHub Pages の /quiz/ 配下） -->
-<base href="/quiz/">
-
-<!-- OG -->
-<meta property="og:type" content="website">
+<meta name="description" content="海のように広がる知識を、検索とタグでサッと探索。スマホ最適のカード一覧で学べます。">
+<meta name="theme-color" content="#f0f6ff">
 <meta property="og:title" content="知識の水槽">
-<meta property="og:description" content="海のように広がる知識を、検索とタグで素早く探索。スマホ最適のカード一覧で学べます。">
+<meta property="og:description" content="海のように広がる知識を、検索とタグでサッと探索。スマホ最適のカード一覧で学べます。">
 <meta property="og:url" content="https://haisuikounozarigani.github.io/quiz/">
 <meta property="og:image" content="https://haisuikounozarigani.github.io/quiz/assets/hero/knowledge-aquarium-1080.png">
-
+<link rel="preload" as="image" href="/quiz/assets/hero/knowledge-aquarium-1080.png">
 <style>
 :root{
-  --accent:#4aa8ff; --accent2:#a48bff;
-  --bg1:#f6fbff; --bg2:#eef2ff;
-  --ink:#1e2a33; --muted:#5b6a75; --line:#e6edf6;
-  --card:#fff; --chip:#eaf3ff;
+  /* ── 青ベース（心の標本と同構成） ── */
+  --bg1:#f6fbff; --bg2:#eef4ff; --card:#fff; --line:#dbe8ff; --fg:#1f2a3a; --muted:#5b6a75;
+  --accent:#4aa8ff; --accent2:#a48bff; --chip:#eaf3ff; --chipb:#dfe8ff;
 }
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0; font-family:system-ui,"Noto Sans JP",sans-serif;
-  color:var(--ink); background:linear-gradient(var(--bg1),var(--bg2));
-  -webkit-text-size-adjust:100%;
-}
-a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
+*{box-sizing:border-box} html,body{height:100%} html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;color:var(--fg);font-family:"Noto Sans JP",system-ui,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2))}
+.hidden{display:none!important}
 
-header{position:relative; isolation:isolate}
-.nav{
-  position:absolute; inset:12px 12px auto 12px;
-  display:flex; align-items:center; justify-content:space-between; gap:12px;
-}
-.brand{
-  font-weight:700; border-radius:12px;
-  background:rgba(255,255,255,.75); backdrop-filter:blur(6px);
-  padding:8px 12px;
-}
-.nav .right a{
-  display:inline-block; padding:8px 12px; border-radius:12px;
-  background:rgba(74,168,255,.14); border:1px solid rgba(74,168,255,.35);
-}
-.hero{
-  min-height:56svh; display:grid; place-items:center; text-align:center;
-  padding:32px 16px;
-  color:#fff;
-  background:
-    linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.25)),
-    url("assets/hero/knowledge-aquarium-1080.png") center/cover no-repeat;
-}
-h1{margin:0 0 6px; font-size:clamp(24px,6vw,42px); letter-spacing:.06em; text-shadow:0 2px 14px rgba(0,0,0,.28)}
-.sub{margin:0; color:#f5ecff; text-shadow:0 1px 6px rgba(0,0,0,.25)}
+/* Splash */
+.splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;cursor:pointer}
+.splash::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.55) 70%,rgba(255,255,255,.8))}
+.splash .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(1.05)}
+.splash .fallback{position:absolute;inset:0;background:radial-gradient(1200px 600px at 50% 30%, #e9f4ff, #eef0ff)}
+.splash .hero{position:relative;z-index:1;text-align:center;padding:22px}
+h1{margin:0 0 6px;font-size:clamp(22px,6vw,34px);letter-spacing:.02em;text-wrap:balance}
+.sub{margin:0;color:var(--muted)}
+.tap{margin-top:14px;font-size:.95em;color:#6a7580}
+.splash.closing{opacity:0;transition:opacity .28s ease;pointer-events:auto}
 
-.wrap{max-width:1120px; margin:-28px auto 64px; padding:0 16px}
-.panel{
-  background:var(--card); border:1px solid var(--line); border-radius:16px;
-  box-shadow:0 8px 24px rgba(0,0,0,.08); padding:14px;
-}
-.controls{display:grid; gap:10px}
-.search{display:flex; gap:8px}
-input[type="search"]{
-  flex:1; padding:12px 14px; border:1px solid #cfe2ff; border-radius:12px; font-size:16px;
-}
-.btn{
-  appearance:none; border:1px solid #cfe2ff; background:var(--chip);
-  border-radius:12px; padding:10px 12px; font-size:14px; cursor:pointer;
-}
-.btn:focus-visible, .chip:focus-visible{outline:3px solid #98bfff; outline-offset:2px}
-.chips{display:flex; flex-wrap:wrap; gap:8px}
-.chip{
-  padding:8px 12px; border-radius:999px; background:var(--chip);
-  border:1px solid #cfe2ff; color:#234; cursor:pointer; user-select:none;
-}
-.chip.active{background:#dfe8ff; border-color:#7aa7ff; box-shadow:inset 0 0 0 2px #7aa7ff}
+/* Main */
+.wrap{max-width:980px;margin:20px auto 28px;padding:0 14px max(28px,env(safe-area-inset-bottom));opacity:0;transform:translateY(12px);transition:opacity .35s ease,transform .35s ease}
+.wrap.show{opacity:1;transform:none}
 
-.grid{
-  display:grid; gap:14px; margin-top:14px;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-}
-.card{
-  display:grid; grid-template-rows:auto 1fr auto;
-  background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden;
-  transition:transform .08s ease;
-}
-.card:focus-visible{outline:3px solid #98bfff; outline-offset:2px}
-.card:hover{transform:translateY(-2px)}
-.card img{width:100%; height:154px; object-fit:cover; background:#eef5ff}
-.p{padding:12px}
-.ttl{font-weight:700; margin:0 0 6px}
-.sub2{color:var(--muted); font-size:13px; margin:0 0 8px}
-.meta{display:flex; gap:6px; flex-wrap:wrap}
-.pill{
-  font-size:12px; padding:4px 8px; border-radius:999px;
-  background:#f2f6ff; border:1px solid #d8e7ff; color:#355;
-}
-.badge{
-  position:absolute; top:8px; left:8px; font-size:11px; font-weight:700;
-  padding:4px 8px; border-radius:999px; background:#ff5fb6; color:#fff;
-}
-.card .thumbwrap{position:relative}
-.hidden{display:none !important}
+/* Controls */
+.controls{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin:6px 0 10px;box-shadow:0 8px 22px rgba(74,168,255,.10)}
+.controls .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+input[type="search"]{flex:1;padding:12px 14px;border:1px solid #cfe2ff;border-radius:12px;font-size:16px}
+.btn{appearance:none;border:1px solid #cfe2ff;background:#fff;border-radius:12px;padding:10px 12px;font-size:14px;cursor:pointer}
+.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));border-color:transparent;color:#fff}
+.btn:focus-visible, .chip:focus-visible{outline:3px solid #98bfff;outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{padding:8px 12px;border:1px solid #cfe2ff;border-radius:999px;background:var(--chip);cursor:pointer;user-select:none;color:#234;line-height:1.2}
+.chip.active{background:var(--chipb);box-shadow:inset 0 0 0 2px #7aa7ff;border-color:transparent}
 
-.footer{max-width:1120px; margin:24px auto 64px; padding:0 16px; color:var(--muted); font-size:13px}
+/* Switcher */
+.switcher{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.segbtn{
+  appearance:none;border:1px solid #cfe2ff;background:#fff;border-radius:999px;
+  padding:10px 14px;font-size:14px;line-height:1;text-decoration:none;color:inherit;
+  display:inline-flex;align-items:center;gap:8px;min-height:44px
+}
+.segbtn.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(74,168,255,.18)}
 
-@media (min-width:880px){
-  .hero{border-bottom-left-radius:28px; border-bottom-right-radius:28px}
+/* Cards（画像なし：心の標本と同じレイアウト） */
+.links{display:grid;gap:12px;margin-top:10px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+a.link{
+  display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--fg);
+  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;
+  box-shadow:0 6px 18px rgba(74,168,255,.12);transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease
+}
+a.link:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(164,139,255,.18);border-color:#d7e6ff}
+a.link .emo{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;font-size:22px;line-height:1;flex:0 0 auto}
+a.link > div{flex:1 1 auto;min-width:0}
+.ttl{
+  font-weight:800;margin:0;display:block;line-height:1.35;letter-spacing:.01em;text-wrap:balance;
+  font-size:clamp(15px,3.8vw,17px);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden
+}
+.mini{font-size:.72em;padding:2px 6px;border-radius:8px;border:1px solid #dfe7ff;background:#fff;display:inline-flex;align-items:center;line-height:1;vertical-align:middle;white-space:nowrap}
+.mini.new{background:linear-gradient(90deg,#d6ebff,#e0dbff);color:#2b3b4a;border-color:transparent}
+.sub2{
+  color:var(--muted);font-size:.92em;margin:4px 0 0;line-height:1.5;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden
+}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.pill{padding:4px 8px;border-radius:999px;font-size:.8em;border:1px solid #dbe8ff;background:#fff;color:#3b4d5e;display:inline-flex;align-items:center;line-height:1;vertical-align:middle}
+.badge{margin-left:auto;padding:8px 12px;border-radius:999px;font-weight:700;font-size:.9em;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;line-height:1;vertical-align:middle}
+
+/* Thumbnail mode（使わない：data-thumbが無い限り無効） */
+.link.with-thumb{display:grid;grid-template-rows:auto 1fr auto;padding:0}
+.link.with-thumb .thumb{margin:0;position:relative;aspect-ratio:1200/630;background:#f4f8ff;border-bottom:1px solid var(--line);overflow:hidden;border-top-left-radius:16px;border-top-right-radius:16px}
+.link.with-thumb .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.link.with-thumb .emo{display:none}
+.link.with-thumb .body{padding:12px 14px}
+.link.with-thumb .badge{margin:0 12px 12px auto}
+
+/* Footer */
+.note{color:var(--muted);text-align:center;margin:18px 0}
+.footerbar{position:sticky;bottom:0;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;padding:10px;background:rgba(255,255,255,.82);
+  backdrop-filter:blur(6px) saturate(1.05);border-top:1px solid #e6eefb}
+.footerbar a{padding:12px 14px;border:1px solid #dbe8ff;border-radius:999px;text-decoration:none;color:#14202b;background:#fff;cursor:pointer;flex:0 0 auto;white-space:nowrap;line-height:1;display:inline-flex;align-items:center;min-height:44px}
+
+@media (max-width:400px){
+  .links{grid-template-columns:1fr}
+  a.link{padding:12px}
+  .badge{display:none}
 }
 </style>
 </head>
 <body>
-<header>
-  <nav class="nav" aria-label="グローバルナビ">
-    <div class="brand"><a href="/quiz/index.html" aria-label="知識の水槽トップへ">知識の水槽</a></div>
-    <div class="right">
-      <a href="/shindan/" aria-label="診断一覧へ">診断一覧</a>
-    </div>
-  </nav>
-  <div class="hero" role="img" aria-label="水の中に本を読む僕と生きものたちのヒーロー画像">
-    <div>
-      <h1>知識の水槽</h1>
-      <p class="sub">遊びながら知が泳ぐ、ゆめかわナレッジ</p>
-    </div>
+<!-- Splash -->
+<section id="splash" class="splash" aria-label="知識の水槽の入口" tabindex="0" role="button">
+  <div class="fallback" aria-hidden="true"></div>
+  <img class="bg" alt="知識の水槽のキービジュアル"
+       src="/quiz/assets/hero/knowledge-aquarium-1080.png">
+  <div class="hero">
+    <h1>知識の水槽</h1>
+    <p class="sub">タップ（またはEnter/Space）で入口が開きます。</p>
   </div>
-</header>
+</section>
 
-<main class="wrap">
-  <section class="panel controls" aria-label="検索とタグ">
-    <div class="search">
-      <input id="q" type="search" placeholder="キーワード検索（例：メンダコ イルカ 認知）" aria-label="検索">
-      <button id="shareBtn" class="btn" type="button" aria-label="このページを共有">共有</button>
+<main id="content" class="wrap" aria-live="polite" aria-label="知識の入口" tabindex="-1" inert>
+  <!-- Controls -->
+  <section class="controls" aria-label="検索とタグ">
+    <!-- サイト切替：現在ページを強調 -->
+    <div class="row switcher" aria-label="サイト切替">
+      <a class="segbtn" href="/shindan/" rel="noopener">🌟 心の標本</a>
+      <a class="segbtn active" href="/quiz/" aria-current="page">🔎 知識の水槽</a>
+    </div>
+
+    <div class="row">
+      <input id="q" type="search" placeholder="キーワード or #タグ（例：#海 / #心理）" aria-label="検索">
+      <button id="btnNew" class="btn" type="button" aria-pressed="false" aria-label="NEWだけ表示">NEWだけ</button>
       <button id="clearBtn" class="btn" type="button" aria-label="検索とタグをクリア">クリア</button>
     </div>
-    <div class="chips" role="listbox" aria-label="タグ（スペース/エンターで切替）">
-      <button class="chip" data-tag="海" role="option" aria-selected="false">#海</button>
-      <button class="chip" data-tag="心理" role="option" aria-selected="false">#心理</button>
-      <button class="chip" data-tag="脳" role="option" aria-selected="false">#脳</button>
-      <button class="chip" data-tag="生活" role="option" aria-selected="false">#生活</button>
-      <button class="chip" data-tag="クイズ" role="option" aria-selected="false">#クイズ</button>
-      <button class="chip" data-tag="診断" role="option" aria-selected="false">#診断</button>
-    </div>
+    <div id="chips" class="chips" role="listbox" aria-multiselectable="false" aria-label="タグ（1つ選択で絞り込み）"></div>
   </section>
 
-  <section class="grid" id="grid" aria-live="polite">
-    <!-- カード：data-*でフィルタ可能。リンク先は必要に応じて作成 -->
-    <a class="card" href="posts/aquarium-animals.html"
-       data-tags="海" data-mins="4" data-updated="2025-09-13"
-       data-keywords="シャチ イルカ メンダコ クラゲ うんちく 種分類 ハクジラ">
-      <div class="thumbwrap">
-        <img loading="lazy" src="assets/thumbs/sea-animals.webp" alt="海のいきもの豆知識のサムネ">
-        <span class="badge" data-new>NEW</span>
+  <!-- Cards（画像なし・1件・作成中） -->
+  <nav class="links" id="list" aria-label="記事/クイズ一覧（検索結果）">
+    <a class="link" href="#" aria-disabled="true"
+       data-id="wip" data-tags="海" data-updated="2025-09-15"
+       data-keywords="作成中 WIP 準備中">
+      <span class="emo">🔧</span>
+      <div class="body">
+        <div class="ttl">作成中</div>
+        <div class="sub2">コンテンツ公開まで少々お待ちください。</div>
+        <div class="meta"></div>
       </div>
-      <div class="p">
-        <div class="ttl">シャチ・イルカ・メンダコ・クラゲ豆知識</div>
-        <div class="sub2">水槽の住人たちの意外な共通点と違い。</div>
-        <div class="meta"><span class="pill">⏱4分</span><span class="pill">#海</span></div>
-      </div>
+      <span class="badge">準備中</span>
     </a>
+  </nav>
 
-    <a class="card" href="posts/sleep-hygiene.html"
-       data-tags="生活 心理 脳" data-mins="6" data-updated="2025-08-25"
-       data-keywords="睡眠 クロノタイプ 体内時計 衛生">
-      <div class="thumbwrap">
-        <img loading="lazy" src="assets/thumbs/sleep-basics.webp" alt="睡眠の基礎のサムネ">
-      </div>
-      <div class="p">
-        <div class="ttl">眠りの基礎：クロノタイプと整え方</div>
-        <div class="sub2">夜型/朝型の仕組みと今日からできるコツ。</div>
-        <div class="meta"><span class="pill">⏱6分</span><span class="pill">#生活</span><span class="pill">#心理</span></div>
-      </div>
-    </a>
-
-    <a class="card" href="posts/mini-quiz-heuristics.html"
-       data-tags="クイズ 心理 診断" data-mins="3" data-updated="2025-09-10"
-       data-keywords="3分クイズ 直感 ヒューリスティック 認知バイアス">
-      <div class="thumbwrap">
-        <img loading="lazy" src="assets/thumbs/mini-quiz.webp" alt="3分クイズのサムネ">
-      </div>
-      <div class="p">
-        <div class="ttl">3分クイズ：直感 vs 論理</div>
-        <div class="sub2">遊びながら認知のクセを知ろう。</div>
-        <div class="meta"><span class="pill">⏱3分</span><span class="pill">#クイズ</span><span class="pill">#心理</span></div>
-      </div>
-    </a>
-
-    <a class="card" href="posts/tools-reading-list.html"
-       data-tags="心理 脳" data-mins="5" data-updated="2025-07-30"
-       data-keywords="注意 集中 学習 ツール 読書">
-      <div class="thumbwrap">
-        <img loading="lazy" src="assets/thumbs/tools-reading.webp" alt="学習ツール集のサムネ">
-      </div>
-      <div class="p">
-        <div class="ttl">学びの道具箱：集中と記憶のミニ技</div>
-        <div class="sub2">スマホでも試せる小ワザを厳選。</div>
-        <div class="meta"><span class="pill">⏱5分</span><span class="pill">#心理</span><span class="pill">#脳</span></div>
-      </div>
-    </a>
+  <section id="legal-note" role="note" aria-label="ご利用にあたって" class="note">
+    <h2 style="font-size:1.05em;margin:18px 0 10px">ご利用にあたって</h2>
+    <ul style="margin:0 0 10px 18px;padding:0;line-height:1.7">
+      <li><strong>非提携・非公式：</strong>本サイトの各コンテンツ（記事・クイズ等）は研究一般の知見に<span style="white-space:nowrap">ヒントを得た</span><strong>独自制作</strong>です。各種の公式検査・尺度の<strong>原文項目や正式な採点方法は使用しておらず</strong>、権利者の承認・提携・推奨を意味しません。</li>
+      <li><strong>医療用途ではありません：</strong>娯楽＋自己理解の目安を目的とした読み物/セルフチェックで、医療的・心理的な<strong>診断／治療／助言を目的としません</strong>。強い苦痛や不調が続く場合は、医療機関や専門家へご相談ください。</li>
+      <li><strong>プライバシー：</strong>ページ内のインタラクションは<strong>ブラウザ内（端末内）で完結</strong>し、サーバーへの送信は行いません。進行状況や一部表示設定のみローカルストレージに保存されることがあります。</li>
+      <li><strong>表現について：</strong>「タイプ」「サイコパス」等の呼称は<strong>比喩・俗称・ゲーミフィケーション表現</strong>であり、他者を断定・ラベリングする用途を意図しません。</li>
+      <li><strong>免責：</strong>法令で認められる範囲で、本サイトの利用により生じたいかなる損失・損害についても、当サイトは責任を負いません。</li>
+    </ul>
   </section>
 </main>
 
-<footer class="footer">
-  © 知識の水槽 / <a href="/shindan/">心の標本（診断一覧）</a> に戻る
-</footer>
+<!-- Footer -->
+<nav class="footerbar" aria-label="フッターナビ">
+  <a href="https://x.com/oki2a?s=21" target="_blank" rel="noopener">X</a>
+  <a href="https://www.instagram.com/zariganitabetai7?igsh=MTdzc245MDJrdWZzYw%3D%3D&utm_source=qr" target="_blank" rel="noopener">Instagram</a>
+  <a href="https://lin.ee/KUtaxdD" target="_blank" rel="noopener">公式LINE</a>
+  <a href="/shindan/seikaku.html">自己紹介</a>
+</nav>
+
+<noscript>
+  <div style="max-width:980px;margin:16px auto;padding:0 14px max(28px,env(safe-area-inset-bottom));color:#6b7b86">
+    JavaScriptが無効です。<a href="/quiz/">一覧はこちら</a>。
+  </div>
+</noscript>
 
 <script>
-/* -------- 検索＋タグ複合フィルタ / #tag=xxx 起動 / NEW判定 / 共有 -------- */
-const grid = document.getElementById('grid');
-const cards = [...grid.querySelectorAll('.card')];
-const q = document.getElementById('q');
-const chips = [...document.querySelectorAll('.chip')];
-const shareBtn = document.getElementById('shareBtn');
-const clearBtn = document.getElementById('clearBtn');
+(function(){
+  const $  = (q,root=document)=>root.querySelector(q);
+  const $$ = (q,root=document)=>[...root.querySelectorAll(q)];
 
-/* NEW バッジ：更新日が14日以内 */
-const today = new Date();
-cards.forEach(c=>{
-  const upd = new Date(c.dataset.updated);
-  const diff = (today - upd) / (1000*60*60*24);
-  const badge = c.querySelector('[data-new]');
-  if(badge){ badge.style.display = diff<=14 ? 'inline-block' : 'none'; }
-});
+  const splash  = $('#splash');
+  const content = $('#content');
+  const vibrate = (ms=10)=>('vibrate' in navigator)&&navigator.vibrate(ms);
 
-/* #tag=xxx 起動 */
-const initTag = (location.hash.startsWith('#tag=')) ? decodeURIComponent(location.hash.slice(5)) : '';
-if(initTag){
-  const chip = chips.find(x=>x.dataset.tag===initTag);
-  if(chip){ toggleChip(chip,true); }
-}
-
-/* 共有 */
-shareBtn.addEventListener('click', async ()=>{
-  const title = document.title;
-  const url = location.href;
-  const text = '知識の水槽｜遊びながら知が泳ぐ';
-  if(navigator.share){
-    try{ await navigator.share({title,text,url}); }catch(e){}
-  }else{
-    await navigator.clipboard.writeText(url);
-    shareBtn.textContent = 'URLコピー済';
-    setTimeout(()=>shareBtn.textContent='共有',1500);
+  // Splash open
+  const GUARD_MS=600, HIDE_DELAY=300; let opened=false, guardUntil=0;
+  function startClickGuard(){
+    guardUntil=performance.now()+GUARD_MS;
+    const guard=(e)=>{ if(performance.now()<guardUntil){ e.stopPropagation(); e.preventDefault(); } else { window.removeEventListener('click',guard,true); } };
+    window.addEventListener('click',guard,true);
+    content.style.pointerEvents='none'; setTimeout(()=>{content.style.pointerEvents='';},GUARD_MS);
   }
-});
+  function reveal(ev){
+    if(opened) return; opened=true;
+    if(ev){ try{ ev.preventDefault(); ev.stopPropagation(); }catch{} }
+    startClickGuard();
+    splash.classList.add('closing'); splash.setAttribute('aria-hidden','true');
+    content.classList.add('show'); vibrate(12);
+    setTimeout(()=>{ splash.classList.add('hidden'); splash.classList.remove('closing'); try{ content.removeAttribute('inert'); content.focus({preventScroll:true}); }catch{} }, Math.max(HIDE_DELAY,GUARD_MS));
+  }
+  splash.addEventListener('pointerup', e=>{ if(e?.target?.closest?.('a,button,input,label')) return; reveal(e); });
+  splash.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); reveal(e); } });
 
-/* クリア */
-clearBtn.addEventListener('click', ()=>{
-  q.value = ''; chips.forEach(c=>toggleChip(c,false));
-  history.replaceState({},'', location.pathname);
+  // NEWバッジ（21日以内）
+  const today=new Date();
+  $$('#list a.link').forEach(a=>{
+    const badge=a.querySelector('[data-new]'); const ds=a.dataset.updated;
+    if(badge && ds){ const diff=(today - new Date(ds+'T00:00:00'))/86400000; badge.style.display=(diff<=21)?'inline-flex':'none'; }
+  });
+
+  // data-thumb → サムネ（今回は未使用：data-thumbがあれば自動で有効）
+  $$('#list a.link').forEach(a=>{
+    const src=a.dataset.thumb; if(!src) return;
+    a.classList.add('with-thumb');
+    const fg=document.createElement('figure'); fg.className='thumb';
+    const img=new Image(); img.loading='lazy'; img.src=src; img.alt=(a.querySelector('.ttl')?.textContent||'記事')+'のサムネイル';
+    fg.appendChild(img); a.insertBefore(fg,a.firstChild);
+  });
+
+  // 検索・タグ（単一選択）
+  const q=$('#q'), chipsWrap=$('#chips'), btnNew=$('#btnNew'), clearBtn=$('#clearBtn');
+
+  // エイリアス（必要なら追加）
+  const ALIAS={ '性格':'こころ', '短時間':'さくっと' };
+  const ORDER=['海','心理','脳','生活','クイズ','診断','こころ','セルフケア','認知','仕事','占い','ゲーム風','さくっと','ふつう','しっかり','適性'];
+
+  // カードのタグ正規化 + メタ整形
+  $$('#list a.link').forEach(a=>{
+    const tags=(a.dataset.tags||'').split(',').map(s=>s.trim()).filter(Boolean).map(t=>ALIAS[t]||t);
+    a.dataset.tags=[...new Set(tags)].join(',');
+    const meta=a.querySelector('.meta'); meta.innerHTML='';
+    const mins=a.dataset.mins; if(mins){ const s=document.createElement('span'); s.className='pill'; s.textContent=`⏱${mins}分`; meta.appendChild(s); }
+  });
+
+  // タグ候補（存在するもののみ）
+  const counts={};
+  $$('#list a.link').forEach(a=>{
+    (a.dataset.tags||'').split(',').filter(Boolean).forEach(t=>{ counts[t]=(counts[t]||0)+1; });
+  });
+  const tagsSorted=Object.keys(counts).sort((a,b)=>{
+    const ai=ORDER.indexOf(a), bi=ORDER.indexOf(b);
+    if(ai!==-1 || bi!==-1){ return (ai===-1?999:ai) - (bi===-1?999:bi); }
+    return a.localeCompare(b,'ja');
+  });
+
+  // チップ生成（単一選択）
+  let activeTag=null; const chipMap=new Map();
+  tagsSorted.forEach(tag=>{
+    const b=document.createElement('button');
+    b.type='button'; b.className='chip'; b.textContent='#'+tag; b.dataset.tag=tag;
+    b.setAttribute('role','option'); b.setAttribute('aria-selected','false');
+    b.addEventListener('click',()=> setActiveTag(activeTag===tag? null : tag));
+    b.addEventListener('keydown',e=>{
+      if(e.key===' '||e.key==='Enter'){ e.preventDefault(); b.click(); }
+      if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
+        e.preventDefault(); const chips=[...chipsWrap.querySelectorAll('.chip')];
+        const i=chips.indexOf(document.activeElement); if(i>-1){ chips[(i+(e.key==='ArrowRight'?1:-1)+chips.length)%chips.length].focus(); }
+      }
+    });
+    chipsWrap.appendChild(b); chipMap.set(tag,b);
+  });
+
+  function setActiveTag(tag){
+    activeTag=tag;
+    chipMap.forEach((btn,t)=>{ const on=(t===tag); btn.classList.toggle('active',on); btn.setAttribute('aria-selected',on?'true':'false'); });
+    if(tag){ history.replaceState({},'', '#tag='+encodeURIComponent(tag)); } else { history.replaceState({},'', location.pathname + location.search); }
+    apply();
+  }
+
+  // 初期：#tag= or ?q=
+  const params=new URLSearchParams(location.search);
+  q.value=params.get('q')||'';
+  const initTag=location.hash.startsWith('#tag=') ? decodeURIComponent(location.hash.slice(5)) : '';
+  if(initTag && chipMap.has(initTag)) setActiveTag(initTag);
+
+  // 入力：末尾 #タグ を同期
+  q.addEventListener('input', ()=>{
+    const m=q.value.match(/(^|\s)#([^\s#]+)$/);
+    if(m){ const t=m[2]; if(chipMap.has(t)) setActiveTag(t); }
+    apply();
+  });
+
+  // NEWだけ
+  let newOnly=false;
+  btnNew.addEventListener('click', ()=>{
+    newOnly=!newOnly; btnNew.classList.toggle('primary',newOnly);
+    btnNew.setAttribute('aria-pressed', newOnly?'true':'false');
+    btnNew.textContent=newOnly?'NEWだけ（解除）':'NEWだけ';
+    apply();
+  });
+
+  // クリア
+  clearBtn.addEventListener('click', ()=>{ q.value=''; setActiveTag(null); apply(); });
+
+  // フィルタ
+  function apply(){
+    const kw=q.value.trim().toLowerCase().split(/\s+/).filter(Boolean).filter(t=>!t.startsWith('#'));
+    let shown=0;
+    $$('#list a.link').forEach(a=>{
+      const tags=(a.dataset.tags||'').split(',').filter(Boolean);
+      const text=(a.textContent+' '+(a.dataset.keywords||'')).toLowerCase();
+      const okTag = activeTag ? tags.includes(activeTag) : true;
+      const okKw  = kw.length ? kw.every(w=>text.includes(w)) : true;
+      const isNew = (()=>{ const b=a.querySelector('[data-new]'); return b && b.style.display!=='none'; })();
+      const show  = okTag && okKw && (newOnly? isNew : true);
+      a.style.display=show?'':'none'; if(show) shown++;
+    });
+    $('#list').setAttribute('aria-label', `記事/クイズ一覧（検索結果 ${shown} 件）`);
+  }
   apply();
-});
 
-/* フィルタ適用 */
-q.addEventListener('input', apply);
-
-chips.forEach(chip=>{
-  chip.addEventListener('click', ()=>{ chip.classList.toggle('active'); chip.setAttribute('aria-selected', chip.classList.contains('active')); syncHash(); apply(); });
-  chip.addEventListener('keydown', e=>{
-    if(e.key===' '||e.key==='Enter'){ e.preventDefault(); chip.click(); }
-    if(e.key==='ArrowRight'){ e.preventDefault(); focusMove(1); }
-    if(e.key==='ArrowLeft'){ e.preventDefault(); focusMove(-1); }
-  });
-});
-
-function focusMove(delta){
-  const idx = chips.indexOf(document.activeElement);
-  if(idx>-1){ const nx=(idx+delta+chips.length)%chips.length; chips[nx].focus(); }
-}
-
-function toggleChip(chip,on){
-  chip.classList.toggle('active', !!on);
-  chip.setAttribute('aria-selected', !!on);
-}
-
-function syncHash(){
-  const act = chips.filter(c=>c.classList.contains('active')).map(c=>c.dataset.tag);
-  const first = act[0];
-  if(first){ history.replaceState({},'', '#tag='+encodeURIComponent(first)); }
-  else{ history.replaceState({},'', location.pathname + location.search); }
-}
-
-function apply(){
-  const kw = q.value.trim().toLowerCase();
-  const act = chips.filter(c=>c.classList.contains('active')).map(c=>c.dataset.tag);
-  let shown = 0;
-  cards.forEach(card=>{
-    const tags = (card.dataset.tags||'').split(' ').filter(Boolean);
-    const text = (card.textContent + ' ' + (card.dataset.keywords||'')).toLowerCase();
-    const okTag = act.length ? act.every(t=>tags.includes(t)) : true;
-    const okKw = kw ? text.includes(kw) : true;
-    const show = okTag && okKw;
-    card.classList.toggle('hidden', !show);
-    if(show) shown++;
-  });
-  grid.setAttribute('aria-label', `検索結果 ${shown} 件`);
-}
-apply();
-
-/* Esc で検索クリア */
-document.addEventListener('keydown', e=>{
-  if(e.key==='Escape'){ q.value=''; apply(); }
-});
+  // Escで検索クリア
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ q.value=''; setActiveTag(null); apply(); } });
+})();
 </script>
 </body>
 </html>
