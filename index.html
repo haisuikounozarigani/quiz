@@ -1,4 +1,6 @@
 <!doctype html>
+<!-- 0 -->
+<!-- 1 -->
 <html lang="ja">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -130,8 +132,23 @@ a.link > div{flex:1 1 auto;min-width:0}
     <div id="chips" class="chips" role="listbox" aria-multiselectable="false" aria-label="タグ（1つ選択で絞り込み）"></div>
   </section>
 
-  <!-- Cards（画像なし・1件・作成中） -->
+  <!-- Cards（クイズカード追加） -->
   <nav class="links" id="list" aria-label="記事/クイズ一覧（検索結果）">
+    <!-- NEW: 猫と犬の心理研究クイズ -->
+    <a class="link" href="/quiz/inu-neko-quiz.html"
+       data-id="inu-neko-quiz" data-tags="クイズ,心理,猫,犬" data-mins="3"
+       data-updated="2025-09-21"
+       data-keywords="犬派 猫派 性格 オキシトシン 名前 指差し しっぽ 瞬き 散歩">
+      <span class="emo">🐾</span>
+      <div class="body">
+        <div class="ttl">猫と犬の心理研究クイズ</div>
+        <div class="sub2">選んだ瞬間に結果が出る、直感と研究のズレを楽しむ10問。</div>
+        <div class="meta"></div>
+      </div>
+      <span class="badge" data-new>NEW</span>
+    </a>
+
+    <!-- 既存：作成中 -->
     <a class="link" href="#" aria-disabled="true"
        data-id="wip" data-tags="海" data-updated="2025-09-15"
        data-keywords="作成中 WIP 準備中">
