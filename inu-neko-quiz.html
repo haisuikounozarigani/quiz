@@ -1,0 +1,311 @@
+<!doctype html>
+<!-- 0 -->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>猫と犬の心理研究クイズ｜知識の水槽</title>
+<meta name="description" content="選んだ瞬間に答えが出る！直感とズレやすい“意外な研究”をもとにした猫・犬クイズ（10問）。結果は3段階の画像つき。">
+<meta name="theme-color" content="#f6fbff">
+<base href="/quiz/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="猫と犬の心理研究クイズ｜知識の水槽">
+<meta property="og:description" content="選んだ瞬間に答えが出る！直感とズレやすい“意外な研究”ベースの猫・犬クイズ（10問）。">
+<meta property="og:url" content="https://haisuikounozarigani.github.io/quiz/inu-neko-quiz.html">
+<meta property="og:image" content="https://haisuikounozarigani.github.io/quiz/assets/hero/knowledge-aquarium-1080.png">
+<style>
+:root{--accent:#4aa8ff;--accent2:#a48bff;--bg1:#f6fbff;--bg2:#eef2ff;--ink:#1f2a33;--muted:#62707c;--line:#e6edf6}
+*{box-sizing:border-box}img{max-width:100%;display:block}
+body{margin:0;font-family:system-ui,"Noto Sans JP",sans-serif;color:var(--ink);background:linear-gradient(var(--bg1),var(--bg2))}
+a{color:inherit;text-decoration:none}
+header{position:relative;isolation:isolate}
+.nav{position:absolute;inset:12px 12px auto 12px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:700;background:rgba(255,255,255,.78);backdrop-filter:blur(6px);padding:8px 12px;border-radius:12px}
+.nav .right a{display:inline-block;padding:8px 12px;border-radius:12px;background:rgba(74,168,255,.14);border:1px solid rgba(74,168,255,.35)}
+.hero{min-height:42svh;display:grid;place-items:center;text-align:center;padding:28px 16px;color:#fff;background:
+linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.25)),
+url("assets/hero/knowledge-aquarium-1080.png") center/cover no-repeat}
+h1{margin:0 0 6px;font-size:clamp(22px,6vw,40px);text-shadow:0 2px 12px rgba(0,0,0,.28)}
+.sub{margin:0;color:#f5ecff}
+.wrap{max-width:920px;margin:-22px auto 64px;padding:0 16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.06);padding:16px}
+.meta{display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-bottom:8px}
+.pill{padding:4px 8px;border-radius:999px;background:#eef6ff;border:1px solid #cfe2ff}
+.q{border-top:1px dashed #d9e6f5;padding-top:12px;margin-top:12px}
+.q h3{margin:.2em 0 .4em;font-size:16px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid #d9e6f5;border-radius:12px;padding:10px;background:#fbfdff;cursor:pointer;transition:transform .06s}
+.opt:hover{border-color:#9ec0ff;transform:translateY(-1px)}
+.opt input{transform:translateY(2px)}
+.opt.correct{border-color:#36c27a;background:#eefcf4;position:relative}
+.opt.correct::after{content:"🎉";position:absolute;right:10px;top:8px}
+.opt.wrong{border-color:#ff7b7b;background:#fff3f3;animation:shake .18s 2}
+@keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-2px)}50%{transform:translateX(2px)}75%{transform:translateX(-2px)}100%{transform:translateX(0)}}
+.ex{margin:.45em 0 0;color:#233341;font-size:14px}
+.ex .wink{display:inline-block;margin-left:.3em}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.btn{appearance:none;border:1px solid #cfe2ff;background:#eaf3ff;border-radius:12px;padding:10px 14px;font-size:14px;cursor:pointer}
+.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none}
+.result{margin-top:14px;padding:12px;border-radius:12px;background:#f2f8ff;border:1px solid #cfe2ff}
+.score{font-size:clamp(20px,4.5vw,28px);margin:.2em 0}
+.progress{height:10px;border-radius:999px;background:#e7eef8;overflow:hidden}
+.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+#resultImg{display:block;width:100%;max-width:520px;margin:10px auto;border-radius:16px;border:1px solid var(--line);background:#fff}
+.footer{max-width:920px;margin:24px auto 64px;padding:0 16px;color:var(--muted);font-size:13px}
+.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.dot{position:absolute;width:8px;height:8px;border-radius:50%;opacity:.9;animation:fall 900ms ease-out forwards}
+@keyframes fall{to{transform:translateY(120vh) rotate(540deg);opacity:0}}
+.lmemo{font-size:12px;color:#6b7a86;border-top:1px dashed #cfe2ff;margin-top:10px;padding-top:10px}
+</style>
+</head>
+<body>
+<header>
+  <nav class="nav" aria-label="グローバルナビ">
+    <div class="brand"><a href="/quiz/index.html">知識の水槽</a></div>
+    <div class="right"><a href="/shindan/">診断一覧</a></div>
+  </nav>
+  <div class="hero" role="img" aria-label="猫と犬の心理研究クイズのヒーロー">
+    <div>
+      <h1>猫と犬の心理研究クイズ</h1>
+      <p class="sub">選んだ瞬間にジャッジ！ 直感 vs 研究のズレを楽しくチェック（10問）</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card" aria-labelledby="quizTitle">
+    <div class="meta"><span class="pill">⏱3分</span><span class="pill">#心理</span><span class="pill">#猫</span><span class="pill">#犬</span></div>
+    <h2 id="quizTitle" class="visually-hidden">猫と犬の心理研究クイズ</h2>
+
+    <div id="quiz" aria-live="polite">
+      <div class="q" data-qid="q1">
+        <h3>Q1. 犬派と猫派、「平均すると性格にちょっとした違い」がある？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q1">
+          <label class="opt"><input type="radio" name="q1" value="a">ある（小さいが見られる）</label>
+          <label class="opt"><input type="radio" name="q1" value="b">ない（完全に同じ）</label>
+        </div><div class="ex"></div>
+      </div>
+
+      <div class="q" data-qid="q2">
+        <h3>Q2. 猫は「赤ちゃん言葉」なら誰の声でもご機嫌になる？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q2">
+          <label class="opt"><input type="radio" name="q2" value="a">なる（誰でもOK）</label>
+          <label class="opt"><input type="radio" name="q2" value="b">身内（飼い主）の声が効きやすい</label>
+          <label class="opt"><input type="radio" name="q2" value="c">ならない</label>
+        </div><div class="ex"></div>
+      </div>
+
+      <div class="q" data-qid="q3">
+        <h3>Q3. 猫は自分の名前、ほんとに聞き分けてる？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q3">
+          <label class="opt"><input type="radio" name="q3" value="a">聞き分けてる</label>
+          <label class="opt"><input type="radio" name="q3" value="b">気のせい</label>
+        </div><div class="ex"></div>
+      </div>
+
+      <div class="q" data-qid="q4">
+        <h3>Q4. 犬と見つめ合うと上がりやすいホルモンは？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q4">
+          <label class="opt"><input type="radio" name="q4" value="a">オキシトシン</label>
+          <label class="opt"><input type="radio" name="q4" value="b">コルチゾール</label>
+          <label class="opt"><input type="radio" name="q4" value="c">テストステロン</label>
+        </div><div class="ex"></div>
+      </div>
+
+      <div class="q" data-qid="q5">
+        <h3>Q5. 猫にも「飼い主への愛着タイプ（安全型など）」ってある？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q5">
+          <label class="opt"><input type="radio" name="q5" value="a">ある</label>
+          <label class="opt"><input type="radio" name="q5" value="b">ない</label>
+        </div><div class="ex"></div>
+      </div>
+
+      <div class="q" data-qid="q6">
+        <h3>Q6. 犬は「おやつ」と「ほめられる」、どっち派が多い？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q6">
+          <label class="opt"><input type="radio" name="q6" value="a">おやつ一択</label>
+          <label class="opt"><input type="radio" name="q6" value="b">個体差がデカい</label>
+          <label class="opt"><input type="radio" name="q6" value="c">ほめ一択</label>
+        </div><div class="ex"></div>
+      </div>
+
+      <div class="q" data-qid="q7">
+        <h3>Q7. 猫は“音だけ”でも、飼い主のだいたいの位置を追える？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q7">
+          <label class="opt"><input type="radio" name="q7" value="a">追える</label>
+          <label class="opt"><input type="radio" name="q7" value="b">無理</label>
+        </div><div class="ex"></div>
+      </div>
+
+      <div class="q" data-qid="q8">
+        <h3>Q8. 犬のしっぽ、気分で「右寄り/左寄り」にクセが出る？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q8">
+          <label class="opt"><input type="radio" name="q8" value="a">出る（右＝ポジ、左＝ネガ）</label>
+          <label class="opt"><input type="radio" name="q8" value="b">出ない</label>
+        </div><div class="ex"></div>
+      </div>
+
+      <div class="q" data-qid="q9">
+        <h3>Q9. 人の“ゆっくり瞬き”は、猫にとって？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q9">
+          <label class="opt"><input type="radio" name="q9" value="a">「好きだよ」の合図になりやすい</label>
+          <label class="opt"><input type="radio" name="q9" value="b">逆効果で警戒</label>
+          <label class="opt"><input type="radio" name="q9" value="c">無関係</label>
+        </div><div class="ex"></div>
+      </div>
+
+      <div class="q" data-qid="q10">
+        <h3>Q10. 犬の散歩、飼い主の運動量はどうなる？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q10">
+          <label class="opt"><input type="radio" name="q10" value="a">増えがち</label>
+          <label class="opt"><input type="radio" name="q10" value="b">ほぼ変わらない</label>
+          <label class="opt"><input type="radio" name="q10" value="c">なぜか減る</label>
+        </div><div class="ex"></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" id="reset" class="btn">リセット</button>
+      <button type="button" id="share" class="btn">共有</button>
+    </div>
+
+    <div class="result" aria-live="polite">
+      <img id="resultImg" src="assets/results/inu-neko-quiz/03.png" alt="結果イメージ（初期）" />
+      <div class="score">正解：<b id="score">0</b> / <span id="total">10</span></div>
+      <div class="progress" aria-label="正答率"><i id="bar" style="width:0%"></i></div>
+      <div id="label" style="margin-top:6px;font-weight:700">固定観念アップデート中</div>
+      <div style="margin-top:10px">
+        <a href="/quiz/index.html" class="btn">クイズ一覧に戻る</a>
+      </div>
+      <div class="lmemo">
+        ＜法務メモ＞本ページは娯楽・教育目的の要約であり、医療・行動指導の代替ではありません。研究結果には前提条件や個体差・再現性の議論があります。画像・テキストの著作・商標等は各権利者に帰属します。
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  © 知識の水槽 / <a href="/quiz/index.html">トップに戻る</a> ・ <a href="/shindan/">診断一覧</a>
+</footer>
+
+<div class="confetti" id="fx" aria-hidden="true"></div>
+
+<script>
+/* ===== 正解キー ===== */
+const KEY = { q1:'a', q2:'b', q3:'a', q4:'a', q5:'a', q6:'b', q7:'a', q8:'a', q9:'a', q10:'a' };
+
+/* ===== くすっと系ワンフレーズ（研究要約＋ジョーク） =====
+   ※ 誹謗やスティグマは避け、やわらかい比喩にしています。 */
+const FUN = {
+  q1:{ok:"つまり…犬派は『陽キャ寄り？』猫派は『内省ガチ勢？』※もちろん個体差デカい。",
+      ng:"平均には小さな差あり。みんな完全に同じではないんだよね。"},
+  q2:{ok:"翻訳：猫は“身内ひいき”が尊い。知らん人の甘声はスルー力高め。",
+      ng:"誰でもOKではない様子。猫の世界にも『会員制』がある。"},
+  q3:{ok:"名前はわかってる。返事するかは“気分”という猫ルール。", 
+      ng:"聞き分けている証拠あり。都合よく無視するプロでもある。"},
+  q4:{ok:"オキシトシン↑＝相思相愛ホルモン。見つめ合いは無料の課金。", 
+      ng:"ストレス系ではなく“絆系”が上がりやすい。"},
+  q5:{ok:"猫にも愛着タイプ。ツン中にしれっとデレ、は科学的にもアリ。", 
+      ng:"『猫は誰にも属さない』説、けっこう崩れる。"},
+  q6:{ok:"結論：犬にも“称賛厨”と“おやつ勢”がいる。推しは犬自身が決める。", 
+      ng:"全員おやつ一択ではない。拍手で目がキラキラの子も多い。"},
+  q7:{ok:"耳レーダーでご主人の“今どこ”を脳内マップ化。ステルス飼い主不可。", 
+      ng:"実は追える例がある。息を潜めてもバレがち。"},
+  q8:{ok:"右寄りブンブン＝うれしみ、左寄りフリフリ＝ちょい不安寄り。", 
+      ng:"同じ振りでも“向き”に感情サインが混ざる。"},
+  q9:{ok:"スローブリンク＝猫語の『だいじょうぶだよ』。まずは人間が先に。", 
+      ng:"ゆっくりがコツ。ガン見は通報される。"},
+  q10:{ok:"散歩＝人間の運動も増量。健康ポイント二重取り。", 
+       ng:"増える傾向が多い。ズル休みは犬にバレる。"}
+};
+
+const total = Object.keys(KEY).length;
+document.getElementById('total').textContent = total;
+let score = 0, answered = new Set();
+
+document.querySelectorAll('.opts input[type="radio"]').forEach(inp=>{
+  inp.addEventListener('change', (e)=>{
+    const name = e.target.name;  // qid
+    const val  = e.target.value;
+    const qBox = e.target.closest('.q');
+    if(answered.has(name)) return;
+    answered.add(name);
+
+    const ok = (val === KEY[name]);
+    const pickedLabel = e.target.closest('.opt');
+    const opts = qBox.querySelectorAll('.opt');
+    opts.forEach(l=>l.style.cursor='default');
+    pickedLabel.classList.add(ok ? 'correct' : 'wrong');
+    const correctLabel = qBox.querySelector(`input[value="${KEY[name]}"]`).closest('.opt');
+    if(!ok) correctLabel.classList.add('correct');
+
+    const ex = qBox.querySelector('.ex');
+    ex.innerHTML = (ok?'✅ 正解！':'❌ 不正解…') + 
+                   ' <span class="wink">— ' + (ok?FUN[name].ok:FUN[name].ng) + '</span>';
+
+    if(ok){ score++; confettiBurst(); }
+    updateScore();
+    qBox.querySelectorAll('input[type="radio"]').forEach(r=>r.disabled=true);
+
+    const next = [...document.querySelectorAll('.q')].find(q=>!answered.has(q.dataset.qid));
+    if(next){ next.scrollIntoView({behavior:'smooth',block:'center'}); }
+  });
+});
+
+function updateScore(){
+  const bar = document.getElementById('bar');
+  const pct = Math.round(score/total*100);
+  document.getElementById('score').textContent = score;
+  bar.style.width = pct + '%';
+  const label = document.getElementById('label');
+  label.textContent =
+    pct>=90 ? '研究探索マスター✨' :
+    pct>=70 ? '観察鋭い研究通👍' :
+    pct>=50 ? '良い気づき、あと一歩🔍' :
+              '固定観念アップデート中🔁';
+  swapResultImage(pct);
+}
+
+/* 結果画像：01（最高）/02（中間）/03（最低）を表示 */
+function swapResultImage(pct){
+  const img = document.getElementById('resultImg');
+  const tier = pct>=80 ? '01' : pct>=40 ? '02' : '03';
+  img.src = `assets/results/inu-neko-quiz/${tier}.png`;
+  img.alt = `結果イメージ ${tier}`;
+}
+
+document.getElementById('reset').addEventListener('click', ()=>{
+  score = 0; answered.clear(); updateScore();
+  document.querySelectorAll('.q').forEach(q=>{
+    q.querySelectorAll('input[type="radio"]').forEach(r=>{r.checked=false; r.disabled=false;});
+    q.querySelectorAll('.opt').forEach(l=>l.classList.remove('correct','wrong'));
+    q.querySelector('.ex').textContent='';
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+document.getElementById('share').addEventListener('click', async ()=>{
+  const title=document.title, url=location.href, text='猫と犬の心理研究クイズ｜知識の水槽';
+  if(navigator.share){ try{await navigator.share({title,text,url});}catch(_){} }
+  else{ await navigator.clipboard.writeText(url); alert('URLをコピーしました'); }
+});
+
+/* ちょい花火 */
+function confettiBurst(){
+  const fx = document.getElementById('fx');
+  for(let i=0;i<14;i++){
+    const d = document.createElement('i');
+    d.className='dot';
+    d.style.left = (Math.random()*100)+'%';
+    d.style.top  = '0';
+    d.style.background = i%3? 'var(--accent)': 'var(--accent2)';
+    d.style.transform = `translateY(-10px) translateX(${(Math.random()*40-20)}px)`;
+    d.style.animationDelay = (Math.random()*0.2)+'s';
+    fx.appendChild(d);
+    setTimeout(()=>d.remove(),1000);
+  }
+}
+</script>
+</body>
+</html>
