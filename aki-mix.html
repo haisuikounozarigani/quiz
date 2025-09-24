@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>秋の贅沢クイズ｜知識の水槽</title>
+<meta name="description" content="“秋あるある”の思い込みを、心理・雑学で楽しくアップデート。選んだ瞬間に判定される3択×15問。">
+<meta name="theme-color" content="#f6fbff">
+<base href="/quiz/">
+<!-- OG -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="秋の贅沢クイズ｜知識の水槽">
+<meta property="og:description" content="“秋あるある”の思い込みを、心理・雑学で楽しくアップデート。選んだ瞬間に判定される3択×15問。">
+<meta property="og:url" content="https://haisuikounozarigani.github.io/quiz/aki-mix.html">
+<meta property="og:image" content="https://haisuikounozarigani.github.io/quiz/assets/results/aki-mix/01.png">
+<style>
+:root{--accent:#4aa8ff; --accent2:#a48bff; --bg1:#f6fbff; --bg2:#eef2ff; --ink:#1f2a33; --muted:#5d6a77; --line:#dbe8ff}
+*{box-sizing:border-box} img{max-width:100%;display:block}
+body{margin:0;font-family:system-ui,"Noto Sans JP",sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2))}
+a{color:inherit;text-decoration:none}
+header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.86);backdrop-filter:blur(6px);border-bottom:1px solid #eef3ff}
+.nav{max-width:980px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:10px 14px}
+.brand{font-weight:800}
+.nav .right a{display:inline-block;padding:8px 12px;border-radius:12px;border:1px solid #cfe2ff;background:#fff}
+.wrap{max-width:980px;margin:18px auto 80px;padding:0 14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:16px}
+h1{margin:.2em 0 .4em;font-size:clamp(22px,6vw,36px);letter-spacing:.02em}
+.sub{margin:0 0 .8em;color:var(--muted)}
+.meta{display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-bottom:8px}
+.pill{padding:4px 8px;border-radius:999px;background:#eef6ff;border:1px solid #cfe2ff}
+.q{border-top:1px dashed #d9e6f5;padding-top:12px;margin-top:12px}
+.q h3{margin:.2em 0 .4em;font-size:16px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid #d9e6f5;border-radius:12px;padding:10px;background:#fbfdff;cursor:pointer;transition:transform .06s,border-color .06s}
+.opt:hover{border-color:#9ec0ff;transform:translateY(-1px)}
+.opt input{transform:translateY(2px)}
+.opt.correct{border-color:#2fc072;background:#eefcf3;position:relative}
+.opt.correct::after{content:"🎉";position:absolute;right:10px;top:8px}
+.opt.wrong{border-color:#ff8a8a;background:#fff3f3;animation:shake .16s 2}
+@keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-2px)}50%{transform:translateX(2px)}75%{transform:translateX(-2px)}100%{transform:translateX(0)}}
+.ex{margin:.45em 0 0;color:#233341;font-size:14px;min-height:1.2em}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.btn{appearance:none;border:1px solid #cfe2ff;background:#eaf3ff;border-radius:12px;padding:10px 14px;font-size:14px;cursor:pointer}
+.btn:focus-visible{outline:3px solid #98bfff;outline-offset:2px}
+.result{margin-top:14px;padding:12px;border-radius:12px;background:#f2f8ff;border:1px solid #cfe2ff}
+.score{font-size:clamp(20px,4.5vw,28px);margin:.2em 0}
+.progress{height:10px;border-radius:999px;background:#e7eef8;overflow:hidden}
+.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+#resultImg{display:block;width:100%;max-width:520px;aspect-ratio:1/1;object-fit:contain;margin:10px auto;border-radius:16px;border:1px solid var(--line);background:#fff}
+footer{max-width:980px;margin:22px auto 28px;padding:0 14px;color:var(--muted);font-size:13px}
+.note{font-size:12px;color:#6b7a86;border-top:1px dashed #cfe2ff;margin-top:12px;padding-top:10px}
+.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.dot{position:absolute;width:8px;height:8px;border-radius:50%;opacity:.9;animation:fall 900ms ease-out forwards}
+@keyframes fall{to{transform:translateY(120vh) rotate(540deg);opacity:0}}
+</style>
+</head>
+<body>
+<header>
+  <nav class="nav" aria-label="グローバルナビ">
+    <div class="brand"><a href="/quiz/" aria-label="知識の水槽トップへ">知識の水槽</a></div>
+    <div class="right"><a href="/shindan/" aria-label="診断一覧へ">診断一覧</a></div>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section class="card" aria-labelledby="quizTitle">
+    <div class="meta"><span class="pill">⏱5分</span><span class="pill">#秋</span><span class="pill">#雑学</span><span class="pill">#心理</span></div>
+    <h1 id="quizTitle">秋の贅沢クイズ</h1>
+    <p class="sub">“なんとなくの思い込み”と科学・由来のズレを楽しく補正。選んだ瞬間に判定される3択×15問。</p>
+
+    <div id="quiz" aria-live="polite">
+      <!-- Q1〜Q15（カテゴリ表記なし） -->
+      <div class="q" data-qid="q1">
+        <h3>Q1. 同じ絵を何度も見ると、好みはどうなりやすい？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q1">
+          <label class="opt"><input type="radio" name="q1" value="a">A) 下がる</label>
+          <label class="opt"><input type="radio" name="q1" value="b">B) 変わらない</label>
+          <label class="opt"><input type="radio" name="q1" value="c">C) 上がる</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q2">
+        <h3>Q2. 短距離やジャンプの前に“1筋60秒超”の静的ストレッチをすると、瞬発力は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q2">
+          <label class="opt"><input type="radio" name="q2" value="a">A) 上がる</label>
+          <label class="opt"><input type="radio" name="q2" value="b">B) 下がる</label>
+          <label class="opt"><input type="radio" name="q2" value="c">C) 変わらない</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q3">
+        <h3>Q3. 「読書の秋」の語源に近い表現はどれ？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q3">
+          <label class="opt"><input type="radio" name="q3" value="a">A) 天高く馬肥ゆる秋</label>
+          <label class="opt"><input type="radio" name="q3" value="b">B) 灯火親しむべし</label>
+          <label class="opt"><input type="radio" name="q3" value="c">C) 清少納言の一節</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q4">
+        <h3>Q4. ジャック・オー・ランタンの“元祖”でよく彫られた野菜は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q4">
+          <label class="opt"><input type="radio" name="q4" value="a">A) かぼちゃ</label>
+          <label class="opt"><input type="radio" name="q4" value="b">B) かぶ</label>
+          <label class="opt"><input type="radio" name="q4" value="c">C) とうもろこし</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q5">
+        <h3>Q5. 中秋の名月は、毎年“満月その日”になる？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q5">
+          <label class="opt"><input type="radio" name="q5" value="a">A) いつも満月</label>
+          <label class="opt"><input type="radio" name="q5" value="b">B) 満月そのもの</label>
+          <label class="opt"><input type="radio" name="q5" value="c">C) ずれる年がある</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q6">
+        <h3>Q6. 地平線近くの月、実際に大きく“なっている”？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q6">
+          <label class="opt"><input type="radio" name="q6" value="a">A) 実物が拡大</label>
+          <label class="opt"><input type="radio" name="q6" value="b">B) 錯視で大きく見える</label>
+          <label class="opt"><input type="radio" name="q6" value="c">C) 空気でレンズ効果</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q7">
+        <h3>Q7. 「スポーツの秋」普及に一番関係が深い出来事は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q7">
+          <label class="opt"><input type="radio" name="q7" value="a">A) 1964年東京五輪</label>
+          <label class="opt"><input type="radio" name="q7" value="b">B) 1972年札幌五輪</label>
+          <label class="opt"><input type="radio" name="q7" value="c">C) 1998年長野五輪</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q8">
+        <h3>Q8. 赤色を主に作る紅葉の色素は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q8">
+          <label class="opt"><input type="radio" name="q8" value="a">A) カロテノイド</label>
+          <label class="opt"><input type="radio" name="q8" value="b">B) アントシアニン</label>
+          <label class="opt"><input type="radio" name="q8" value="c">C) クロロフィル</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q9">
+        <h3>Q9. 「紅葉狩り」の“狩り”の本来のニュアンスは？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q9">
+          <label class="opt"><input type="radio" name="q9" value="a">A) 獲物を捕る</label>
+          <label class="opt"><input type="radio" name="q9" value="b">B) 探し求めて鑑賞する</label>
+          <label class="opt"><input type="radio" name="q9" value="c">C) 祈りの儀式</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q10">
+        <h3>Q10. 「焼き芋の“蜜”」の主成分は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q10">
+          <label class="opt"><input type="radio" name="q10" value="a">A) ショ糖</label>
+          <label class="opt"><input type="radio" name="q10" value="b">B) 麦芽糖（マルトース）</label>
+          <label class="opt"><input type="radio" name="q10" value="c">C) 果糖</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q11">
+        <h3>Q11. 栗のトゲトゲ“イガ”の正式名称は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q11">
+          <label class="opt"><input type="radio" name="q11" value="a">A) 萼（がく）</label>
+          <label class="opt"><input type="radio" name="q11" value="b">B) 総苞（そうほう）</label>
+          <label class="opt"><input type="radio" name="q11" value="c">C) 托葉</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q12">
+        <h3>Q12. サンマの脂が一番のる時期は一般に？（年差あり）</h3>
+        <div class="opts" role="radiogroup" aria-label="Q12">
+          <label class="opt"><input type="radio" name="q12" value="a">A) 初夏</label>
+          <label class="opt"><input type="radio" name="q12" value="b">B) 晩秋</label>
+          <label class="opt"><input type="radio" name="q12" value="c">C) 夏の終わり〜初秋</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q13">
+        <h3>Q13. 「カーディガン」の語源は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q13">
+          <label class="opt"><input type="radio" name="q13" value="a">A) スコットの地名</label>
+          <label class="opt"><input type="radio" name="q13" value="b">B) クリミア戦争の伯爵名</label>
+          <label class="opt"><input type="radio" name="q13" value="c">C) 編み方の名称</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q14">
+        <h3>Q14. 日本の「読書週間」はいつ？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q14">
+          <label class="opt"><input type="radio" name="q14" value="a">A) 10/27〜11/9</label>
+          <label class="opt"><input type="radio" name="q14" value="b">B) 11/1〜11/15</label>
+          <label class="opt"><input type="radio" name="q14" value="c">C) 9/15〜9/30</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q15">
+        <h3>Q15. 仮装で匿名＆大人数の子どもは、素顔で1人より“余分にお菓子を取りやすい”？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q15">
+          <label class="opt"><input type="radio" name="q15" value="a">A) 弱い</label>
+          <label class="opt"><input type="radio" name="q15" value="b">B) 変わらない</label>
+          <label class="opt"><input type="radio" name="q15" value="c">C) 強い</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" id="reset" class="btn">リセット</button>
+      <button type="button" id="share" class="btn">共有</button>
+    </div>
+
+    <div class="result" aria-live="polite">
+      <img id="resultImg" src="assets/results/aki-mix/03.png" alt="結果イメージ（初期）">
+      <div class="score">正解：<b id="score">0</b> / <span id="total">15</span></div>
+      <div class="progress" aria-label="正答率"><i id="bar" style="width:0%"></i></div>
+      <div id="label" style="margin-top:6px;font-weight:700">秋の見習い 🌱 — まずは一口・一歩・一枚から</div>
+      <div style="margin-top:10px">
+        <a href="/quiz/" class="btn" aria-label="クイズ一覧に戻る">クイズ一覧に戻る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 詳しい解説（“ある研究では”表現・出典リンクなし／具体め） -->
+  <section id="deep-dive" class="card" aria-labelledby="deepDiveTtl" style="margin-top:16px">
+    <h2 id="deepDiveTtl" style="margin:0 0 .4em">詳しい解説</h2>
+    <p class="sub" style="margin:.2em 0 8px">断定を避けて、できるだけ具体的にまとめています。条件や年によって違いが出ます。</p>
+    <ul>
+      <li><b>焼き芋の“蜜”</b>：ある研究では、加熱中にデンプンが分解され<strong>麦芽糖</strong>が増えるとされます。目安は<strong>60〜75℃</strong>でゆっくり。80℃超が続くと酵素の働きが弱くなり、甘さの伸びが鈍ります。</li>
+      <li><b>焼き芋を冷ますと？</b>：一部の研究では、加熱後に<strong>4℃前後で一晩</strong>冷やすとデンプンが再結晶化し<strong>レジスタントスターチ</strong>が増える傾向。品種・切り方・時間で増え方は大きく変わります。</li>
+      <li><b>栗のイガ</b>：トゲの外装は<strong>総苞（そうほう）</strong>とされます。中に2〜3個の果実（いわゆる栗）が入り、外側で守っています。</li>
+      <li><b>カーディガン</b>：語源は<strong>伯爵名</strong>。前開きは体温調節がしやすく、秋の寒暖差に向いた服として広まりました。</li>
+      <li><b>紅葉の赤</b>：解説では、<strong>晴れが続く昼</strong>と<strong>冷える夜</strong>の組み合わせで赤が濃くなりやすいとされます。体感では<strong>日中と夜の気温差が10℃前後</strong>あると色づきが進みやすい一方、長雨・台風・早霜は不利になりがちです。</li>
+      <li><b>紅葉狩りの“狩り”</b>：現代の意味は「<strong>探し求めて見に行く</strong>」。葉っぱを獲る行為ではありません。</li>
+      <li><b>中秋の名月と満月</b>：<strong>十五夜</strong>は旧暦8月15日、<strong>満月</strong>は天文で決まる瞬間。基準が違うので<strong>1日前後ずれる年</strong>は普通にあります。</li>
+      <li><b>月が大きく見えるワケ</b>：地平線近くでは、建物や木などの<strong>比べるもの</strong>が視界に入りやすく、脳が大きく感じると説明されます。月そのものが大きくなっているわけではありません。</li>
+      <li><b>ストレッチの使い分け</b>：短距離やジャンプの直前に<strong>長い静的保持（1筋60秒超）</strong>をすると、瞬発系の成績が下がりやすい報告が多いです。準備としては<strong>動的ストレッチ＋軽いドリル</strong>が無難。静的はクールダウンや柔軟性アップに。</li>
+      <li><b>スポーツの秋</b>：広まるきっかけは<strong>1964年の東京五輪</strong>。10月10日の開会式→「体育の日」（現・スポーツの日）へつながりました。</li>
+      <li><b>サンマの脂</b>：年や海域で動きますが、<strong>夏の終わり〜初秋</strong>に脂が高い年がよく見られます。秋が深まるほど脂が落ちる年もあります。</li>
+      <li><b>見慣れると好き？</b>：同じものを見る回数が増えるほど、<strong>好みが上がりやすい</strong>という結果が多いです。新しさだけが好きの理由ではありません。</li>
+    </ul>
+    <p class="note">※個人差・地域差・年度差・品種差・測定条件で結果は変わります。ここは娯楽・教育目的の要約です。</p>
+  </section>
+
+  <!-- 法務メモ（利用にあたって） -->
+  <section class="card" aria-label="ご利用にあたって" style="margin-top:16px">
+    <h2 style="margin:0 0 .4em">ご利用にあたって</h2>
+    <ul style="margin:0 0 10px 18px;padding:0;line-height:1.7">
+      <li><strong>独自制作・非公式：</strong>研究一般の知見にヒントを得た<strong>独自コンテンツ</strong>です。公式検査の項目・採点は使っていません。</li>
+      <li><strong>医療用途ではありません：</strong>娯楽＋自己理解の目安であり、医療的・心理的な<strong>診断／治療／助言を目的としません</strong>。</li>
+      <li><strong>プライバシー：</strong>動作は<strong>ブラウザ内で完結</strong>。サーバー送信はありません。進行などが端末に保存されることがあります。</li>
+      <li><strong>表現：</strong>タイプ名などは<strong>比喩・ゲーム表現</strong>です。ラベリング用ではありません。</li>
+      <li><strong>免責：</strong>本サイトの利用による損失・損害について、可能な範囲で責任を負いません。</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  © 知識の水槽 / <a href="/quiz/">トップに戻る</a> ・ <a href="/shindan/">診断一覧</a>
+</footer>
+
+<div class="confetti" id="fx" aria-hidden="true"></div>
+
+<script>
+/* ===== 正解キー ===== */
+const KEY = {
+  q1:'c', q2:'b', q3:'b', q4:'b', q5:'c',
+  q6:'b', q7:'a', q8:'b', q9:'b', q10:'b',
+  q11:'b', q12:'c', q13:'b', q14:'a', q15:'c'
+};
+
+/* ===== “くすっと”短文（OKもNGも、軽い説明＋ユーモア） ===== */
+const FUN = {
+  q1:{ok:"推しは“見慣れ”で育つ。",           ng:"推し、まだ育成前。"},
+  q2:{ok:"のびのびし過ぎると、記録ものびない。", ng:"のび太モード発動。"},
+  q3:{ok:"夜長はページが進む季節。",           ng:"馬は太るけど本は太らない派。"},
+  q4:{ok:"“カブ顔”は結構ホラー寄り。",         ng:"パンプキン派、渡米が早かった。"},
+  q5:{ok:"名月、たまにマイペース。",           ng:"お月さま、予定はだいたい未定。"},
+  q6:{ok:"月は据え置き、脳がズーム。",         ng:"地平線フィルターで盛れちゃった。"},
+  q7:{ok:"10月10日、秋が走り出す日。",         ng:"雪合戦はまだ先！"},
+  q8:{ok:"赤は期間限定、新作カラー。",         ng:"黄色担当に誤配。"},
+  q9:{ok:"“狩り”＝いい景色を探しに行くこと。", ng:"葉っぱハンターじゃなくて景色ハンター。"},
+  q10:{ok:"甘さ職人は麦芽糖、砂糖は足してません。", ng:"蜜、裏方の仕事が光る。"},
+  q11:{ok:"今日からドヤ顔ワード“総苞”。",      ng:"そのトゲ、肩書きあります。"},
+  q12:{ok:"旬ボディは季節で衣替え。",          ng:"サンマ、先取り派に置いてかれた。"},
+  q13:{ok:"伯爵、まさかのファッションデビュー。", ng:"地名でも編み方でもない路線。"},
+  q14:{ok:"本の秋、文化の日をまたぎます。",     ng:"スケジュール、ちょっとズレました。"},
+  q15:{ok:"仮面をつけると手も伸びがち。",       ng:"仮装パワー、つい盛っちゃう。"}
+};
+
+const total = Object.keys(KEY).length;
+const scoreEl = document.getElementById('score');
+const totalEl = document.getElementById('total');
+const bar = document.getElementById('bar');
+const label = document.getElementById('label');
+const resultImg = document.getElementById('resultImg');
+totalEl.textContent = total;
+
+let score = 0, answered = new Set();
+
+document.querySelectorAll('.opts input[type="radio"]').forEach(inp=>{
+  inp.addEventListener('change', e=>{
+    const qid = e.target.name;
+    const val = e.target.value;
+    const qBox = e.target.closest('.q');
+    if(answered.has(qid)) return;
+    answered.add(qid);
+
+    const ok = (val===KEY[qid]);
+    const picked = e.target.closest('.opt');
+    picked.classList.add(ok?'correct':'wrong');
+
+    // 正解肢をハイライト
+    const correctLabel = qBox.querySelector(`input[value="${KEY[qid]}"]`).closest('.opt');
+    correctLabel.classList.add('correct');
+
+    // その場で一言（OK/NGどちらもくすっと）
+    const ex = qBox.querySelector('.ex');
+    ex.innerHTML = (ok?'✅ 正解！':'❌ 不正解…') + ' — ' + (ok?FUN[qid].ok:FUN[qid].ng);
+
+    // ラジオ無効化
+    qBox.querySelectorAll('input[type="radio"]').forEach(r=>r.disabled=true);
+    qBox.querySelectorAll('.opt').forEach(l=>l.style.cursor='default');
+
+    if(ok){ score++; confettiBurst(); }
+    updateScore();
+
+    // 次の未回答へスクロール
+    const next = [...document.querySelectorAll('.q')].find(q=>!answered.has(q.dataset.qid));
+    if(next){ next.scrollIntoView({behavior:'smooth',block:'center'}); }
+  });
+});
+
+function updateScore(){
+  const pct = Math.round(score/total*100);
+  scoreEl.textContent = score;
+  bar.style.width = pct + '%';
+  // ラベルと結果画像
+  const tier = pct>=87 ? '01' : pct>=47 ? '02' : '03';
+  label.textContent =
+    pct>=87 ? '秋の達人 🍁 — 知も味も体も、秋セット完了' :
+    pct>=47 ? '秋の研究生 🔎 — いい線！あと一歩で見頃' :
+              '秋の見習い 🌱 — まずは一口・一歩・一枚から';
+  resultImg.src = `assets/results/aki-mix/${tier}.png`;
+  resultImg.alt = `結果イメージ ${tier}`;
+}
+
+document.getElementById('reset').addEventListener('click', ()=>{
+  score=0; answered.clear(); updateScore();
+  document.querySelectorAll('.q').forEach(q=>{
+    q.querySelectorAll('input[type="radio"]').forEach(r=>{r.checked=false; r.disabled=false;});
+    q.querySelectorAll('.opt').forEach(l=>l.classList.remove('correct','wrong'));
+    q.querySelector('.ex').textContent='';
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+document.getElementById('share').addEventListener('click', async ()=>{
+  const title=document.title, url=location.href, text='秋の贅沢クイズ｜知識の水槽';
+  if(navigator.share){ try{await navigator.share({title,text,url});}catch(_){} }
+  else{ try{ await navigator.clipboard.writeText(url); alert('URLをコピーしました'); }catch(_){} }
+});
+
+/* ちょい花火 */
+function confettiBurst(){
+  const fx = document.getElementById('fx');
+  for(let i=0;i<14;i++){
+    const d = document.createElement('i');
+    d.className='dot';
+    d.style.left = (Math.random()*100)+'%';
+    d.style.top  = '0';
+    d.style.background = i%3? 'var(--accent)': 'var(--accent2)';
+    d.style.transform = `translateY(-10px) translateX(${(Math.random()*40-20)}px)`;
+    d.style.animationDelay = (Math.random()*0.2)+'s';
+    fx.appendChild(d);
+    setTimeout(()=>d.remove(),1000);
+  }
+}
+</script>
+</body>
+</html>
