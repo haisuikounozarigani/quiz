@@ -1,6 +1,4 @@
 <!doctype html>
-<!-- 0 -->
-<!-- 1 -->
 <html lang="ja">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -57,7 +55,7 @@ input[type="search"]{flex:1;padding:12px 14px;border:1px solid #cfe2ff;border-ra
 }
 .segbtn.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(74,168,255,.18)}
 
-/* Cards（画像なし：心の標本と同じレイアウト） */
+/* Cards */
 .links{display:grid;gap:12px;margin-top:10px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
 a.link{
   display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--fg);
@@ -82,14 +80,6 @@ a.link > div{flex:1 1 auto;min-width:0}
 .pill{padding:4px 8px;border-radius:999px;font-size:.8em;border:1px solid #dbe8ff;background:#fff;color:#3b4d5e;display:inline-flex;align-items:center;line-height:1;vertical-align:middle}
 .badge{margin-left:auto;padding:8px 12px;border-radius:999px;font-weight:700;font-size:.9em;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;line-height:1;vertical-align:middle}
 
-/* Thumbnail mode（使わない：data-thumbが無い限り無効） */
-.link.with-thumb{display:grid;grid-template-rows:auto 1fr auto;padding:0}
-.link.with-thumb .thumb{margin:0;position:relative;aspect-ratio:1200/630;background:#f4f8ff;border-bottom:1px solid var(--line);overflow:hidden;border-top-left-radius:16px;border-top-right-radius:16px}
-.link.with-thumb .thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.link.with-thumb .emo{display:none}
-.link.with-thumb .body{padding:12px 14px}
-.link.with-thumb .badge{margin:0 12px 12px auto}
-
 /* Footer */
 .note{color:var(--muted);text-align:center;margin:18px 0}
 .footerbar{position:sticky;bottom:0;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;padding:10px;background:rgba(255,255,255,.82);
@@ -101,14 +91,22 @@ a.link > div{flex:1 1 auto;min-width:0}
   a.link{padding:12px}
   .badge{display:none}
 }
+
+/***** Quiz view counter (inline stats) *****/
+.stats-inline{justify-content:flex-end;gap:10px;margin-top:6px;display:flex;flex-wrap:wrap}
+.stats-inline .mini{
+  color:var(--muted);font-size:.9em;
+  border:1px solid var(--line);border-radius:999px;
+  padding:4px 8px;background:#fff;line-height:1.6
+}
 </style>
 </head>
 <body>
+
 <!-- Splash -->
 <section id="splash" class="splash" aria-label="知識の水槽の入口" tabindex="0" role="button">
   <div class="fallback" aria-hidden="true"></div>
-  <img class="bg" alt="知識の水槽のキービジュアル"
-       src="/quiz/assets/hero/01.png">
+  <img class="bg" alt="知識の水槽のキービジュアル" src="/quiz/assets/hero/01.png">
   <div class="hero">
     <h1>知識の水槽</h1>
     <p class="sub">タップ（またはEnter/Space）で入口が開きます。</p>
@@ -130,26 +128,31 @@ a.link > div{flex:1 1 auto;min-width:0}
       <button id="clearBtn" class="btn" type="button" aria-label="検索とタグをクリア">クリア</button>
     </div>
     <div id="chips" class="chips" role="listbox" aria-multiselectable="false" aria-label="タグ（1つ選択で絞り込み）"></div>
+
+    <!-- ▼ 心の標本と同じ“Lv”表示：ローカル＋全体 -->
+    <div class="row stats-inline" aria-label="水槽カウンタ">
+      <span class="mini">📘 あなたの知識Lv <strong id="myOpenCount">0</strong></span>
+      <span class="mini">📚 みんなの知識Lv <strong id="allOpenCount">—</strong></span>
+    </div>
   </section>
 
-  <!-- Cards（クイズカード追加） -->
+  <!-- Cards（クイズカード） -->
   <nav class="links" id="list" aria-label="記事/クイズ一覧（検索結果）">
-  
-  
- <!-- NEW: 秋の贅沢クイズ -->
-<a class="link" href="/quiz/aki-mix.html"
-   data-id="aki-mix" data-tags="クイズ,秋,雑学,心理,行事,食" data-mins="5"
-   data-updated="2025-09-24"
-   data-keywords="紅葉 中秋の名月 ハロウィン サンマ 焼き芋 栗 カーディガン 読書 錯視 スポーツの秋">
-  <span class="emo">🍁</span>
-  <div class="body">
-    <div class="ttl">秋の贅沢クイズ</div>
-    <div class="sub2">“秋あるある”を楽しく更新。選んだ瞬間に判定される3択×15問。</div>
-    <div class="meta"></div>
-  </div>
-  <span class="badge" data-new>NEW</span>
-</a>
-  
+
+    <!-- NEW: 秋の贅沢クイズ -->
+    <a class="link" href="/quiz/aki-mix.html"
+       data-id="aki-mix" data-tags="クイズ,秋,雑学,心理,行事,食" data-mins="5"
+       data-updated="2025-09-24"
+       data-keywords="紅葉 中秋の名月 ハロウィン サンマ 焼き芋 栗 カーディガン 読書 錯視 スポーツの秋">
+      <span class="emo">🍁</span>
+      <div class="body">
+        <div class="ttl">秋の贅沢クイズ</div>
+        <div class="sub2">“秋あるある”を楽しく更新。選んだ瞬間に判定される3択×15問。</div>
+        <div class="meta"></div>
+      </div>
+      <span class="badge" data-new>NEW</span>
+    </a>
+
     <!-- NEW: 猫と犬の心理研究クイズ -->
     <a class="link" href="/quiz/inu-neko-quiz.html"
        data-id="inu-neko-quiz" data-tags="クイズ,心理,猫,犬" data-mins="3"
@@ -162,6 +165,19 @@ a.link > div{flex:1 1 auto;min-width:0}
         <div class="meta"></div>
       </div>
       <span class="badge" data-new>NEW</span>
+    </a>
+
+    <!-- 既存：作成中 -->
+    <a class="link" href="#" aria-disabled="true"
+       data-id="wip" data-tags="海" data-updated="2025-09-15"
+       data-keywords="作成中 WIP 準備中">
+      <span class="emo">🔧</span>
+      <div class="body">
+        <div class="ttl">作成中</div>
+        <div class="sub2">コンテンツ公開まで少々お待ちください。</div>
+        <div class="meta"></div>
+      </div>
+      <span class="badge">準備中</span>
     </a>
   </nav>
 
@@ -226,7 +242,7 @@ a.link > div{flex:1 1 auto;min-width:0}
     if(badge && ds){ const diff=(today - new Date(ds+'T00:00:00'))/86400000; badge.style.display=(diff<=21)?'inline-flex':'none'; }
   });
 
-  // data-thumb → サムネ（今回は未使用：data-thumbがあれば自動で有効）
+  // data-thumb → サムネ（未使用：data-thumbがあれば有効）
   $$('#list a.link').forEach(a=>{
     const src=a.dataset.thumb; if(!src) return;
     a.classList.add('with-thumb');
@@ -331,5 +347,89 @@ a.link > div{flex:1 1 auto;min-width:0}
   document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ q.value=''; setActiveTag(null); apply(); } });
 })();
 </script>
+
+<!-- ▼ クイズ閲覧カウンタ（心の標本と同じ方式：クリックで加算） -->
+<script>
+(function(){
+  const myEl  = document.querySelector('#myOpenCount');
+  const allEl = document.querySelector('#allOpenCount');
+
+  // —— 設定（必要ならURLだけ差し替え） ——
+  const CF_WORKER_URL = "https://counter.asagikarin.workers.dev"; // 心と同じでOK
+  const GLOBAL_KEY    = "quiz_open_total"; // クイズ用・全体キー名
+
+  // LocalStorage keys（クイズ用）
+  const LS_TOTAL_KEY   = "quiz:open:total";
+  const LS_BYID_KEY    = "quiz:open:byid";
+  const LS_GLOBAL_LAST = "quiz:open:global:last";
+
+  // 表示ヘルパ
+  function setAll(val){
+    if(!allEl) return;
+    if (typeof val === "number" && Number.isFinite(val)) {
+      allEl.textContent = val.toLocaleString("ja-JP");
+      try{ localStorage.setItem(LS_GLOBAL_LAST, String(val)); }catch(e){}
+    } else {
+      const last = parseInt(localStorage.getItem(LS_GLOBAL_LAST) || "0", 10);
+      allEl.textContent = last ? last.toLocaleString("ja-JP") : "—";
+    }
+  }
+  function getLocalTotal(){
+    const n = parseInt(localStorage.getItem(LS_TOTAL_KEY) || "0", 10);
+    return Number.isFinite(n) ? n : 0;
+  }
+  function setLocalTotal(n){ localStorage.setItem(LS_TOTAL_KEY, String(n)); }
+  function incLocalById(id){
+    const t = getLocalTotal() + 1;
+    setLocalTotal(t);
+    let map={}; try{ map=JSON.parse(localStorage.getItem(LS_BYID_KEY) || "{}"); }catch(e){}
+    map[id]=(map[id]||0)+1;
+    localStorage.setItem(LS_BYID_KEY, JSON.stringify(map));
+    if(myEl) myEl.textContent = t.toLocaleString("ja-JP");
+  }
+
+  // 全体取得
+  async function getGlobalCount(){
+    try{
+      const url = new URL(CF_WORKER_URL);
+      url.searchParams.set("key", GLOBAL_KEY);
+      const r = await fetch(url.toString(), {mode:"cors", cache:"no-store"});
+      const d = await r.json();
+      return (d && typeof d.value === "number") ? d.value : null;
+    }catch(e){ return null; }
+  }
+
+  // 全体+1（GET）
+  function bumpGlobal(){
+    try{
+      const url = new URL(CF_WORKER_URL);
+      url.searchParams.set("key", GLOBAL_KEY);
+      url.searchParams.set("hit", "1");
+      fetch(url.toString(), { mode:"cors", cache:"no-store", keepalive:true }).catch(()=>{});
+    }catch(e){}
+  }
+
+  // 初期表示
+  if(myEl) myEl.textContent = getLocalTotal().toLocaleString("ja-JP");
+  setAll(null); // まず前回値/—を表示
+  getGlobalCount().then(val => setAll(val)).catch(()=>setAll(null));
+
+  // 一覧クリックで計測（遷移前）
+  const list = document.querySelector('#list');
+  if(list){
+    list.addEventListener('click', function(e){
+      const a = e.target.closest('a.link');
+      if(!a) return;
+      const id = a.dataset.id || "unknown";
+      incLocalById(id);   // あなたの知識Lv +1
+      bumpGlobal();       // みんなの知識Lv +1
+      // 楽観更新（チラつき防止）
+      const cur = parseInt(localStorage.getItem(LS_GLOBAL_LAST) || "0", 10) || 0;
+      setAll(cur + 1);
+    }, {capture:true});
+  }
+})();
+</script>
+
 </body>
 </html>
