@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>秋の食欲クイズ｜知識の水槽</title>
+<meta name="description" content="20問のA/B/Cクイズ。選んだ瞬間に判定と短い解説、最後にスコアと総評を表示。保存はオプトインのみ。">
+<meta name="keywords" content="クイズ,生活,食欲,秋,超加工食品,ながら食べ,皿の大きさ,ビュッフェ,酢,水,前菜,辛さ,カトラリー,アルコール,姿勢,写真撮影">
+<meta name="theme-color" content="#ffffff">
+<!-- OGP -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="秋の食欲クイズ｜知識の水槽">
+<meta property="og:description" content="20問のA/B/Cクイズ。選んだ瞬間に判定と短い解説、最後にスコアと総評を表示。">
+<meta property="og:url" content="/quiz/aki-appetite.html">
+<meta property="og:image" content="/quiz/assets/results/aki-appetite/01.png">
+
+<style>
+:root{
+  --accent:#4aa8ff; --ink:#1f2732; --muted:#667087; --paper:#fff;
+  --bg1:#f7f9ff; --line:#e6ecf7; --ok:#2fb07f; --ng:#e05a69;
+}
+*{box-sizing:border-box}
+img{max-width:100%;display:block}
+html,body{margin:0;padding:0;background:var(--bg1);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans JP","Hiragino Kaku Gothic ProN","BIZ UDPGothic",sans-serif;line-height:1.6}
+main{max-width:980px;margin:0 auto;padding:16px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 0 rgba(10,30,60,.03)}
+.card.small{font-size:.9rem;color:var(--muted)}
+.mini{font-size:.9em;color:var(--muted)}
+.hd{padding:16px 0}
+.hd h1{margin:.2em 0;font-size:1.6rem}
+.hd p{margin:0;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.pill{border:1px solid var(--line);padding:4px 10px;border-radius:999px;background:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:8px;color:var(--muted);margin-top:8px}
+.sticky{position:sticky;top:0;z-index:10;background:linear-gradient(#fff, #fff8);backdrop-filter:saturate(1.3) blur(6px);border:1px solid var(--line);border-radius:14px;padding:12px;margin:12px 0}
+.bar{height:10px;background:#f0f4ff;border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+#prog{height:100%;width:0;background:linear-gradient(90deg,var(--accent),#a48bff);transition:width .25s ease}
+.sticky .row{display:flex;align-items:center;gap:12px;margin-top:10px}
+button{appearance:none;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font-weight:600;cursor:pointer}
+button:hover{border-color:#d8e2f2}
+label.inline{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+
+.q{border:1px solid var(--line);border-radius:12px;margin:18px 0;padding:12px}
+.q legend{font-weight:700;margin-bottom:8px}
+.scale{display:grid;grid-template-columns:1fr;gap:10px}
+.scale > div{position:relative}
+.scale input[type="radio"]{position:absolute;inset:0;opacity:0}
+.scale label{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:14px;min-height:48px;cursor:pointer}
+.scale input[type="radio"]:focus + label{outline:3px solid #cfe4ff;outline-offset:2px}
+.scale input[type="radio"]:checked + label{border-color:var(--accent);background:#f5f9ff;box-shadow:0 0 0 2px #e8f1ff inset}
+.fb{margin-top:10px;padding:10px;border-radius:10px;background:#f8fbff;border:1px solid var(--line);color:#223}
+.fb.ok{background:#ecfbf3;border-color:#d8f6e7}
+.fb.ng{background:#fff1f3;border-color:#ffd9df}
+.fb .mini{display:inline-block;margin-left:8px;color:var(--muted);font-size:.9em}
+
+#result{display:none}
+#resImg{display:block;width:100%;max-width:480px;height:auto;margin:10px auto;border-radius:12px;border:1px solid var(--line);background:#f4f7ff}
+#scoreLine{font-size:1.1rem;font-weight:700}
+ul#resResearch{margin:8px 0 0 20px}
+#deepDive{margin-top:12px;border-top:1px dashed var(--line);padding-top:12px}
+
+#lastScore{color:var(--muted);margin-left:8px}
+hr.sep{border:none;border-top:1px solid var(--line);margin:12px 0}
+
+.share{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.share button{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px}
+.share svg{width:18px;height:18px}
+
+@media (min-width:640px){
+  .hd h1{font-size:1.9rem}
+  .scale{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+<main>
+  <header class="hd">
+    <h1>秋の食欲クイズ</h1>
+    <p>直感でA/B/Cを選ぶだけ。選んだ瞬間に判定と短い解説が出ます。</p>
+  </header>
+
+  <div class="sticky" role="region" aria-label="進捗と操作">
+    <div class="bar" aria-hidden="true"><div id="prog" style="width:0%"></div></div>
+    <div class="row">
+      <button id="resetBtn" type="button">最初から</button>
+      <span class="mini">回答済みの割合がバーに表示されます。</span>
+    </div>
+  </div>
+
+  <section id="desc" class="card">
+    <div class="tags">
+      <span class="pill">#クイズ</span>
+      <span class="pill">#生活</span>
+      <span class="pill">#食欲</span>
+      <span class="pill">#秋</span>
+    </div>
+    <div class="meta">
+      <span class="pill">⏱ 所要：約6分</span>
+      <span class="pill">更新：2025-10-02</span>
+    </div>
+    <p class="mini">ネット通信なし／外部送信なし。選択肢は毎回ランダムに並びます。</p>
+  </section>
+
+  <section id="ctrl" class="card">
+    <label class="inline">
+      <input id="optSave" type="checkbox">
+      <span>前回スコアを保存する（オプトイン）</span>
+    </label>
+    <span id="lastScore" hidden>前回：-</span>
+  </section>
+
+  <section id="quiz" class="card" aria-label="問題リスト">
+    <!-- JSで生成 -->
+    <noscript>
+      <p>JavaScriptをONにしてください。クイズの表示・採点に使用します（外部通信は行いません）。</p>
+    </noscript>
+  </section>
+
+  <section id="result" class="card" aria-live="polite">
+    <div id="scoreLine">スコア：-</div>
+    <div id="scorePoints" class="mini" style="margin:.3em 0 .6em">（100点満点換算の点数も表示します）</div>
+    <img id="resImg" src="" alt="結果画像" loading="lazy">
+    <p id="resCopy">-</p>
+    <div class="share" aria-label="共有">
+      <span class="mini">シェア：</span>
+      <button id="shareLine" type="button" aria-label="LINEで共有" title="LINEで共有">
+        <svg viewBox="0 0 36 36" aria-hidden="true"><path fill="#06c755" d="M18 4C10.82 4 5 8.98 5 15.11c0 4.4 2.86 8.24 7.05 10.26-.1.37-.66 2.36-.68 2.56 0 .28.1.55.32.74.3.25.74.3 1.1.12.3-.15 3.38-2.07 3.92-2.39.4.05.82.07 1.24.07 7.18 0 13-4.98 13-11.11S25.18 4 18 4z"/></svg>
+        LINE
+      </button>
+      <button id="shareInsta" type="button" aria-label="Instagramで共有" title="Instagramで共有">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#c13584" d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-.75a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5z"/></svg>
+        Instagram
+      </button>
+      <button id="shareX" type="button" aria-label="Xで共有" title="Xで共有">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2H21l-6.5 7.43L22 22h-6.91l-4.51-5.95L4.5 22H2l7-8L2 2h6.91l4.26 5.62L18.244 2Zm-2.406 18h1.489L8.255 4H6.766l9.072 16Z" fill="#000"/></svg>
+        X
+      </button>
+    </div>
+    <h3 style="margin-top:12px">ある研究では</h3>
+    <ul id="resResearch"></ul>
+    <div id="deepDive"></div>
+    <hr class="sep">
+    <button id="retry" type="button">もう一度</button>
+  </section>
+
+  <footer class="card small">
+    <p>注意：数字は目安です。体質や状況により合わないことがあります。保存は既定でOFF（ONにすると「前回スコア」1件のみをお使いのブラウザに保存）。</p>
+  </footer>
+</main>
+
+<!-- ▼ クイズJSON（埋め込みデータ） -->
+<script id="data" type="application/json">
+{
+  "title": "秋の食欲クイズ",
+  "slug": "aki-appetite",
+  "tags": ["クイズ","生活","食欲","秋"],
+  "mins": 6,
+  "updated": "2025-10-02",
+  "results_images": [
+    "/quiz/assets/results/aki-appetite/01.png",
+    "/quiz/assets/results/aki-appetite/02.png",
+    "/quiz/assets/results/aki-appetite/03.png"
+  ],
+  "settings": { "save_default": false, "show_last_score": true },
+  "questions": [
+    { "id":"q1","text":"「さっき食べた量」を思い出してからおやつを選ぶと？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"c","is_misconception": true,"explain":"記憶がブレーキになる。ある研究では、想起でその後の摂取が約10〜20％減。","funny_ok":"思い出し満腹。","funny_ng":"忘れればゼロカロ！","research_hint":""},
+    { "id":"q2","text":"超加工っぽい“食べやすい”献立に切り替えると？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"a","is_misconception": false,"explain":"食べやすさは速さ↑→合計↑に。ある研究では約500kcal/日増。","funny_ok":"サクサクは口が加速。","funny_ng":"栄養同じなら無限OK！","research_hint":""},
+    { "id":"q3","text":"数分だけテトリスなどで気をそらすと？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"c","is_misconception": true,"explain":"渇望のイメージ枠が埋まり衝動↓。ある研究では約15〜20％低下。","funny_ok":"小腹よりブロック優先。","funny_ng":"眺め耐えが正解！","research_hint":""},
+    { "id":"q4","text":"睡眠を削った翌日の食事量は？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"a","is_misconception": false,"explain":"眠い日は高カロリー寄り。ある研究では約200〜500kcal/日増。","funny_ok":"眠気は胃袋を甘やかす。","funny_ng":"徹夜ダイエット！","research_hint":""},
+    { "id":"q5","text":"青っぽい照明（※男性で報告が目立つ）で食事をすると？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"c","is_misconception": true,"explain":"光は雰囲気の味付け。ある研究では男性で摂取が下がる傾向（万人ではない）。","funny_ok":"ライトで食欲ディマー。","funny_ng":"青なら誰でもゼロ！","research_hint":""},
+    { "id":"q6","text":"たんぱく質“やや多め”の食事にすると？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"c","is_misconception": false,"explain":"腹持ち↑→合計↓の小さな効果。ある研究では約5〜15％減。","funny_ok":"腹持ち係、出動。","funny_ng":"肉だけ食べれば勝ち！","research_hint":""},
+    { "id":"q7","text":"大盛りを食べる人と同席すると自分の量は？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"a","is_misconception": false,"explain":"同調が起きやすい。ある研究では同席者に強く引っぱられる。","funny_ok":"「今日だけ」は伝染。","funny_ng":"自分は無関係！","research_hint":""},
+    { "id":"q8","text":"同じ献立でも“硬めの食感”にすると？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"c","is_misconception": true,"explain":"よく噛む→速さ↓→合計↓。ある研究では約13％減。","funny_ok":"“コリッ”が神アシスト。","funny_ng":"飲み物なら無限！","research_hint":""},
+    { "id":"q9","text":"無音と“静かなBGM”、総量は？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"b","is_misconception": true,"explain":"選ぶ内容は変わり得るが、総量はほぼ同等。ある研究では差は約0〜5％。","funny_ok":"曲は気分、量は別腹。","funny_ng":"音で満腹度MAX！","research_hint":""},
+    { "id":"q10","text":"“ながら食べ”（画面を見つつ）をすると？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"a","is_misconception": true,"explain":"注意が散り記憶が薄く。ある研究では後の摂取が約10〜25％増。","funny_ok":"画面＝食欲ブースター。","funny_ng":"ながらは節制の友！","research_hint":""},
+    { "id":"q11","text":"大きい皿で盛りつけると？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"a","is_misconception": false,"explain":"余白が“もう少し”を呼ぶ。ある研究では約10〜30％増。","funny_ok":"余白はおかわりの罠。","funny_ng":"皿は関係なし！","research_hint":""},
+    { "id":"q12","text":"種類が多いビュッフェでの総量は？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"a","is_misconception": false,"explain":"多様性効果で“少しずつ”が山に。ある研究では約15〜30％増。","funny_ok":"試食が本編。","funny_ng":"種類多いほど節制！","research_hint":""},
+    { "id":"q13","text":"食前に少量の酢を添えると？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"c","is_misconception": false,"explain":"消化がゆるみ満腹感↑。ある研究ではGI約35％低下＋総量↓の報告。","funny_ok":"ひと振りで波なだらか。","funny_ng":"飲めば全部ゼロ！","research_hint":""},
+    { "id":"q14","text":"辛さを“やや”上げただけで総量は？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"b","is_misconception": true,"explain":"刺激は増えても量は大差なしの報告が多い。差は約0〜5％。","funny_ok":"舌は熱く、量は平熱。","funny_ng":"激辛で爆食い！","research_hint":""},
+    { "id":"q15","text":"食前にコップ1〜2杯の水を飲むと？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"c","is_misconception": true,"explain":"胃の容積が埋まり一時的に控えめ。ある研究では約10％減（個人差）。","funny_ok":"先に水で前哨戦。","funny_ng":"水だけで無限減量！","research_hint":""},
+    { "id":"q16","text":"野菜スープを先に飲んでから主食に行くと？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"c","is_misconception": false,"explain":"低エネ前菜→満腹感↑。ある研究では総量が約10〜15％減。","funny_ok":"前菜は盾。","funny_ng":"スープはお腹の邪魔！","research_hint":""},
+    { "id":"q17","text":"重いカトラリーで食べると総量は？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"b","is_misconception": true,"explain":"満足感は変わっても量はほぼ同じ。差は約0〜5％。","funny_ok":"重さは気分の演出。","funny_ng":"重いと満腹2倍！","research_hint":""},
+    { "id":"q18","text":"食前に少量のお酒（アペリティフ）を飲むと？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"a","is_misconception": false,"explain":"食欲促進が起きやすい。ある研究では総摂取が約10〜20％増。","funny_ok":"乾杯で箸が滑走路。","funny_ng":"お酒はカロリーゼロ！","research_hint":""},
+    { "id":"q19","text":"立って食べる vs 座って食べる、総量は？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"b","is_misconception": true,"explain":"姿勢は満足感に影響し得るが総量は大差なし。差は約0〜5％。","funny_ok":"姿勢は気分、量は別。","funny_ng":"立食で自動ダイエット！","research_hint":""},
+    { "id":"q20","text":"料理を撮影してから食べると総量は？","choices":["A) 増える","B) 変わらない","C) 減る"],"answer":"b","is_misconception": true,"explain":"味わいは深まる報告もあるが、量はほぼ同等。差は約0〜5％。","funny_ok":"思い出は太らない。","funny_ng":"撮るほど痩せる！","research_hint":""}
+  ],
+  "deep_dive_html": "<h3>秋の食欲の整え方（使い分けメモ）</h3><ul><li>抑えたい日：前菜（野菜/スープ）→主食／水を先に／硬め調理。</li><li>楽しみたい日：皿は大きくしすぎない・多様性は計画的に。</li><li>ノーチェンジ条件：静かなBGM有無／器具の重さ／姿勢／軽い辛さ／写真撮影。</li><li>睡眠が鍵：眠い日は最初にタンパク質で満腹を前借り。</li></ul><p class='mini' style='color:#667087'>※ 数字は目安。体質や状況により合わない場合があります。</p>",
+  "keywords": "超加工食品, マインドフル, テトリス, 睡眠不足, 青色照明, たんぱく質, 硬い食感, BGM, ながら食べ, 皿の大きさ, ビュッフェ, 酢, 水, 前菜, 辛さ, カトラリー, アルコール, 姿勢, 写真撮影"
+}
+</script>
+
+<!-- ▼ 実装JS（依存ゼロ） -->
+<script>
+(function(){
+  "use strict";
+  // ---- load data ----
+  var raw = document.getElementById("data").textContent;
+  try{ raw = raw.trim(); }catch(e){}
+  var QUIZ = JSON.parse(raw);
+  var qs = QUIZ.questions.slice(); // 順序固定
+
+  // ---- DOM refs ----
+  var prog = document.getElementById("prog");
+  var quizWrap = document.getElementById("quiz");
+  var resSec = document.getElementById("result");
+  var resImg = document.getElementById("resImg");
+  var scoreLine = document.getElementById("scoreLine");
+  var scorePoints = document.getElementById("scorePoints");
+  var resCopy = document.getElementById("resCopy");
+  var resResearch = document.getElementById("resResearch");
+  var deepDive = document.getElementById("deepDive");
+  var optSave = document.getElementById("optSave");
+  var lastScore = document.getElementById("lastScore");
+
+  // ---- storage helpers ----
+  var K = "aquarium:last:"+QUIZ.slug;
+  function loadLast(){
+    if(!optSave || !optSave.checked){ if(lastScore) lastScore.hidden = true; return; }
+    try{
+      var v = JSON.parse(localStorage.getItem(K) || "null");
+      if(!v){ lastScore.hidden = true; return; }
+      var days = Math.floor((Date.now()-v.ts)/86400000);
+      lastScore.hidden = false;
+      lastScore.textContent = "前回："+v.correct+"/"+v.total+"（"+days+"日前）";
+    }catch(e){ lastScore.hidden = true; }
+  }
+  function saveLast(correct,total){
+    if(!optSave || !optSave.checked) return;
+    try{ localStorage.setItem(K, JSON.stringify({correct:correct,total:total,rate:correct/total,ts:Date.now()})); }catch(e){}
+  }
+  function clearLast(){ try{ localStorage.removeItem(K); }catch(e){} }
+
+  // ---- shuffle choices only ----
+  function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=(Math.random()*(i+1))|0; var t=a[i]; a[i]=a[j]; a[j]=t; } }
+
+  // ---- build quiz ----
+  var answered = 0, correct = 0;
+  function build(){
+    var html = "";
+    for(var idx=0; idx<qs.length; idx++){
+      var q = qs[idx];
+      var ids = ["a","b","c"];
+      var cs = q.choices.map(function(t,i){ return {key:ids[i], text:t}; });
+      shuffle(cs); // 選択肢だけ毎回シャッフル
+      html += '<fieldset class="q" id="fs-'+q.id+'">'
+            +   '<legend>'+(idx+1)+'. '+q.text+'</legend>'
+            +   '<div class="scale">'
+            +     cs.map(function(c){
+                      return '<div>'
+                          +    '<input id="'+q.id+'-'+c.key+'" type="radio" name="'+q.id+'" value="'+c.key+'">'
+                          +    '<label for="'+q.id+'-'+c.key+'">'+c.text+'</label>'
+                          +  '</div>';
+                    }).join("")
+            +   '</div>'
+            +   '<div class="fb" aria-live="polite"></div>'
+            + '</fieldset>';
+    }
+    quizWrap.innerHTML = html;
+  }
+
+  // ---- event delegation for answers ----
+  function onQuizChange(e){
+    var t = e.target || e.srcElement;
+    if(!t || t.tagName!=="INPUT" || t.type!=="radio") return;
+    var name = t.name;
+    var fs = document.getElementById("fs-"+name);
+    if(!fs) return;
+    // すでに回答済みなら無視
+    if(fs.getAttribute("data-done")) return;
+    fs.setAttribute("data-done","1");
+
+    // 採点
+    var q = null;
+    for(var i=0;i<qs.length;i++){ if(qs[i].id===name){ q=qs[i]; break; } }
+    if(!q) return;
+    var val = t.value;
+    var fb = fs.querySelector(".fb");
+    var isOK = (val===q.answer);
+    var radios = fs.querySelectorAll('input[type="radio"]');
+    for(var k=0;k<radios.length;k++){ radios[k].disabled = true; }
+    answered++;
+    if(isOK){
+      correct++;
+      fb.classList.remove("ng"); fb.classList.add("ok");
+      fb.innerHTML = '✅ 正解。'+q.explain+' <span class="mini">'+(q.funny_ok||"")+'</span>';
+    }else{
+      fb.classList.remove("ok"); fb.classList.add("ng");
+      fb.innerHTML = '❌ 惜しい。'+q.explain+' <span class="mini">'+(q.funny_ng||"")+'</span>';
+    }
+    prog.style.width = Math.round(100*answered/qs.length)+'%';
+    if(answered===qs.length) finish();
+  }
+
+  // ---- finish ----
+  function finish(){
+    var rate = correct/qs.length;
+    var img = rate>=0.8? QUIZ.results_images[0] : (rate>=0.4? QUIZ.results_images[1] : QUIZ.results_images[2]);
+    resImg.src = img; resImg.alt = "結果画像";
+    scoreLine.textContent = "正解："+correct+" / "+qs.length+"（"+Math.round(rate*100)+"%）";
+    var points = Math.round((correct/qs.length)*100);
+    document.getElementById("scorePoints").textContent = "スコア："+points+"点（100点満点）";
+
+    resCopy.textContent = rate>=0.8
+      ? "よく見えているタイプ。環境・注意・前菜の使い分けができています。次も“前菜→主食”と睡眠を味方に。"
+      : rate>=0.4
+      ? "あと一歩で安定ゾーン。皿の大きさと“ながら”に注意すると、ちょうど良さが続きます。"
+      : "今回は学び多め。まずは“水かスープを先に”と“ながら食べ回避”の2点から。";
+
+    // 「ある研究では」抽出（最大6件）— explainに含まれる「約」を優先抽出
+    var hints = [];
+    for(var i=0;i<qs.length && hints.length<6;i++){
+      var ex = qs[i].explain||"";
+      if(ex.indexOf("ある研究では")>-1){
+        var txt = ex.replace(/^.*?ある研究では[、：:]?/, "").replace(/。*$/,"");
+        if(txt){ hints.push("ある研究では、"+txt); }
+      }
+    }
+    resResearch.innerHTML = hints.length
+      ? hints.map(function(h){ return "<li>"+h+"</li>"; }).join("")
+      : "<li>ある研究では、条件により摂取量が上下します（数値は人により異なります）。</li>";
+
+    // Deep dive
+    if(QUIZ.deep_dive_html){ deepDive.innerHTML = QUIZ.deep_dive_html; }
+
+    document.getElementById("result").style.display = "block";
+    saveLast(correct, qs.length);
+    loadLast();
+    try{ document.getElementById("result").scrollIntoView({behavior:"smooth", block:"start"}); }catch(e){}
+  }
+
+  // ---- share helpers ----
+  function buildShareText(){
+    var title = "秋の食欲クイズ";
+    var sEl = (document.getElementById("scorePoints").textContent||"").replace("スコア：","");
+    var s2 = (document.getElementById("scoreLine").textContent||"").replace("正解：","");
+    return title+"｜"+sEl.trim()+"｜"+s2.trim();
+  }
+  function pageURL(){
+    try{ return location.href; }catch(e){ return "/quiz/aki-appetite.html"; }
+  }
+  function shareX(){
+    var text = encodeURIComponent(buildShareText());
+    var url = encodeURIComponent(pageURL());
+    var u = "https://twitter.com/intent/tweet?text="+text+"&url="+url;
+    window.open(u,"_blank","noopener,width=600,height=480");
+  }
+  function shareLine(){
+    // LINEはURL共有が基本
+    var u = "https://social-plugins.line.me/lineit/share?url="+encodeURIComponent(pageURL());
+    window.open(u,"_blank","noopener,width=600,height=640");
+  }
+  function shareInsta(){
+    // Webからの直接投稿は不可。モバイルのWeb Share APIを優先し、なければURLコピー。
+    var text = buildShareText();
+    var url = pageURL();
+    if(navigator.share){
+      navigator.share({title:"秋の食欲クイズ", text:text, url:url}).catch(function(){});
+    }else if(navigator.clipboard){
+      navigator.clipboard.writeText(url).then(function(){ alert("URLをコピーしました。Instagramの投稿で貼り付けて共有してください。"); });
+    }else{
+      prompt("URLをコピーしてください", url);
+    }
+  }
+
+  // ---- events ----
+  document.getElementById("resetBtn") && document.getElementById("resetBtn").addEventListener("click", function(){ location.reload(); });
+  document.getElementById("retry") && document.getElementById("retry").addEventListener("click", function(){ location.reload(); });
+  if(optSave){
+    optSave.checked = !!(QUIZ.settings && QUIZ.settings.save_default);
+    optSave.addEventListener("change", function(){
+      if(!optSave.checked){ clearLast(); }
+      loadLast();
+    });
+  }
+  document.getElementById("shareX") && document.getElementById("shareX").addEventListener("click", shareX);
+  document.getElementById("shareLine") && document.getElementById("shareLine").addEventListener("click", shareLine);
+  document.getElementById("shareInsta") && document.getElementById("shareInsta").addEventListener("click", shareInsta);
+  document.getElementById("quiz").addEventListener("change", onQuizChange);
+
+  // ---- init ----
+  build();
+  loadLast();
+})();
+</script>
+</body>
+</html>
