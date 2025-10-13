@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>読書の秋クイズ｜知識の水槽</title>
+<meta name="description" content="読書まわりの思い込みをやさしくほどく、A/B/Cの15問。選ぶと即判定、くすっと一言＋解説を表示。保存機能は使いません。">
+<meta name="theme-color" content="#f6fbff">
+<base href="/quiz/">
+<!-- OG -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="読書の秋クイズ｜知識の水槽">
+<meta property="og:description" content="選ぶとすぐ判定。くすっと一言＋解説が出るA/B/C×15問。">
+<meta property="og:url" content="https://example.com/quiz/aki-reading.html">
+<meta property="og:image" content="https://example.com/quiz/assets/results/aki-reading/01.png">
+<style>
+:root{--accent:#4aa8ff; --accent2:#a48bff; --bg1:#f6fbff; --bg2:#eef2ff; --ink:#1f2a33; --muted:#5d6a77; --line:#dbe8ff}
+*{box-sizing:border-box} img{max-width:100%;display:block}
+body{margin:0;font-family:system-ui,"Noto Sans JP",sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2))}
+a{color:inherit;text-decoration:none}
+header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.86);backdrop-filter:blur(6px);border-bottom:1px solid #eef3ff}
+.nav{max-width:980px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:10px 14px}
+.brand{font-weight:800}
+.nav .right a{display:inline-block;padding:8px 12px;border-radius:12px;border:1px solid #cfe2ff;background:#fff}
+.wrap{max-width:980px;margin:18px auto 80px;padding:0 14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:16px}
+h1{margin:.2em 0 .4em;font-size:clamp(22px,6vw,36px);letter-spacing:.02em}
+.sub{margin:0 0 .8em;color:var(--muted)}
+.meta{display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-bottom:8px}
+.pill{padding:4px 8px;border-radius:999px;background:#eef6ff;border:1px solid #cfe2ff}
+.q{border-top:1px dashed #d9e6f5;padding-top:12px;margin-top:12px}
+.q h3{margin:.2em 0 .4em;font-size:16px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid #d9e6f5;border-radius:12px;padding:10px;background:#fbfdff;cursor:pointer;transition:transform .06s,border-color .06s}
+.opt:hover{border-color:#9ec0ff;transform:translateY(-1px)}
+.opt input{transform:translateY(2px)}
+.opt.correct{border-color:#2fc072;background:#eefcf3;position:relative}
+.opt.correct::after{content:"🎉";position:absolute;right:10px;top:8px}
+.opt.wrong{border-color:#ff8a8a;background:#fff3f3;animation:shake .16s 2}
+@keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-2px)}50%{transform:translateX(2px)}75%{transform:translateX(-2px)}100%{transform:translateX(0)}}
+.ex{margin:.45em 0 0;color:#233341;font-size:14px;min-height:1.2em}
+.ex .mini{display:block;color:#5b6a77;font-size:12.5px;margin-top:4px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.btn{appearance:none;border:1px solid #cfe2ff;background:#eaf3ff;border-radius:12px;padding:10px 14px;font-size:14px;cursor:pointer}
+.btn:focus-visible{outline:3px solid #98bfff;outline-offset:2px}
+.result{margin-top:14px;padding:12px;border-radius:12px;background:#f2f8ff;border:1px solid #cfe2ff}
+.score{font-size:clamp(20px,4.5vw,28px);margin:.2em 0}
+.progress{height:10px;border-radius:999px;background:#e7eef8;overflow:hidden}
+.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+#resultImg{display:block;width:100%;max-width:520px;aspect-ratio:1/1;object-fit:contain;margin:10px auto;border-radius:16px;border:1px solid var(--line);background:#fff}
+footer{max-width:980px;margin:22px auto 28px;padding:0 14px;color:var(--muted);font-size:13px}
+.note{font-size:12px;color:#6b7a86;border-top:1px dashed #cfe2ff;margin-top:12px;padding-top:10px}
+.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.dot{position:absolute;width:8px;height:8px;border-radius:50%;opacity:.9;animation:fall 900ms ease-out forwards}
+@keyframes fall{to{transform:translateY(120vh) rotate(540deg);opacity:0}}
+</style>
+</head>
+<body>
+<header>
+  <nav class="nav" aria-label="グローバルナビ">
+    <div class="brand"><a href="/quiz/" aria-label="知識の水槽トップへ">知識の水槽</a></div>
+    <div class="right"><a href="/shindan/" aria-label="診断一覧へ">診断一覧</a></div>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section class="card" aria-labelledby="quizTitle">
+    <div class="meta"><span class="pill">⏱6分</span><span class="pill">#読書</span><span class="pill">#心理</span><span class="pill">#生活</span></div>
+    <h1 id="quizTitle">読書の秋クイズ</h1>
+    <p class="sub">選んだ瞬間に判定。<b>くすっと一言</b>と<b>短い解説</b>が出ます（保存はしません）。</p>
+
+    <div id="quiz" aria-live="polite">
+      <!-- Q1〜Q15（内容は既出どおり／選択肢は非統一） -->
+      <div class="q" data-qid="q1">
+        <h3>Q1. 就寝前に発光端末で読むと、眠気の出やすさは？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q1">
+          <label class="opt"><input type="radio" name="q1" value="a">A) 早まりやすい</label>
+          <label class="opt"><input type="radio" name="q1" value="b">B) 時間帯しだいで同じ</label>
+          <label class="opt"><input type="radio" name="q1" value="c">C) 遅れやすい</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q2">
+        <h3>Q2. 文学フィクションの短編で、他人の気持ちを当てる力は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q2">
+          <label class="opt"><input type="radio" name="q2" value="a">A) すこし上がる</label>
+          <label class="opt"><input type="radio" name="q2" value="b">B) ほぼ変わらない</label>
+          <label class="opt"><input type="radio" name="q2" value="c">C) 一時的に下がる</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q3">
+        <h3>Q3. 読書30分で、リラックス感（血圧・心拍・気分）は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q3">
+          <label class="opt"><input type="radio" name="q3" value="a">A) すっと楽になりやすい</label>
+          <label class="opt"><input type="radio" name="q3" value="b">B) 体感は変わるが実測は同じ</label>
+          <label class="opt"><input type="radio" name="q3" value="c">C) かえって高ぶりやすい</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q4">
+        <h3>Q4. 子どもに「正直に言うと褒められる」物語を読むと、正直な行動は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q4">
+          <label class="opt"><input type="radio" name="q4" value="a">A) 増えやすい</label>
+          <label class="opt"><input type="radio" name="q4" value="b">B) ごほうびが無いなら同じ</label>
+          <label class="opt"><input type="radio" name="q4" value="c">C) 罰を強調した話のほうが効く</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q5">
+        <h3>Q5. SF・ファンタジーを読むと、発想の幅は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q5">
+          <label class="opt"><input type="radio" name="q5" value="a">A) 少し広がりやすい</label>
+          <label class="opt"><input type="radio" name="q5" value="b">B) 非現実は影響しにくい</label>
+          <label class="opt"><input type="radio" name="q5" value="c">C) 非現実でむしろ狭まりやすい</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q6">
+        <h3>Q6. 幼少期の読書を週30時間以上に増やすと、認知の伸びは？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q6">
+          <label class="opt"><input type="radio" name="q6" value="a">A) もっと伸びやすい</label>
+          <label class="opt"><input type="radio" name="q6" value="b">B) 頭打ちでだいたい同じ</label>
+          <label class="opt"><input type="radio" name="q6" value="c">C) 疲れてむしろ下がりやすい</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q7">
+        <h3>Q7. フィクションをよく読む大人の人づきあい（支え合い感）は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q7">
+          <label class="opt"><input type="radio" name="q7" value="a">A) やや高い傾向</label>
+          <label class="opt"><input type="radio" name="q7" value="b">B) 目立った差は出ない</label>
+          <label class="opt"><input type="radio" name="q7" value="c">C) 低くなりがち</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q8">
+        <h3>Q8. 小学生が毎日「本」で読むと、学力は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q8">
+          <label class="opt"><input type="radio" name="q8" value="a">A) 上がりやすい</label>
+          <label class="opt"><input type="radio" name="q8" value="b">B) 新聞や漫画でも同じくらい</label>
+          <label class="opt"><input type="radio" name="q8" value="c">C) 宿題が増えて下がりやすい</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q9">
+        <h3>Q9. 文学を読む人のボランティア参加は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q9">
+          <label class="opt"><input type="radio" name="q9" value="a">A) 高めになりがち</label>
+          <label class="opt"><input type="radio" name="q9" value="b">B) 学歴などをそろえれば同じ</label>
+          <label class="opt"><input type="radio" name="q9" value="c">C) 低めになりがち</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q10">
+        <h3>Q10. E-ink端末（昼・フロントライトOFF）で読むと、理解は？（紙と比べて）</h3>
+        <div class="opts" role="radiogroup" aria-label="Q10">
+          <label class="opt"><input type="radio" name="q10" value="a">A) 目に優しい分よくなる</label>
+          <label class="opt"><input type="radio" name="q10" value="b">B) だいたい同じ</label>
+          <label class="opt"><input type="radio" name="q10" value="c">C) 端末は下がりやすい</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q11">
+        <h3>Q11. 昼にダークモード（黒地に白字）で長文を読むと、理解は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q11">
+          <label class="opt"><input type="radio" name="q11" value="a">A) 黒地のほうが上がりやすい</label>
+          <label class="opt"><input type="radio" name="q11" value="b">B) 明るさが同じなら差は小さい</label>
+          <label class="opt"><input type="radio" name="q11" value="c">C) 白地のほうが必ず良い</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q12">
+        <h3>Q12. 小音量の器楽BGMで読むと、理解は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q12">
+          <label class="opt"><input type="radio" name="q12" value="a">A) はかどって上がりやすい</label>
+          <label class="opt"><input type="radio" name="q12" value="b">B) ほぼ変わらない</label>
+          <label class="opt"><input type="radio" name="q12" value="c">C) どの音でも下がりやすい</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q13">
+        <h3>Q13. 温かいノンカフェイン飲み物を片手に読むと、理解は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q13">
+          <label class="opt"><input type="radio" name="q13" value="a">A) 温かさで上がりやすい</label>
+          <label class="opt"><input type="radio" name="q13" value="b">B) 気分は上がるが理解は同じ</label>
+          <label class="opt"><input type="radio" name="q13" value="c">C) 飲むと下がりやすい</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q14">
+        <h3>Q14. にぎやかなカフェ（話し声＋大きめBGM）で長めに読むと、理解は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q14">
+          <label class="opt"><input type="radio" name="q14" value="a">A) 活気で上がりやすい</label>
+          <label class="opt"><input type="radio" name="q14" value="b">B) イヤホンがあれば同じ</label>
+          <label class="opt"><input type="radio" name="q14" value="c">C) 会話ノイズで下がりやすい</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+
+      <div class="q" data-qid="q15">
+        <h3>Q15. 速読アプリで一気に読むと、理解は？</h3>
+        <div class="opts" role="radiogroup" aria-label="Q15">
+          <label class="opt"><input type="radio" name="q15" value="a">A) 慣れれば上がりやすい</label>
+          <label class="opt"><input type="radio" name="q15" value="b">B) 速度だけ上がって理解は同じ</label>
+          <label class="opt"><input type="radio" name="q15" value="c">C) 戻り読みできず下がりやすい</label>
+        </div><div class="ex" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" id="reset" class="btn">リセット</button>
+      <button type="button" id="share" class="btn">共有</button>
+    </div>
+
+    <div class="result" aria-live="polite">
+      <img id="resultImg" src="assets/results/aki-reading/03.png" alt="結果イメージ（初期）">
+      <div class="score">正解：<b id="score">0</b> / <span id="total">15</span></div>
+      <div class="progress" aria-label="正答率"><i id="bar" style="width:0%"></i></div>
+      <div id="label" style="margin-top:6px;font-weight:700">ページの見習い 🌱 — 6分から“いい読み”を育てよう</div>
+      <div style="margin-top:10px">
+        <a href="/quiz/" class="btn" aria-label="クイズ一覧に戻る">クイズ一覧に戻る</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" aria-label="ご利用にあたって" style="margin-top:16px">
+    <h2 style="margin:0 0 .4em">ご利用にあたって</h2>
+    <ul style="margin:0 0 10px 18px;padding:0;line-height:1.7">
+      <li><strong>独自制作・非公式：</strong>研究一般の知見にヒントを得た<strong>独自コンテンツ</strong>です。公式検査の項目・採点は使っていません。</li>
+      <li><strong>医療用途ではありません：</strong>娯楽＋学習目的であり、医療的・心理的な<strong>診断/治療/助言を目的としません</strong>。</li>
+      <li><strong>プライバシー：</strong>動作は<strong>ブラウザ内で完結</strong>。サーバー送信・保存は行いません。</li>
+      <li><strong>表現：</strong>タイプ名などは<strong>比喩・ゲーム表現</strong>です。</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  © 知識の水槽 / <a href="/quiz/">トップに戻る</a> ・ <a href="/shindan/">診断一覧</a>
+</footer>
+
+<div class="confetti" id="fx" aria-hidden="true"></div>
+
+<script>
+/* ===== 正解キー（内容は変更なし） ===== */
+const KEY = {
+  q1:'c', q2:'a', q3:'a', q4:'a', q5:'a',
+  q6:'b', q7:'a', q8:'a', q9:'a', q10:'b',
+  q11:'b', q12:'b', q13:'b', q14:'c', q15:'c'
+};
+
+/* ===== くすっと一言（OK/NG） ===== */
+const FUN = {
+  q1:{ok:"寝る前はやさしい明かりで。",          ng:"明るいほど即寝られる!?"},
+  q2:{ok:"行間リーディングの勝利。",              ng:"小説は共感ゼロ!?"},
+  q3:{ok:"まず1章で一息。",                      ng:"まず3巻一気読み。"},
+  q4:{ok:"“正直バフ”を付与。",                   ng:"罰ゲームで教育。"},
+  q5:{ok:"異世界は脳のストレッチ。",              ng:"発想は現実待ち。"},
+  q6:{ok:"詰め込みよりバランス派。",              ng:"本で筋トレ。"},
+  q7:{ok:"物語で“人感センサー”磨き。",            ng:"背表紙だけ友だち。"},
+  q8:{ok:"一日一章のビルド。",                    ng:"見出しで偏差値UP。"},
+  q9:{ok:"本好き、街にも優しい。",                ng:"活字だけが友達。"},
+  q10:{ok:"条件合わせがコツ。",                  ng:"端末=理解-20%固定!?"},
+  q11:{ok:"“眩しさ”の調整が本命。",               ng:"配色でIQ+30!?"},
+  q12:{ok:"“静かめ”なら友。",                     ng:"爆音で偏差値UP。"},
+  q13:{ok:"湯気は雰囲気演出家。",                 ng:"ホットでIQ爆上がり!?"},
+  q14:{ok:"静けさは脳の味方。",                   ng:"雑踏で理解ブースト!?"},
+  q15:{ok:"速さより“届く読み”。",                 ng:"1分で名作マスター。"}
+};
+
+/* ===== 短い解説（内容そのまま反映） ===== */
+const EXPL = {
+  q1:"ある研究では、発光端末でメラトニンが約55％抑えられ、入眠が遅れた報告。紙はこの悪影響が出にくい。",
+  q2:"ある研究では、直後の“心の理論”テストが小さく上がる傾向（効果は小・条件でばらつき）。",
+  q3:"ある研究では、読書30分でストレス指標が有意に低下。ヨガやユーモア視聴と同程度の速効性。",
+  q4:"ある研究では、「正直は得」型の話で真実申告が増加。罰中心は効果が薄め。",
+  q5:"あるレビューでは、空想世界への没入が発散的思考を小幅に底上げ。",
+  q6:"大規模追跡では週約12時間が最適帯で、それ以上は頭打ちの傾向。",
+  q7:"複数の調査で、物語読書量が多い人は共感・社会的サポートがやや高めという関連（相関で因果は未確定）。",
+  q8:"大規模縦断で、本の読書は成績が約0.22ポイント上昇（約3か月相当）。新聞や漫画は安定しにくい。",
+  q9:"全国調査では、文学読者約43％、非読者約17％。関連であり、因果は断定不可。",
+  q10:"日中の読解は紙とほぼ同等（約0〜5％差）の報告が多い。扱いやすさで選んでOK。",
+  q11:"可読性は人と環境しだい。昼は平均で大差が出にくい（約0〜5％）。",
+  q12:"歌詞なし・小音量なら影響は小さいことが多い。注意が割れない範囲ならOK。",
+  q13:"気分や快適さは上がっても、読解そのものは大きく変わりにくい（約0〜5％）。",
+  q14:"言語ノイズや大音量BGMは割り込みが増え、読解が数％〜十数％下がる傾向。",
+  q15:"高速提示（RSVP等）は戻り読みが不可で、理解が約10〜30％落ちる報告。"
+};
+
+/* ===== スコア・UI ===== */
+const total = Object.keys(KEY).length;
+const scoreEl = document.getElementById('score');
+const totalEl = document.getElementById('total');
+const bar = document.getElementById('bar');
+const label = document.getElementById('label');
+const resultImg = document.getElementById('resultImg');
+totalEl.textContent = total;
+
+let score = 0, answered = new Set();
+
+document.querySelectorAll('.opts input[type="radio"]').forEach(inp=>{
+  inp.addEventListener('change', e=>{
+    const qid = e.target.name;
+    const val = e.target.value;
+    const qBox = e.target.closest('.q');
+    if(answered.has(qid)) return;
+    answered.add(qid);
+
+    const ok = (val===KEY[qid]);
+    const picked = e.target.closest('.opt');
+    picked.classList.add(ok?'correct':'wrong');
+
+    // 正解肢もハイライト
+    const correctLabel = qBox.querySelector(`input[value="${KEY[qid]}"]`).closest('.opt');
+    correctLabel.classList.add('correct');
+
+    // くすっと一言＋解説
+    const ex = qBox.querySelector('.ex');
+    ex.innerHTML = (ok ? '✅ 正解！' : '❌ 惜しい…')
+      + ' — ' + (ok?FUN[qid].ok:FUN[qid].ng)
+      + '<span class="mini">解説：' + EXPL[qid] + '</span>';
+
+    // ラジオ無効化
+    qBox.querySelectorAll('input[type="radio"]').forEach(r=>r.disabled=true);
+    qBox.querySelectorAll('.opt').forEach(l=>l.style.cursor='default');
+
+    if(ok){ score++; confettiBurst(); }
+    updateScore();
+
+    // 次の未回答へスクロール
+    const next = [...document.querySelectorAll('.q')].find(q=>!answered.has(q.dataset.qid));
+    if(next){ next.scrollIntoView({behavior:'smooth',block:'center'}); }
+  });
+});
+
+function updateScore(){
+  const pct = Math.round(score/total*100);
+  scoreEl.textContent = score;
+  bar.style.width = pct + '%';
+
+  // 画像の割当（80/40しきい値：内容は据え置き）
+  const tier = (pct>=80) ? '01' : (pct>=40 ? '02' : '03');
+  label.textContent =
+    pct>=80 ? '読書の達人 📚 — 環境調整＆“戻れる読み”で盤石' :
+    pct>=40 ? '読書の研究生 🔎 — いい線！光と音を少し整えよう' :
+              'ページの見習い 🌱 — まずは6分、静かめ・暖色で';
+
+  resultImg.src = `assets/results/aki-reading/${tier}.png`;
+  resultImg.alt = `結果イメージ ${tier}`;
+}
+
+document.getElementById('reset').addEventListener('click', ()=>{
+  score=0; answered.clear(); updateScore();
+  document.querySelectorAll('.q').forEach(q=>{
+    q.querySelectorAll('input[type="radio"]').forEach(r=>{r.checked=false; r.disabled=false;});
+    q.querySelectorAll('.opt').forEach(l=>l.classList.remove('correct','wrong'));
+    q.querySelector('.ex').textContent='';
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+document.getElementById('share').addEventListener('click', async ()=>{
+  const title=document.title, url=location.href, text='読書の秋クイズ｜知識の水槽';
+  if(navigator.share){ try{await navigator.share({title,text,url});}catch(_){} }
+  else{ try{ await navigator.clipboard.writeText(url); alert('URLをコピーしました'); }catch(_){} }
+});
+
+/* ちょい花火 */
+function confettiBurst(){
+  const fx = document.getElementById('fx');
+  for(let i=0;i<14;i++){
+    const d = document.createElement('i');
+    d.className='dot';
+    d.style.left = (Math.random()*100)+'%';
+    d.style.top  = '0';
+    d.style.background = i%3? 'var(--accent)': 'var(--accent2)';
+    d.style.transform = `translateY(-10px) translateX(${(Math.random()*40-20)}px)`;
+    d.style.animationDelay = (Math.random()*0.2)+'s';
+    fx.appendChild(d);
+    setTimeout(()=>d.remove(),1000);
+  }
+}
+</script>
+</body>
+</html>
