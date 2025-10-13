@@ -8,8 +8,8 @@
 <meta property="og:title" content="知識の水槽">
 <meta property="og:description" content="海のように広がる知識を、検索とタグでサッと探索。スマホ最適のカード一覧で学べます。">
 <meta property="og:url" content="https://haisuikounozarigani.github.io/quiz/">
-<meta property="og:image" content="https://haisuikounozarigani.github.io/quiz/assets/hero/01.png">
-<link rel="preload" as="image" href="/quiz/assets/hero/01.png">
+<meta property="og:image" content="https://haisuikounozarigani.github.io/quiz/assets/hero/t01.webp">
+<link rel="preload" as="image" href="/quiz/assets/hero/t01.webp">
 <style>
 :root{
   /* ── 青ベース（心の標本と同構成） ── */
@@ -99,6 +99,34 @@ a.link > div{flex:1 1 auto;min-width:0}
   border:1px solid var(--line);border-radius:999px;
   padding:4px 8px;background:#fff;line-height:1.6
 }
+
+/* === ランクボックス（心の標本と同形式） === */
+.rankbox{
+  margin:12px 0 8px; padding:12px;
+  border:1px solid var(--line); border-radius:12px; background:#fff;
+  box-shadow:0 1px 0 #f2e6f0;
+}
+.rankbox.pop{animation:rk-pop .5s}
+@keyframes rk-pop{0%{transform:scale(.98)}50%{transform:scale(1.01)}100%{transform:scale(1)}}
+.rk-head{display:flex;align-items:center;gap:8px}
+.rk-emo{font-size:1.25em}
+.rk-name{font-weight:700}
+.rk-pct{margin-left:auto;color:var(--muted);font-size:.9em}
+.rk-bar{height:10px;border-radius:999px;background:#f6edf5;border:1px solid #eed8ea;overflow:hidden;margin:8px 0}
+.rk-bar #rkFill{display:block;height:100%;width:0;background:#dfe3ff;transition:width .4s, filter .2s}
+.rk-next{font-size:.9em;color:#7b6571}
+
+/* --- done marker（既に受けた表示：済バッジ） --- */
+a.link[data-done]{position:relative;opacity:.9}
+a.link[data-done]::after{
+  content:"済"; position:absolute; top:8px; right:8px;
+  font-weight:800; font-size:.8rem; line-height:1;
+  padding:4px 8px; border-radius:999px;
+  background:linear-gradient(90deg,#c3ffd6,#d8eaff);
+  color:#233; border:1px solid #dce9f0; box-shadow:0 3px 10px rgba(0,0,0,.06)
+}
+/* 済カードではNEWバッジ隠す */
+a.link[data-done] .mini[data-new]{display:none}
 </style>
 </head>
 <body>
@@ -106,7 +134,9 @@ a.link > div{flex:1 1 auto;min-width:0}
 <!-- Splash -->
 <section id="splash" class="splash" aria-label="知識の水槽の入口" tabindex="0" role="button">
   <div class="fallback" aria-hidden="true"></div>
-  <img class="bg" alt="知識の水槽のキービジュアル" src="/quiz/assets/hero/01.png">
+  <img class="bg" alt="知識の水槽のキービジュアル"
+       src="/quiz/assets/hero/t01.webp"
+       onerror="this.src='/quiz/assets/hero/01.png'">
   <div class="hero">
     <h1>知識の水槽</h1>
     <p class="sub">タップ（またはEnter/Space）で入口が開きます。</p>
@@ -124,22 +154,52 @@ a.link > div{flex:1 1 auto;min-width:0}
 
     <div class="row">
       <input id="q" type="search" placeholder="キーワード or #タグ（例：#海 / #心理）" aria-label="検索">
-      <button id="btnNew" class="btn" type="button" aria-pressed="false" aria-label="NEWだけ表示">NEWだけ</button>
+      <button id="btnNew" class="btn" type="button" aria-pressed="false" aria-label="未挑戦だけ表示">未挑戦だけ</button>
       <button id="clearBtn" class="btn" type="button" aria-label="検索とタグをクリア">クリア</button>
     </div>
     <div id="chips" class="chips" role="listbox" aria-multiselectable="false" aria-label="タグ（1つ選択で絞り込み）"></div>
 
-    <!-- ▼ 心の標本と同じ“Lv”表示：ローカル＋全体 -->
+    <!-- ローカル＋全体の「知識Lv」 -->
     <div class="row stats-inline" aria-label="水槽カウンタ">
       <span class="mini">📘 あなたの知識Lv <strong id="myOpenCount">0</strong></span>
       <span class="mini">📚 みんなの知識Lv <strong id="allOpenCount">—</strong></span>
     </div>
   </section>
+  
+  <!-- ★ 進捗ランク（コンプリート率） -->
+  <section id="rankbox" class="rankbox" aria-live="polite">
+    <div class="rk-head">
+      <span id="rkEmoji" class="rk-emo" aria-hidden="true">🔹</span>
+      <strong id="rkName" class="rk-name">水晶</strong>
+      <span class="rk-pct"><span id="rkPct">0</span>%</span>
+    </div>
+
+    <div class="rk-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="コンプリート進捗">
+      <span id="rkFill"></span>
+    </div>
+
+    <div id="rkNext" class="rk-next">あと <span id="rkRemain">1</span> 件でランクアップ</div>
+  </section>
 
   <!-- Cards（クイズカード） -->
   <nav class="links" id="list" aria-label="記事/クイズ一覧（検索結果）">
+    <!-- 以下、既存カード群はそのまま。例として3件だけ置いています（あなたの現行をここに全貼りでOK） -->
+    	
+    <!-- NEW: 秋の読書クイズ -->
+<a class="link" href="/quiz/aki-reading.html"
+   data-id="aki-reading" data-tags="クイズ,読書,心理,生活" data-mins="6"
+   data-updated="2025-10-10"
+   data-keywords="メラトニン 発光端末 E-ink ダークモード BGM 器楽 ノンカフェイン カフェ ノイズ 速読 RSVP フィクション 共感 正直 認知 学力 ボランティア">
+  <span class="emo">📚</span>
+  <div class="body">
+    <div class="ttl">秋の読書クイズ</div>
+    <div class="sub2">選ぶとすぐ判定。くすっと一言＋解説が出るA/B/C×15問。</div>
+    <div class="meta"></div>
+  </div>
+  <span class="badge" data-new>NEW</span>
+</a>
 
-    <!-- NEW: 秋の食欲クイズ -->
+  <!-- NEW: 秋の食欲クイズ -->
 <a class="link" href="/quiz/aki-appetite.html"
    data-id="aki-appetite" data-tags="クイズ,秋,生活,食欲" data-mins="6"
    data-updated="2025-10-02"
@@ -268,7 +328,17 @@ a.link > div{flex:1 1 auto;min-width:0}
   // 検索・タグ（単一選択）
   const q=$('#q'), chipsWrap=$('#chips'), btnNew=$('#btnNew'), clearBtn=$('#clearBtn');
 
-  // エイリアス（必要なら追加）
+  // 「未挑戦だけ」トグル
+  let todoOnly=false;
+  btnNew.addEventListener('click', ()=>{
+    todoOnly=!todoOnly;
+    btnNew.classList.toggle('primary',todoOnly);
+    btnNew.setAttribute('aria-pressed', String(todoOnly));
+    btnNew.textContent = todoOnly ? '未挑戦だけ（解除）' : '未挑戦だけ';
+    apply();
+  });
+
+  // エイリアス・タグ順
   const ALIAS={ '性格':'こころ', '短時間':'さくっと' };
   const ORDER=['海','心理','脳','生活','クイズ','診断','こころ','セルフケア','認知','仕事','占い','ゲーム風','さくっと','ふつう','しっかり','適性'];
 
@@ -328,41 +398,126 @@ a.link > div{flex:1 1 auto;min-width:0}
     apply();
   });
 
-  // NEWだけ
-  let newOnly=false;
-  btnNew.addEventListener('click', ()=>{
-    newOnly=!newOnly; btnNew.classList.toggle('primary',newOnly);
-    btnNew.setAttribute('aria-pressed', newOnly?'true':'false');
-    btnNew.textContent=newOnly?'NEWだけ（解除）':'NEWだけ';
+  // クリア
+  clearBtn.addEventListener('click', ()=>{
+    q.value=''; setActiveTag(null);
+    if(location.hash) history.replaceState({},'', location.pathname + location.search);
     apply();
   });
 
-  // クリア
-  clearBtn.addEventListener('click', ()=>{ q.value=''; setActiveTag(null); apply(); });
+  // 済マーク復元（心の標本と同仕様）
+  const LS_BYID_KEY = "quiz:open:byid";
+  function getDoneMap(){ try{ return JSON.parse(localStorage.getItem(LS_BYID_KEY)||"{}"); }catch(e){ return {}; } }
+  function markDoneCards(){
+    const done = getDoneMap();
+    document.querySelectorAll('#list a.link').forEach(a=>{
+      const id=a.dataset.id; if(!id) return;
+      if(done[id]>0) a.setAttribute('data-done','1'); else a.removeAttribute('data-done');
+    });
+  }
+  window.markDoneCards = markDoneCards;
 
-  // フィルタ
+  // 進捗ランク
+  let lastRankName = null;
+  function updateCompletion(){
+    const cards = document.querySelectorAll('#list a.link');
+    const total = cards.length;
+    let doneMap = getDoneMap();
+    let done = 0;
+    cards.forEach(a=>{ const id=a.dataset.id; if(id && doneMap[id]>0) done++; });
+    const pct = total ? Math.round(done/total*100) : 0;
+
+    const ranks = [
+      {min:  0, name:'水晶',        emo:'🔹', grad:'linear-gradient(90deg,#8fd3ff,#c9c9ff)'},
+      {min: 10, name:'銅',          emo:'🥉', grad:'linear-gradient(90deg,#d68b49,#ffd29d)'},
+      {min: 25, name:'銀',          emo:'🥈', grad:'linear-gradient(90deg,#aeb6bf,#e6eef5)'},
+      {min: 45, name:'金',          emo:'🥇', grad:'linear-gradient(90deg,#f2c94c,#f2994a)'},
+      {min: 70, name:'白金',        emo:'✨', grad:'linear-gradient(90deg,#d6d0ff,#ffffff)'},
+      {min: 90, name:'ダイヤモンド', emo:'💎', grad:'linear-gradient(90deg,#8be9ff,#b69cff)'}
+    ];
+
+    let cur = ranks[0]; for(const r of ranks){ if(pct>=r.min) cur=r; }
+    const next = ranks.find(r=>r.min>pct);
+
+    const box   = document.getElementById('rankbox');
+    const emo   = document.getElementById('rkEmoji');
+    const name  = document.getElementById('rkName');
+    const fill  = document.getElementById('rkFill');
+    const pctEl = document.getElementById('rkPct');
+    const nextEl= document.getElementById('rkNext');
+    if(!box||!emo||!name||!fill||!pctEl||!nextEl) return;
+
+    emo.textContent   = cur.emo;
+    name.textContent  = cur.name;
+    pctEl.textContent = pct;
+    fill.style.width  = pct + '%';
+    fill.style.background = cur.grad;
+    fill.style.filter = 'drop-shadow(0 0 6px rgba(255,255,255,.5))';
+
+    if(next){
+      const needDone = Math.ceil((next.min/100)*total);
+      const remain   = Math.max(0, needDone - done);
+      nextEl.innerHTML = 'あと <span id="rkRemain">'+remain+'</span> 件でランクアップ';
+    }else{
+      nextEl.textContent = 'コンプリート間近！ 予備の新作を鋭意制作中。';
+    }
+
+    if(lastRankName!==null && lastRankName!==cur.name){
+      box.classList.remove('pop'); void box.offsetWidth; box.classList.add('pop');
+    }
+    lastRankName = cur.name;
+  }
+  window.updateCompletion = updateCompletion;
+
+  // フィルタ本体
   function apply(){
     const kw=q.value.trim().toLowerCase().split(/\s+/).filter(Boolean).filter(t=>!t.startsWith('#'));
     let shown=0;
     $$('#list a.link').forEach(a=>{
       const tags=(a.dataset.tags||'').split(',').filter(Boolean);
       const text=(a.textContent+' '+(a.dataset.keywords||'')).toLowerCase();
-      const okTag = activeTag ? tags.includes(activeTag) : true;
-      const okKw  = kw.length ? kw.every(w=>text.includes(w)) : true;
-      const isNew = (()=>{ const b=a.querySelector('[data-new]'); return b && b.style.display!=='none'; })();
-      const show  = okTag && okKw && (newOnly? isNew : true);
+      const okTag  = activeTag ? tags.includes(activeTag) : true;
+      const okKw   = kw.length ? kw.every(w=>text.includes(w)) : true;
+      const okTodo = todoOnly ? !a.hasAttribute('data-done') : true;
+      const show   = okTag && okKw && okTodo;
       a.style.display=show?'':'none'; if(show) shown++;
     });
     $('#list').setAttribute('aria-label', `記事/クイズ一覧（検索結果 ${shown} 件）`);
+    updateCompletion();
   }
+
+  // 初期反映
+  markDoneCards();
+  updateCompletion();
   apply();
+
+  // 他タブ同期
+  window.addEventListener('storage', (e)=>{
+    if(e.key===LS_BYID_KEY){
+      markDoneCards();
+      updateCompletion();
+      apply();
+    }
+  });
 
   // Escで検索クリア
   document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ q.value=''; setActiveTag(null); apply(); } });
+
+  // 「済」更新後に再フィルタできるようイベント待ち受け
+  document.addEventListener('quiz-done', apply);
+
+  // 祝砲KF（無ければ追加）
+  (function addFadeUpKeyframes(){
+    const id='rkFadeUpKF';
+    if(document.getElementById(id)) return;
+    const st=document.createElement('style'); st.id=id;
+    st.textContent=`@keyframes fadeUp{0%{opacity:0;transform:translateY(6px) scale(.95)}60%{opacity:1}100%{opacity:.0;transform:translateY(-8px) scale(1.1)}}`;
+    document.head.appendChild(st);
+  })();
 })();
 </script>
 
-<!-- ▼ クイズ閲覧カウンタ（心の標本と同じ方式：クリックで加算） -->
+<!-- ▼ クイズ閲覧カウンタ（心の標本と同方式：クリックで加算＋済化） -->
 <script>
 (function(){
   const myEl  = document.querySelector('#myOpenCount');
@@ -413,7 +568,7 @@ a.link > div{flex:1 1 auto;min-width:0}
     }catch(e){ return null; }
   }
 
-  // 全体+1（GET）
+  // 全体+1（GET/keepalive）
   function bumpGlobal(){
     try{
       const url = new URL(CF_WORKER_URL);
@@ -435,8 +590,12 @@ a.link > div{flex:1 1 auto;min-width:0}
       const a = e.target.closest('a.link');
       if(!a) return;
       const id = a.dataset.id || "unknown";
-      incLocalById(id);   // あなたの知識Lv +1
-      bumpGlobal();       // みんなの知識Lv +1
+      incLocalById(id);      // あなたの知識Lv +1
+      bumpGlobal();          // みんなの知識Lv +1
+      // 済バッジ付与＋ランク更新＋表示再適用
+      try{ a.setAttribute('data-done','1'); }catch(_){}
+      if (window.updateCompletion) window.updateCompletion();
+      document.dispatchEvent(new CustomEvent('quiz-done'));
       // 楽観更新（チラつき防止）
       const cur = parseInt(localStorage.getItem(LS_GLOBAL_LAST) || "0", 10) || 0;
       setAll(cur + 1);
