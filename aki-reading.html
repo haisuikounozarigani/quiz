@@ -12,7 +12,7 @@
 <meta property="og:title" content="読書の秋クイズ｜知識の水槽">
 <meta property="og:description" content="選ぶとすぐ判定。くすっと一言＋解説が出るA/B/C×15問。">
 <meta property="og:url" content="https://example.com/quiz/aki-reading.html">
-<meta property="og:image" content="https://example.com/quiz/assets/results/aki-reading/01.png">
+<meta property="og:image" content="https://example.com/quiz/assets/results/aki-reading/t01.webp">
 <style>
 :root{--accent:#4aa8ff; --accent2:#a48bff; --bg1:#f6fbff; --bg2:#eef2ff; --ink:#1f2a33; --muted:#5d6a77; --line:#dbe8ff}
 *{box-sizing:border-box} img{max-width:100%;display:block}
@@ -214,7 +214,7 @@ footer{max-width:980px;margin:22px auto 28px;padding:0 14px;color:var(--muted);f
     </div>
 
     <div class="result" aria-live="polite">
-      <img id="resultImg" src="assets/results/aki-reading/03.png" alt="結果イメージ（初期）">
+      <img id="resultImg" src="assets/results/aki-reading/t03.webp" alt="結果イメージ（初期）">
       <div class="score">正解：<b id="score">0</b> / <span id="total">15</span></div>
       <div class="progress" aria-label="正答率"><i id="bar" style="width:0%"></i></div>
       <div id="label" style="margin-top:6px;font-weight:700">ページの見習い 🌱 — 6分から“いい読み”を育てよう</div>
@@ -345,7 +345,7 @@ function updateScore(){
     pct>=40 ? '読書の研究生 🔎 — いい線！光と音を少し整えよう' :
               'ページの見習い 🌱 — まずは6分、静かめ・暖色で';
 
-  resultImg.src = `assets/results/aki-reading/${tier}.png`;
+  resultImg.src = `assets/results/aki-reading/t${tier}.webp`;
   resultImg.alt = `結果イメージ ${tier}`;
 }
 
