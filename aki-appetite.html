@@ -82,8 +82,10 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:12px 0}
   <div class="sticky" role="region" aria-label="進捗と操作">
     <div class="bar" aria-hidden="true"><div id="prog" style="width:0%"></div></div>
     <div class="row">
-      <button id="resetBtn" type="button">最初から</button>
-      <span class="mini">回答済みの割合がバーに表示されます。</span>
+  <button id="resetBtn" type="button">最初から</button>
+  <a class="pill" href="/quiz/" role="button">クイズ一覧に戻る</a>
+  <span class="mini">回答済みの割合がバーに表示されます。</span>
+</div>
     </div>
   </div>
 
@@ -98,7 +100,7 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:12px 0}
       <span class="pill">⏱ 所要：約6分</span>
       <span class="pill">更新：2025-10-02</span>
     </div>
-    <p class="mini">選択肢は毎回ランダムに並びます。</p>
+    <p class="mini">ネット通信なし／外部送信なし。選択肢は毎回ランダムに並びます。</p>
   </section>
 
   <section id="ctrl" class="card">
@@ -140,7 +142,10 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:12px 0}
     <ul id="resResearch"></ul>
     <div id="deepDive"></div>
     <hr class="sep">
-    <button id="retry" type="button">もう一度</button>
+    <div class="row">
+      <button id="retry" type="button">もう一度</button>
+      <a class="btn" href="/quiz/" role="button">クイズ一覧に戻る</a>
+    </div>
   </section>
 
   <footer class="card small">
@@ -308,17 +313,20 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:12px 0}
 
     // 「ある研究では」抽出（最大6件）— explainに含まれる「約」を優先抽出
     var hints = [];
-    for(var i=0;i<qs.length && hints.length<6;i++){
-      var ex = qs[i].explain||"";
-      if(ex.indexOf("ある研究では")>-1){
-        var txt = ex.replace(/^.*?ある研究では[、：:]?/, "").replace(/。*$/,"");
-        if(txt){ hints.push("ある研究では、"+txt); }
-      }
+var seen = new Set();
+for (var i = 0; i < qs.length && hints.length < 5; i++) {
+  var ex = qs[i].explain || "";
+  if (ex.indexOf("ある研究では") > -1) {
+    var txt = ex.replace(/^.*?ある研究では[、：:]?/, "").replace(/。*$/, "");
+    if (txt && !seen.has(txt)) {
+      seen.add(txt);
+      hints.push("ある研究では、" + txt + "。");
     }
-    resResearch.innerHTML = hints.length
-      ? hints.map(function(h){ return "<li>"+h+"</li>"; }).join("")
-      : "<li>ある研究では、条件により摂取量が上下します（数値は人により異なります）。</li>";
-
+  }
+}
+resResearch.innerHTML = hints.length
+  ? hints.map(function(h){ return "<li>" + h + "</li>"; }).join("")
+  : "<li>ある研究では、条件により摂取量が上下します（数値は人により異なります）。</li>";
     // Deep dive
     if(QUIZ.deep_dive_html){ deepDive.innerHTML = QUIZ.deep_dive_html; }
 
@@ -390,7 +398,7 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:12px 0}
 ============================================================== */
 (function(){
   // このページのID（body[data-id] を優先）
-  var MY_ID = document.body.getAttribute('data-id') || 'aki-mix';
+  var MY_ID = document.body.getAttribute('data-id') || 'aki-appetite';
 
   // みんなのカウント（クイズ用の名前空間）
   var COUNTAPI_NS  = 'haisuikounozarigani_quiz';
@@ -411,12 +419,11 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:12px 0}
   // 最初の回答（ラジオ選択）で一度だけ加算
   document.addEventListener('change', function(ev){
     var t = ev.target;
-    if (t && t.matches('.opts input[type="radio"]')) {
+    if (t && t.matches('#quiz input[type="radio"]')) {
       hitEveryoneOnce();
     }
   }, { once:true });
 })();
 </script>
-</body>
 </body>
 </html>
