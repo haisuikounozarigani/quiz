@@ -1,5 +1,4 @@
 <!doctype html>
-<!-- 0 -->
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -59,7 +58,7 @@ h1{margin:0 0 6px;font-size:clamp(22px,6vw,40px);text-shadow:0 2px 12px rgba(0,0
 .lmemo{font-size:12px;color:#6b7a86;border-top:1px dashed #cfe2ff;margin-top:10px;padding-top:10px}
 </style>
 </head>
-<body>
+<body data-id="inu-neko-quiz">
 <header>
   <nav class="nav" aria-label="グローバルナビ">
     <div class="brand"><a href="/quiz/index.html">知識の水槽</a></div>
@@ -258,6 +257,7 @@ function updateScore(){
   const pct = Math.round(score/total*100);
   document.getElementById('score').textContent = score;
   bar.style.width = pct + '%';
+if (answered.size === total && !window._quizDone) { window._quizDone = true; window.dispatchEvent(new Event('quiz:done')); }
   const label = document.getElementById('label');
   label.textContent =
     pct>=90 ? '研究探索マスター✨' :
@@ -306,6 +306,29 @@ function confettiBurst(){
     setTimeout(()=>d.remove(),1000);
   }
 }
+</script>
+<script>
+/* ===== クイズ完了時に“みんなの”合計を +1（CountAPI）===== */
+(function(){
+  // ページID（必要なら index 側の取得にも使える）
+  var MY_ID = document.body.getAttribute('data-id') || 'inu-neko-quiz';
+
+  // CountAPI の集計先（必要に応じて KEY を "quiz_total_"+MY_ID にするとクイズ別集計になります）
+  var COUNTAPI_NS  = 'haisuikounozarigani_quiz';
+  var COUNTAPI_KEY = 'quiz_total';
+
+  function hitCount(){
+    var url = 'https://api.countapi.xyz/hit/' + COUNTAPI_NS + '/' + COUNTAPI_KEY;
+    if (navigator.sendBeacon) {
+      try { navigator.sendBeacon(url); } catch(_) {}
+    } else {
+      fetch(url, { mode:'cors', cache:'no-store', keepalive:true }).catch(function(){});
+    }
+  }
+
+  // ②でディスパッチした完了イベントを拾って一度だけ加算
+  window.addEventListener('quiz:done', hitCount, { once:true });
+})();
 </script>
 </body>
 </html>
