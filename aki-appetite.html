@@ -72,7 +72,7 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:12px 0}
 }
 </style>
 </head>
-<body>
+<body data-id="aki-appetite">
 <main>
   <header class="hd">
     <h1>秋の食欲クイズ</h1>
@@ -382,5 +382,41 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:12px 0}
   loadLast();
 })();
 </script>
+<script>
+/* === quiz用：最初の回答時に一度だけ「みんなの挑戦数」を +1 ===
+   - 既存の採点ロジックには未干渉
+   - CountAPI: https://api.countapi.xyz/hit/{namespace}/{key}
+   - namespace/key は quiz用に分離（site全体の設計に合わせてOK）
+============================================================== */
+(function(){
+  // このページのID（body[data-id] を優先）
+  var MY_ID = document.body.getAttribute('data-id') || 'aki-mix';
+
+  // みんなのカウント（クイズ用の名前空間）
+  var COUNTAPI_NS  = 'haisuikounozarigani_quiz';
+  var COUNTAPI_KEY = 'plays_total'; // まとめカウンタ（ページ個別にしたい場合は MY_ID を混ぜて OK）
+
+  var counted = false;
+  function hitEveryoneOnce(){
+    if (counted) return; 
+    counted = true;
+    var url = 'https://api.countapi.xyz/hit/' + COUNTAPI_NS + '/' + COUNTAPI_KEY;
+    if (navigator.sendBeacon) {
+      try { navigator.sendBeacon(url); } catch(_) {}
+    } else {
+      fetch(url, {mode:'cors', cache:'no-store', keepalive:true}).catch(function(){});
+    }
+  }
+
+  // 最初の回答（ラジオ選択）で一度だけ加算
+  document.addEventListener('change', function(ev){
+    var t = ev.target;
+    if (t && t.matches('.opts input[type="radio"]')) {
+      hitEveryoneOnce();
+    }
+  }, { once:true });
+})();
+</script>
+</body>
 </body>
 </html>
