@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>冬の孤独クイズ —— 心が寒い日の“思い込み”ほぐし</title>
+<meta name="description" content="冬に強まりがちな“思い込み”をやさしくほどく3択クイズ。選んだ瞬間に判定＋ひとこと解説。保存なし・軽量・モバイル最適。">
+<meta name="theme-color" content="#ffffff">
+
+<!-- OGP（t00.webpをOGPに） -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="冬の孤独クイズ —— 心が寒い日の“思い込み”ほぐし">
+<meta property="og:description" content="冬に強まりがちな“思い込み”をやさしくほどく3択クイズ。選んだ瞬間に判定＋ひとこと解説。保存なし・軽量・モバイル最適。">
+<meta property="og:url" content="">
+<meta property="og:image" content="/quiz/assets/results/winter-loneliness/t00.webp">
+
+<style>
+:root{
+  /* —— ライトテーマ（高コントラスト） —— */
+  --bg:#ffffff;
+  --card:#ffffff;
+  --text:#0f172a;     /* ほぼ黒 */
+  --muted:#475569;    /* 濃い目のサブ */
+  --accent:#2563eb;   /* 青アクセント */
+  --accent2:#7c3aed;  /* 補助アクセント */
+  --ok:#16a34a;
+  --ng:#dc2626;
+  --pill:#f1f5f9;     /* ライトなチップ背景 */
+  --border:#e2e8f0;   /* 薄い枠線 */
+  --focus:#2563eb;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.7}
+img{max-width:100%;display:block}
+a{color:var(--accent)}
+.hd{padding:24px 16px 12px;max-width:920px;margin:0 auto}
+.hd h1{margin:0 0 6px;font-size:clamp(20px,4vw,28px);letter-spacing:.02em}
+.hd p{margin:0;color:var(--muted)}
+.sticky{position:sticky;top:0;z-index:20;background:#ffffffcc;backdrop-filter:saturate(1.2) blur(6px);border-bottom:1px solid var(--border)}
+.sticky .wrap{max-width:920px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bar{flex:1;background:#f1f5f9;border:1px solid var(--border);height:12px;border-radius:999px;overflow:hidden}
+#prog{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .35s ease}
+.btn{appearance:none;border:1px solid var(--border);background:#ffffff;color:var(--text);padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer}
+.btn:hover{border-color:#cbd5e1}
+.pill{display:inline-block;background:var(--pill);color:var(--text);border:1px solid var(--border);padding:6px 12px;border-radius:999px;font-size:.9rem}
+.card{max-width:920px;margin:16px auto;padding:16px;border:1px solid var(--border);border-radius:16px;background:var(--card);box-shadow:0 4px 24px rgba(15,23,42,.06)}
+.card.small{font-size:.96rem;color:var(--muted)}
+.meta{display:flex;gap:8px;flex-wrap:wrap}
+#quiz .q{margin:18px 0;padding:14px;border:1px dashed #cbd5e1;border-radius:14px;background:#ffffff}
+#quiz legend{font-weight:800;padding:0 2px 8px}
+.opts{display:grid;gap:10px;margin-top:4px}
+.opts input{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.opt{display:flex;align-items:center;gap:12px;border:2px solid var(--border);padding:14px 16px;border-radius:12px;background:#ffffff;cursor:pointer;user-select:none;min-height:50px}
+.opt:hover{background:#f8fafc}
+.opt::before{content:"";width:18px;height:18px;border-radius:50%;border:2px solid #94a3b8;display:inline-block;flex:0 0 auto;background:#fff}
+input:checked + .opt{outline:3px solid color-mix(in srgb,var(--focus),transparent 70%);border-color:var(--focus);background:#eef2ff}
+input:checked + .opt::before{background:var(--focus);border-color:var(--focus)}
+.q.locked .opt{opacity:.7;cursor:not-allowed}
+.fb{margin-top:10px;padding:12px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0}
+.fb.ok{border-color:color-mix(in srgb,var(--ok),#fff 70%);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok),transparent 88%) inset}
+.fb.ng{border-color:color-mix(in srgb,var(--ng),#fff 70%);box-shadow:0 0 0 3px color-mix(in srgb,var(--ng),transparent 90%) inset}
+.fb strong{display:inline-block;margin-right:8px}
+.scoreline{font-weight:800;margin-bottom:10px}
+#result figure{margin:10px 0}
+#resImg{width:100%;max-width:560px;border-radius:14px;border:1px solid var(--border);margin:0 auto}
+#resCopy{margin:12px 0;color:var(--text)}
+#resResearch{margin:0 0 10px 18px}
+#resResearch li{margin:6px 0}
+hr.sep{border:0;border-top:1px solid var(--border);margin:12px 0}
+.hidden{display:none}
+@media (max-width:420px){
+  .btn{padding:9px 12px}
+}
+</style>
+</head>
+<body>
+<header class="hd">
+  <h1>冬の孤独クイズ —— 心が寒い日の“思い込み”ほぐし</h1>
+  <p>選んだ瞬間に判定＆ひとこと解説。全15問・約6分。</p>
+</header>
+
+<div class="sticky">
+  <div class="wrap">
+    <div class="bar" aria-label="進捗バー"><div id="prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>
+    <button id="resetBtn" class="btn" type="button">最初から</button>
+  </div>
+</div>
+
+<section id="desc" class="card">
+  <div class="meta">
+    <span class="pill">⏱ 約6分</span>
+    <div class="tags"></div>
+  </div>
+  <p style="margin-top:8px;color:var(--muted)">冬に強まりがちな「数を増やせば解決」などの思い込みを、やさしい言葉とちょい笑いでアップデート。</p>
+</section>
+
+<section id="quiz" class="card" aria-label="クイズ本体">
+  <!-- JSで各問を生成 -->
+</section>
+
+<section id="result" class="card hidden" aria-live="polite">
+  <div id="scoreLine" class="scoreline"></div>
+  <figure><img id="resImg" alt="結果画像" loading="lazy"></figure>
+  <div id="resCopy"></div>
+  <hr class="sep">
+<h3 class="mini-title" id="resMemoTtl" style="margin:8px 0 6px">研究メモ</h3>
+<ul id="resResearch"></ul>
+  <button id="retry" class="btn" type="button">もう一度</button>
+<a href="/quiz/" class="btn" aria-label="クイズ一覧に戻る">クイズ一覧に戻る</a>
+</section>
+
+<footer class="card small">
+  <p>※ 数字は目安／人によって感じ方や合う方法は異なります。医療目的ではありません。回答は保存されません。</p>
+</footer>
+
+<!-- ▼ 先にデータを置く（ここがポイント！） -->
+<script id="data" type="application/json">
+{
+  "title": "冬の孤独クイズ —— 心が寒い日の“思い込み”ほぐし",
+  "slug": "winter-loneliness",
+  "tags": ["クイズ","心理","生活"],
+  "mins": 6,
+  "updated": "2025-11-02",
+  "hero_image": "/quiz/assets/results/winter-loneliness/t00.webp",
+  "results_images": [
+    "/quiz/assets/results/winter-loneliness/t01.webp",
+    "/quiz/assets/results/winter-loneliness/t02.webp",
+    "/quiz/assets/results/winter-loneliness/t03.webp"
+  ],
+  "settings": { "save_default": false },
+  "questions": [
+    { "id":"q1", "text":"孤独は主に高齢者の問題？",
+      "choices":["A) 若めにかたよる","B) 年齢で大きな差はない","C) 年上にかたよる"],
+      "answer":"a","is_misconception": true,
+      "explain":"ある研究では、若年のほうが孤独が強めの国が多い傾向。男性>女性、個人主義の国でやや高め。",
+      "research_hint":"ある研究では、若年は高齢より孤独高群に入りやすい傾向（国差あり）。",
+      "funny_ok":"若さは“つながり力”の練習中。","funny_ng":"年齢で決め打ち。"
+    },
+    { "id":"q2","text":"孤独が強いと、死亡リスクは？",
+      "choices":["A) すこし下がる","B) だいたい変わらない","C) 上がりやすい"],
+      "answer":"c","is_misconception": false,
+      "explain":"ある研究では、孤独は死亡率が約26％上がる傾向。社会的孤立も約29％上がる。",
+      "research_hint":"ある研究では、孤独で約26％、孤立で約29％のリスク増。",
+      "funny_ok":"生命のほうも“温活”を。","funny_ng":"根性で無敵。"
+    },
+    { "id":"q3","text":"慢性的に孤独だと、白血球の炎症よりは？",
+      "choices":["A) おさまりやすい","B) ほぼ同じ","C) 強まりやすい"],
+      "answer":"c","is_misconception": true,
+      "explain":"ある研究では、炎症↑／抗ウイルス↓の方向に寄る。体も落ち着きにくい。",
+      "research_hint":"ある研究では、炎症関連が上向き、抗ウイルス系が下向きに。",
+      "funny_ok":"心の冷えは体にも伝染。","funny_ng":"気のせい理論。"
+    },
+    { "id":"q4","text":"仲間外れの心の痛みは脳でどう処理？",
+      "choices":["A) 体の痛みと近い動き","B) べつの場所中心","C) ごほうびの場所が主"],
+      "answer":"a","is_misconception": true,
+      "explain":"ある研究では、痛みの回路（前部帯状皮質など）が強く反応。",
+      "research_hint":"ある研究では、痛み関連部位の反応が主観的苦痛と関連。",
+      "funny_ok":"“いたい”は正当。","funny_ng":"気合で無痛。"
+    },
+    { "id":"q5","text":"SNSを“ながら”多用すると孤独は？",
+      "choices":["A) 減る","B) 変化無し","C) 増える"],
+      "answer":"c","is_misconception": true,
+      "explain":"ある研究では、利用が多いほど孤独の感じやすさ↑。最上位群で約2〜3倍の報告。",
+      "research_hint":"ある研究では、最も多い層で孤独のオッズが約2〜3倍。",
+      "funny_ok":"比べグセにマフラーを。","funny_ng":"スクロールが親友。"
+    },
+    { "id":"q6","text":"推しとの一方通行は支えになる？",
+      "choices":["A) ほとんどならない","B) 知人以上・親友未満","C) 親友より強い"],
+      "answer":"b","is_misconception": true,
+      "explain":"ある研究では、知人超え・親友未満の支えに感じられやすい。",
+      "research_hint":"ある研究では、パラソーシャル関係は知人より有効と評価されやすい。",
+      "funny_ok":"推し活＝心のカイロ。","funny_ng":"人間いらない論。"
+    },
+    { "id":"q7","text":"AIと雑談したあとの孤独は？",
+      "choices":["A) 軽くなる","B) とくに変わらない","C) 長く使うほど悪化"],
+      "answer":"a","is_misconception": true,
+      "explain":"ある研究では、短期で数％〜十数％の軽減が見られることも。聞いてくれる感じがカギ。",
+      "research_hint":"ある研究では、AI対話で短期に孤独が下がる傾向。",
+      "funny_ok":"今日はAIで肩ならし。","funny_ng":"端末に土下座。"
+    },
+    { "id":"q8","text":"いちばん効いた孤独対策は？",
+      "choices":["A) 会う回数をふやす","B) 話し方をならう","C) 考え方のクセを直す"],
+      "answer":"c","is_misconception": true,
+      "explain":"ある研究では、認知の歪みに働きかける方法が小〜中の効果で安定。",
+      "research_hint":"ある研究では、認知修正の介入が最有力（小〜中効果）。",
+      "funny_ok":"脳内評論家を減給。","funny_ng":"数打ちゃ当たる式。"
+    },
+    { "id":"q9","text":"孤独についての反すうは、抑うつとの結びつきが…",
+      "choices":["A) 弱い","B) 同じくらい","C) より強い"],
+      "answer":"c","is_misconception": true,
+      "explain":"ある研究では、「くよくよ考える」が中心の結び目になって気分を下げやすい。",
+      "research_hint":"ある研究では、反すうが関連ネットワークの中心に位置。",
+      "funny_ok":"考える回数に上限を。","funny_ng":"無限ループ歓迎。"
+    },
+    { "id":"q10","text":"孤独は人にうつる？",
+      "choices":["A) 友人まで","B) 友人の友人の先まで","C) ずっと先まで"],
+      "answer":"b","is_misconception": true,
+      "explain":"ある研究では、友人の友人の先まで波及する連鎖が観察。",
+      "research_hint":"ある研究では、影響は約3手先まで届く傾向。",
+      "funny_ok":"温め合いも連鎖で。","funny_ng":"孤島戦法。"
+    },
+    { "id":"q11","text":"遺伝の寄与はどのくらい？",
+      "choices":["A) すこしだけ","B) 半分くらい","C) ほとんど全部"],
+      "answer":"b","is_misconception": false,
+      "explain":"ある研究では、約37〜55％が遺伝の説明。環境ももちろん大きい。",
+      "research_hint":"ある研究では、遺伝率は約37〜55％。",
+      "funny_ok":"素質＋環境＝現在地。","funny_ng":"運命100％。"
+    },
+    { "id":"q12","text":"冬の寒さそのものだけで孤独は…",
+      "choices":["A) ぐっと上がる","B) だいたい同じ","C) ぐっと下がる"],
+      "answer":"b","is_misconception": true,
+      "explain":"いくつかの調査では、気温そのものより生活リズムや関わり方が効きやすい。",
+      "research_hint":"ある研究では、温度単独の影響ははっきりせず条件依存。",
+      "funny_ok":"心は室温だけじゃ決まらない。","funny_ng":"寒波のせいに全部。"
+    },
+    { "id":"q13","text":"グループ通話、人数だけ増やせば孤独は…",
+      "choices":["A) 質が合わないと変わらない","B) 多いほど必ず下がる","C) 少人数は逆に上がる"],
+      "answer":"a","is_misconception": true,
+      "explain":"“数”だけでははっきり変わらないことも。安心感や話題のほうが大事。",
+      "research_hint":"ある研究では、接触量より関係の質の説明力が高い傾向。",
+      "funny_ok":"人数より“空気感”。","funny_ng":"フルハウス至上主義。"
+    },
+    { "id":"q14","text":"今日だけ読書時間を増やす。その晩の孤独は…",
+      "choices":["A) ぐっと下がる","B) だいたい同じ","C) ぐっと上がる"],
+      "answer":"b","is_misconception": true,
+      "explain":"読書は長く続けて効きやすい。1回で大きくは変わりにくい。",
+      "research_hint":"ある研究では、短期即効より長期継続のほうが効果が出やすい示唆。",
+      "funny_ok":"積み重ねがホットパック。","funny_ng":"一夜漬けで完治。"
+    },
+    { "id":"q15","text":"SNSで“自分から発信”を少し増やすと…",
+      "choices":["A) 必ず下がる","B) だいたい同じ","C) 必ず上がる"],
+      "answer":"b","is_misconception": true,
+      "explain":"受動閲覧は上げやすいが、発信は内容と関係性次第で効果がばらつく。",
+      "research_hint":"ある研究では、使い方により方向が分かれる報告も。",
+      "funny_ok":"発信＝橋づくり。中身がカギ。","funny_ng":"とりあえず大量投下。"
+    }
+  ],
+  "deep_dive_html": "<h2>冬の孤独をぬくめるコツ</h2><ul><li>“数”より“質”：会う人数より安心・共感・話題の合い方。</li><li>反すうに上限：紙に1行で切り替える。</li><li>小さな親切×4週：近所でちょい行動→芽が出やすい。</li><li>SNS設計：受動閲覧を短く、発信は誰に何をで。</li><li>体を温める儀式：散歩・湯・光で土台づくり。</li><li>思考のクセ：「どうせ…」に根拠チェック。</li></ul><p>※数字は目安／人によって合わないこともあります。</p>",
+  "keywords": "孤独, 冬, SNS, パラソーシャル, AI, 反すう, 認知行動, 炎症, 若年, 文化"
+}
+</script>
+
+<script>
+(()=> {
+  'use strict';
+
+  // ========== 小ユーティリティ ==========
+  const $  = (sel, el=document)=>el.querySelector(sel);
+  const $$ = (sel, el=document)=>Array.from(el.querySelectorAll(sel));
+  const byId = id=>document.getElementById(id);
+  const shuffle = (arr)=>{ const a=arr.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+
+  // ========== コンフェッティ（ok時ちょい） ==========
+  function confettiBurst(){
+    try{
+      const c = document.createElement('canvas');
+      const ctx = c.getContext('2d');
+      const W = c.width = window.innerWidth;
+      const H = c.height = Math.min(window.innerHeight, 600);
+      Object.assign(c.style,{position:'fixed',left:0,top:0,width:'100vw',height:H+'px',pointerEvents:'none',zIndex:9999});
+      document.body.appendChild(c);
+      const N = 60;
+      const parts = Array.from({length:N},()=>({x:Math.random()*W,y:-10-Math.random()*30,vx:(Math.random()-0.5)*2,vy:2+Math.random()*3,w:6,h:10,a:1,rot:Math.random()*Math.PI}));
+      let t=0, id;
+      (function loop(){
+        ctx.clearRect(0,0,W,H);
+        parts.forEach(p=>{
+          p.x+=p.vx; p.y+=p.vy; p.vy+=0.05; p.rot+=0.1; p.a-=0.008;
+          ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+          ctx.globalAlpha=Math.max(0,p.a);
+          const g=ctx.createLinearGradient(-p.w,-p.h,p.w,p.h); g.addColorStop(0,'#2563eb'); g.addColorStop(1,'#7c3aed');
+          ctx.fillStyle=g; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+        });
+        t++; (t<220)? id=requestAnimationFrame(loop) : (cancelAnimationFrame(id), c.remove());
+      })();
+    }catch(e){}
+  }
+
+  // ========== データ読込（#dataは先にある前提） ==========
+  let DATA = {};
+  try{
+    const node = byId('data');
+    DATA = JSON.parse(node.textContent);
+  }catch(e){
+    console.error('DATA JSON parse error', e);
+    const host = byId('quiz');
+    if(host){ host.innerHTML = '<p style="color:#dc2626">データの読み込みに失敗しました。</p>'; }
+    return; // ここで停止
+  }
+
+  document.title = DATA.title || document.title;
+  $$('meta[property="og:url"]').forEach(m=>m.setAttribute('content', location.href));
+
+  // 説明タグ描画
+  (function renderDesc(){
+    const wrap = $('.tags', byId('desc'));
+    wrap.innerHTML = '';
+    (DATA.tags||[]).forEach(t=>{
+      const s = document.createElement('span');
+      s.className='pill'; s.textContent = '#'+t;
+      wrap.appendChild(s);
+    });
+  })();
+
+  // 進捗
+  const total = (DATA.questions||[]).length;
+  let answered = 0, correct = 0;
+  function setProgress(){
+    const pct = total? Math.round((answered/total)*100) : 0;
+    const bar = byId('prog');
+    if(!bar) return;
+    bar.style.width = pct+'%';
+    bar.setAttribute('aria-valuenow', String(pct));
+    bar.setAttribute('aria-label', `進捗 ${answered}/${total}`);
+  }
+
+  // 設問描画
+  function renderQuiz(){
+    const host = byId('quiz');
+    if(!host) return;
+    host.innerHTML = '';
+    answered = 0; correct = 0; setProgress();
+    byId('result')?.classList.add('hidden');
+
+    const qs = (DATA.questions||[]).slice(); // 順は固定、選択肢だけシャッフル
+    const keys = ['a','b','c'];
+
+    qs.forEach((q, qi)=>{
+      // フェイルセーフ：choicesが不正でもこけない
+      const rawChoices = Array.isArray(q.choices) ? q.choices.slice(0,3) : [];
+      while(rawChoices.length<3) rawChoices.push('（選択肢）');
+
+      const fs = document.createElement('fieldset'); fs.className='q';
+      const leg = document.createElement('legend'); leg.textContent = `${qi+1}. ${q.text||''}`;
+      fs.appendChild(leg);
+
+      const fb = document.createElement('div'); fb.className='fb'; fb.setAttribute('aria-live','polite');
+
+      const opts = document.createElement('div'); opts.className='opts';
+      const choiceObjs = rawChoices.map((txt,i)=>({ key: keys[i], text: txt }));
+      const shuffled = shuffle(choiceObjs);
+
+      shuffled.forEach(ch=>{
+        const id = `${q.id||('q'+qi)}_${ch.key}`;
+        const input = document.createElement('input');
+        input.type='radio'; input.name=q.id||('q'+qi); input.id=id; input.value=ch.key;
+
+        const lab = document.createElement('label');
+        lab.className='opt'; lab.setAttribute('for', id);
+        lab.textContent = String(ch.text).replace(/^[ABC]\)\s*/,''); // “A) ”などは見た目では外す
+
+        input.addEventListener('change', ()=>{
+          if (fs.classList.contains('locked')) return;
+          fs.classList.add('locked');
+          const isOK = String(ch.key).toLowerCase() === String(q.answer||'').toLowerCase();
+          if(isOK){
+            correct++; confettiBurst();
+            fb.classList.remove('ng'); fb.classList.add('ok');
+            fb.innerHTML = `<strong>✅ 正解</strong> ${(q.explain||'') } <br><small>${q.funny_ok||''}</small>`;
+          }else{
+            fb.classList.remove('ok'); fb.classList.add('ng');
+            fb.innerHTML = `<strong>❌ 惜しい</strong> ${(q.explain||'')} <br><small>${q.funny_ng||''}</small>`;
+          }
+          $$('.opts input', fs).forEach(i=>i.disabled = true);
+          answered++; setProgress();
+          if(answered===total) finish();
+        });
+
+        opts.appendChild(input);
+        opts.appendChild(lab);
+      });
+
+      fs.appendChild(opts);
+      fs.appendChild(fb);
+      host.appendChild(fs);
+    });
+  }
+
+  function pickResCopy(tier){
+    if(tier==='01'){
+      return `つながりセンス、いい感じ。数より質を選べるのは強みです。
+小さな親切や短い雑談を習慣化すると、冬でも温かさが“貯金”されます。`;
+    }else if(tier==='02'){
+      return `コツをつかみ中。受動スクロールを少し減らして、誰に・何を伝えるかを意識すると伸びます。
+“反すうに上限”のルールを1つ決めてみて。`;
+    }
+    return `いまは寒波気味。数より質／短期より習慣の方向へ、小さく着火を。
+近所の一声・光・湯・散歩の固定化からでOK。`;
+  }
+
+  // 終了処理
+  function finish(){
+    const rate = total ? (correct/total) : 0;
+    const tier = rate>=0.8 ? '01' : (rate>=0.4 ? '02' : '03');
+    const pct = Math.round(rate*100);
+
+    byId('scoreLine').textContent = `あなたのスコア：${correct}/${total}（${pct}%）`;
+    const imgEl = byId('resImg');
+    imgEl.src = `/quiz/assets/results/${DATA.slug}/t${tier}.webp`;
+    imgEl.alt = `結果画像 t${tier}`;
+    byId('resCopy').textContent = pickResCopy(tier);
+
+    // 研究メモ（見出しがあるので本文から「ある研究では」は外す）
+    const pool = (DATA.questions||[]).map(q=>q.research_hint||'').filter(Boolean);
+    const uniq = Array.from(new Set(pool)).slice(0,6);
+    const ul = byId('resResearch'); ul.innerHTML='';
+    function cleanMemo(s){
+      let t = s.replace(/^ある研究では[、:：]?\s*/,'').trim();
+      t = t.replace(/↑/g,'上がる').replace(/↓/g,'下がる');
+      if(!/[。.!?？！]$/.test(t)) t+='。';
+      return t;
+    }
+    uniq.forEach(s=>{ const li=document.createElement('li'); li.textContent = cleanMemo(s); ul.appendChild(li); });
+
+    const res = byId('result'); res.classList.remove('hidden');
+    res.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  // ボタン（存在チェックつき）
+  const rb = byId('resetBtn'); if(rb) rb.addEventListener('click', renderQuiz);
+  const ry = byId('retry');    if(ry) ry.addEventListener('click', renderQuiz);
+
+  // 初期化：DOM確定→描画、フォールバック再描画
+  function boot(){
+    try{ renderQuiz(); }catch(e){ console.error(e); }
+    setTimeout(()=>{
+      const host = byId('quiz');
+      if(host && !host.children.length){ try{ renderQuiz(); }catch(e){ console.error(e); } }
+    }, 150);
+  }
+  (document.readyState==='loading') ? document.addEventListener('DOMContentLoaded', boot, {once:true}) : boot();
+
+  // ========== “みんなのこころLv” & “あなたのLv” 加算 ==========
+  (function(){
+    const CF_WORKER_URL = "https://counter.asagikarin.workers.dev";
+    const GLOBAL_KEY    = "quiz_open_total";
+    const LS_TOTAL_KEY   = "quiz:open:total";
+    const LS_BYID_KEY    = "quiz:open:byid";
+    const LS_GLOBAL_LAST = "quiz:open:global:last";
+    function incLocalById(id){
+      try{
+        const t = (parseInt(localStorage.getItem(LS_TOTAL_KEY)||"0",10) || 0) + 1;
+        localStorage.setItem(LS_TOTAL_KEY, String(t));
+        let map={}; try{ map=JSON.parse(localStorage.getItem(LS_BYID_KEY) || "{}"); }catch(e){}
+        map[id]=(map[id]||0)+1;
+        localStorage.setItem(LS_BYID_KEY, JSON.stringify(map));
+      }catch(e){}
+    }
+    function bumpGlobal(){
+      try{
+        const url = new URL(CF_WORKER_URL);
+        url.searchParams.set("key", GLOBAL_KEY);
+        url.searchParams.set("hit", "1");
+        if (navigator.sendBeacon) navigator.sendBeacon(url);
+        else fetch(url.toString(), {mode:"cors", cache:"no-store", keepalive:true}).catch(()=>{});
+        const last = parseInt(localStorage.getItem(LS_GLOBAL_LAST)||"0",10) || 0;
+        localStorage.setItem(LS_GLOBAL_LAST, String(last+1));
+      }catch(e){}
+    }
+    function getSlug(){
+      try{ const el=byId("data"); if(el){ const d=JSON.parse(el.textContent||"{}"); if(d && d.slug) return d.slug; } }catch(e){}
+      return (location.pathname.split("/").pop()||"").replace(/\.html$/,"") || "unknown";
+    }
+    let done=false;
+    document.addEventListener("change", function(ev){
+      if(done) return;
+      if(ev.target && ev.target.matches('.opts input[type="radio"]')){
+        done=true;
+        incLocalById(getSlug()); // あなたのLv +1
+        bumpGlobal();            // みんなのLv +1
+      }
+    }, { once:true });
+  })();
+
+})();
+</script>
+</body>
+</html>
