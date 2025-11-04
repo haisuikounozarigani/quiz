@@ -143,7 +143,7 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:12px 0}
       "research_hint":"ある研究では、孤独で約26％、孤立で約29％のリスク増。",
       "funny_ok":"生命のほうも“温活”を。","funny_ng":"根性で無敵。"
     },
-    { "id":"q3","text":"慢性的に孤独だと、白血球の炎症よりは？",
+    { "id":"q3","text":"慢性的に孤独だと、白血球の炎症は？",
       "choices":["A) おさまりやすい","B) ほぼ同じ","C) 強まりやすい"],
       "answer":"c","is_misconception": true,
       "explain":"ある研究では、炎症↑／抗ウイルス↓の方向に寄る。体も落ち着きにくい。",
@@ -322,7 +322,37 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:12px 0}
     answered = 0; correct = 0; setProgress();
     byId('result')?.classList.add('hidden');
 
-    const qs = (DATA.questions||[]).slice(); // 順は固定、選択肢だけシャッフル
+    // 順番に偏りが出ないよう、回答タイプ（a/b/c）を均等に interleave
+const src = (DATA.questions||[]).slice();
+const byAns = { a:[], b:[], c:[], other:[] };
+src.forEach(q=>{
+  const k = String(q.answer||'').toLowerCase();
+  (byAns[k] ? byAns[k] : byAns.other).push(q);
+});
+// ラウンドロビンで並べ替え（同じ答えが連続しにくい）
+const qs = [];
+let last = '';
+while (qs.length < src.length) {
+  // 残数の多い順に優先
+  const order = ['a','b','c'].sort((x,y)=>(byAns[y].length)-(byAns[x].length));
+  let placed = false;
+  for (const k of order) {
+    if (!byAns[k].length) continue;
+    // 直前と同じ答えを避ける。ただし他が残っていない時は許容。
+    if (k !== last || (byAns[order[1]]?.length===0 && byAns[order[2]]?.length===0)) {
+      qs.push(byAns[k].shift());
+      last = k;
+      placed = true;
+      break;
+    }
+  }
+  // 予備（全部同じしか残ってない場合の保険）
+  if (!placed) {
+    for (const k of order) {
+      if (byAns[k].length) { qs.push(byAns[k].shift()); last = k; break; }
+    }
+  }
+}
     const keys = ['a','b','c'];
 
     qs.forEach((q, qi)=>{
