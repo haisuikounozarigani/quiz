@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <title>美容デマ討伐クイズ（毛穴・水・日焼け止め）</title>
+  <meta name="description" content="選択した瞬間に判定。くすっと＋短い解説（約◯％）。前回スコアは端末内に保存。" />
+
+  <!-- OGP -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="美容デマ討伐クイズ（毛穴・水・日焼け止め）" />
+  <meta property="og:description" content="美容デマを踏み抜かない。勝ち筋（UV・低刺激・継続）を拾う。" />
+  <meta property="og:url" content="/quiz/beauty-myth-battle.html" />
+  <meta property="og:image" content="/quiz/assets/results/beauty-myth-battle/t00.webp" />
+
+  <style>
+    :root{
+      --bg:#f6f7ff;
+      --card:#ffffff;
+      --ink:#141625;
+      --muted:#5a6078;
+      --line:rgba(20,22,37,.12);
+
+      --a1:#8c6bff;
+      --a2:#ff8fc7;
+
+      --ok:#0a9b5a;
+      --ng:#d51a4a;
+
+      --shadow:0 14px 36px rgba(20,22,37,.12);
+      --r:18px;
+      --tap:48px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1100px 520px at 12% -10%, rgba(140,107,255,.22), transparent 60%),
+        radial-gradient(900px 520px at 92% 0%, rgba(255,143,199,.18), transparent 58%),
+        radial-gradient(980px 880px at 40% 120%, rgba(74,168,255,.10), transparent 60%),
+        var(--bg);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:980px;margin:0 auto;padding:14px 14px 28px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      box-shadow: var(--shadow);
+      padding:14px;
+      margin:12px 0;
+    }
+    .small{font-size:.92rem;color:var(--muted);line-height:1.55}
+    .hr{height:1px;background:rgba(20,22,37,.10);border:0;margin:12px 0}
+
+    /* buttons */
+    .btn, .linkPill{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.78);
+      font-weight:950;
+      min-height:44px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn{appearance:none;color:var(--ink)}
+    .btn.primary{
+      border-color: rgba(140,107,255,.35);
+      background: linear-gradient(180deg, rgba(140,107,255,.18), rgba(255,143,199,.10));
+    }
+    .btn:active, .linkPill:active{transform:translateY(1px)}
+    .btn[disabled]{opacity:.45; cursor:not-allowed}
+
+    /* header */
+    .hd{display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin:0 0 8px}
+    .ttl{margin:0 0 6px;font-size:1.25rem;line-height:1.15;font-weight:950;letter-spacing:.02em}
+    .sub{margin:0;color:var(--muted);font-size:.95rem;line-height:1.45}
+
+    /* sticky */
+    .sticky{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(10px);
+      background: rgba(246,247,255,.78);
+      border-bottom:1px solid rgba(20,22,37,.10);
+      margin:10px -14px 10px;
+      padding:10px 14px;
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    }
+    .bar{
+      position:relative;
+      height:10px; flex:1 1 220px; min-width:180px;
+      border-radius:999px; overflow:hidden;
+      background: rgba(20,22,37,.08);
+      border:1px solid rgba(20,22,37,.10);
+    }
+    #prog{
+      height:100%; width:0%;
+      background: linear-gradient(90deg, var(--a1), var(--a2));
+      border-radius:999px;
+      transition: width .22s ease;
+    }
+    .stat{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.78);
+      min-height:44px;
+      font-weight:950;
+    }
+
+    /* prologue */
+    #prologue[hidden]{display:none}
+    .heroWide{
+      width:100%;
+      border-radius:18px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:rgba(255,255,255,.9);
+    }
+    .heroWide img{width:100%;height:auto;display:block}
+    .proT{margin:10px 0 6px;font-weight:950;font-size:1.08rem}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .chip{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.72);
+      color:var(--muted);font-size:.84rem
+    }
+    .actionRow{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:12px;
+      align-items:stretch;
+    }
+    .pushRight{ margin-left:auto; } /* ←開始するを右寄せ */
+    .hintBox{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(20,22,37,.12);
+      background: rgba(255,255,255,.92);
+      color: var(--muted);
+      line-height:1.55;
+    }
+
+    /* quiz */
+    #quizWrap[hidden]{display:none}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    fieldset.q{
+      border:1px solid rgba(20,22,37,.12);
+      border-radius:16px;
+      padding:12px;
+      background: rgba(255,255,255,.78);
+    }
+    legend{padding:0 6px;font-weight:950}
+    .opts{display:grid;gap:10px;margin-top:10px}
+    .opt{
+      display:flex; align-items:stretch; gap:10px;
+      border:1px solid rgba(20,22,37,.12);
+      border-radius:14px;
+      background: rgba(255,255,255,.92);
+      overflow:hidden;
+      min-height:48px;
+    }
+    .opt input{
+      width:22px; margin:0 0 0 14px;
+      accent-color: var(--a2);
+      align-self:center;
+      flex:0 0 auto;
+    }
+    .opt label{
+      flex:1 1 auto;
+      padding:12px 14px 12px 0;
+      cursor:pointer;
+      line-height:1.35;
+      display:flex; align-items:center; gap:10px;
+      user-select:none;
+    }
+
+    /* 選択肢の視認性（灰色にならないように） */
+    .opt input:disabled{ opacity:1; }
+    .opt.opt-dim{ opacity:.55; }
+    .opt.picked-ok{
+      border-color: rgba(10,155,90,.38);
+      background: rgba(10,155,90,.10);
+    }
+    .opt.picked-ng{
+      border-color: rgba(213,26,74,.38);
+      background: rgba(213,26,74,.10);
+    }
+    .opt.picked-ok .badge{
+      background: rgba(10,155,90,.14);
+      border-color: rgba(10,155,90,.32);
+    }
+    .opt.picked-ng .badge{
+      background: rgba(213,26,74,.14);
+      border-color: rgba(213,26,74,.32);
+    }
+    .badge{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:28px;height:28px;border-radius:10px;
+      background: rgba(140,107,255,.14);
+      border:1px solid rgba(140,107,255,.28);
+      font-weight:950;
+      color:var(--ink);
+      flex:0 0 auto;
+    }
+    .fb{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(20,22,37,.12);
+      background: rgba(255,255,255,.92);
+      line-height:1.55;
+    }
+    .fb .line1{font-weight:950}
+    .fb .ok{color:var(--ok)}
+    .fb .ng{color:var(--ng)}
+    .fb .mini{color:var(--muted); font-size:.93rem; margin-top:4px}
+    .nextRow{display:flex; justify-content:flex-end; margin-top:10px}
+    .nextRow[hidden]{display:none}
+
+    /* result */
+    #result[hidden]{display:none}
+    .resTop{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+    .resImg{
+      width:160px;height:160px;border-radius:18px;overflow:hidden;flex:0 0 auto;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.92);
+    }
+    .resImg img{width:100%;height:100%;object-fit:cover;display:block}
+
+    .scoreBox{
+      border:1px solid rgba(20,22,37,.12);
+      background: rgba(255,255,255,.92);
+      border-radius:16px;
+      padding:12px;
+      margin:0 0 10px;
+    }
+    .scoreMain{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap}
+    .scorePct{font-size:1.65rem; font-weight:950; letter-spacing:.02em}
+    .scoreFrac{color:var(--muted); font-weight:950}
+    .scoreBar{
+      margin-top:10px;
+      height:10px;
+      border-radius:999px;
+      overflow:hidden;
+      background: rgba(20,22,37,.08);
+      border:1px solid rgba(20,22,37,.10);
+    }
+    #scoreFill{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--a1), var(--a2));
+      border-radius:999px;
+      transition: width .22s ease;
+    }
+
+    #resCopy{margin:0;line-height:1.6}
+    #resResearch{margin-top:10px}
+    #resResearch .cap{font-weight:950; color:var(--ink); margin-bottom:6px}
+    #resResearch .txt{color:var(--muted); line-height:1.6}
+
+    @media (min-width: 820px){ .ttl{font-size:1.35rem} }
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto !important}
+      #prog{transition:none}
+      #scoreFill{transition:none}
+    }
+  </style>
+</head>
+
+<body id="beauty-myth-battle">
+  <div class="wrap">
+    <header class="hd">
+      <div style="min-width:0">
+        <h1 class="ttl" id="pageTitle">美容デマ討伐クイズ（毛穴・水・日焼け止め）</h1>
+        <p class="sub" id="pageSub">神様派？それとも貧乏神の儀式派？選択した瞬間に判定。</p>
+      </div>
+    </header>
+
+    <div class="sticky" role="region" aria-label="進捗">
+      <div class="bar" aria-label="進捗バー"><div id="prog"></div></div>
+      <div class="stat" aria-label="進捗数"><span id="countLine">0/0</span></div>
+    </div>
+
+    <!-- Prologue -->
+    <section id="prologue" class="card">
+
+      <div class="heroWide" aria-hidden="true" style="margin-top:10px">
+        <img id="heroImg" src="/quiz/assets/results/beauty-myth-battle/t00.webp" alt="" loading="lazy">
+      </div>
+
+      <div class="proT" id="proTitle">Prologue</div>
+      <div class="small" id="proText">
+  鏡の前って、なぜかテンションが極端になる。<br>
+  「今日は完璧」か、「今日はもう無理」の二択になりがち。<br><br>
+  
+  ・使い切れないアイテム<br>
+  ・“良さそう”で買ったやつ<br>
+  ・夜だけやる予定だったやつ<br>
+  ・なぜか1回で満足したやつ<br><br>
+  このクイズは、そういう“美容あるある脳”をゆるく整えるゲーム。<br>
+  「それっぽさ」に振り回されず、続く選択を拾うこと。<br>
+  鏡の前の自分にツッコミ入れに行こう。
+</div>
+
+      <!-- 最初に：前回スコア（左）＋開始（右） -->
+      <div class="actionRow">
+        <button class="btn" id="prevScoreBtn" type="button">前回のスコア</button>
+        <button class="btn primary pushRight" id="startBtn" type="button">開始する</button>
+      </div>
+
+      <div id="prevScoreBox" class="hintBox" hidden aria-live="polite"></div>
+
+      <div class="chips" id="tagRow"></div>
+
+      <hr class="hr">
+      <div class="small">
+        所要時間：⏱ <strong id="minsLine">6分</strong><br>
+        ※前回スコアのみ端末内に保存（localStorage）。
+      </div>
+    </section>
+
+    <!-- Quiz -->
+    <section id="quizWrap" class="card" hidden>
+      <section id="quiz" class="grid" aria-label="クイズ本編"></section>
+    </section>
+
+    <!-- Result -->
+    <section id="result" class="card" hidden aria-label="結果">
+      <div class="resTop">
+        <div class="resImg" aria-hidden="true"><img id="resImg" alt="" loading="lazy"></div>
+        <div style="min-width:240px;flex:1 1 280px">
+          <div class="scoreBox" aria-label="スコア">
+            <div class="scoreMain">
+              <span class="scorePct" id="scorePct">0％</span>
+              <span class="scoreFrac" id="scoreFrac">0/0</span>
+            </div>
+            <div class="scoreBar" aria-hidden="true"><div id="scoreFill"></div></div>
+          </div>
+
+          <p id="resCopy"></p>
+
+          <div id="resResearch">
+            <div class="cap">研究メモ（目安）</div>
+            <div class="txt" id="resResearchText"></div>
+          </div>
+
+          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn primary" id="retry" type="button">もう一回やる</button>
+            <a class="btn" href="/quiz/">一覧に戻る</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="card small">
+      注意：数値（約◯％）は目安。個人差あり。<br>
+      前回スコアのみ端末内に保存（ページ側に送信はしない）。
+      <div style="margin-top:10px">
+        <a class="linkPill" href="/quiz/" aria-label="クイズ一覧に戻る">↩️ クイズ一覧に戻る</a>
+      </div>
+    </footer>
+  </div>
+
+  <script id="data" type="application/json">
+  {
+    "title": "美容デマ討伐クイズ（毛穴・水・日焼け止め）",
+    "slug": "beauty-myth-battle",
+    "tags": ["クイズ","美容","生活","デマ対策"],
+    "mins": 6,
+    "updated": "2026-01-04",
+    "hero_image": "/quiz/assets/results/beauty-myth-battle/t00.webp",
+    "results_images": [
+      "/quiz/assets/results/beauty-myth-battle/t01.webp",
+      "/quiz/assets/results/beauty-myth-battle/t02.webp",
+      "/quiz/assets/results/beauty-myth-battle/t03.webp"
+    ],
+    "prologue": {
+      "title": ""prologue": {
+      "title": "鏡前あるある選手権：開幕",
+      "text": "鏡の前って、なぜかテンションが極端になる。\\n『今日は完璧』か、『今日はもう無理』の二択になりがち。\\n\\n気づけば増えてる：\\n・使い切れないアイテム\\n・“良さそう”で買ったやつ\\n・夜だけやる予定だったやつ\\n・なぜか1回で満足したやつ\\n\\nこのクイズは、そういう“美容あるある脳”をゆるく整えるゲーム。\\n三択をポンッと選ぶだけで、すぐ判定が出る。\\n当たっても外しても、命は減らない。安心して踏め。\\n\\n目標はひとつ。\\n『それっぽさ』に振り回されず、続く選択を拾うこと。\\nさあ、鏡の前の自分にツッコミ入れに行こう。"
+    },
+    "result_copy": {
+      "t1": "デマ、消滅。\\nあなたの手は『攻撃』じゃなく『運用』に向いてる。\\nコツ：日焼け止めは“量と塗り直し”が勝ち筋。",
+      "t2": "反撃、開始。\\n地雷は避けられる。あと少しで神側の動き。\\nコツ：角栓は“こすらず、積み上げ”。",
+      "t3": "その儀式、やめて。\\n効いてる気がするだけの“摩擦”が多め。\\nコツ：まず刺激を減らして、守りを厚く。"
+    },
+    "questions": [
+  {
+    "id":"q1",
+    "text":"水を多めに飲むと、肌のうるおいはどうなる？",
+    "choices":["A) 肌まで潤う","B) 肌は別ルート","C) 保湿いらずになる"],
+    "answer":"b",
+    "is_misconception": true,
+    "explain":"飲水を増やすと肌の水分指標が上がる報告はある。ただし『保湿の完全代替』にはなりにくい。ある研究では水分指標が**約10％**動いた例。",
+    "research_hint":"ある研究では、飲水量の増加で皮膚水分指標が**約10％**動いた例。",
+    "funny_ok":"その判断、保湿棚が拍手してる。",
+    "funny_ng":"水を万能薬扱いすると、肌がツッコミ入れる。"
+  },
+  {
+    "id":"q2",
+    "text":"毛穴は温めると開いて冷やすと閉じる？",
+    "choices":["A) 温度で開閉する","B) 見た目が変化する","C) 冷やせば縮むだけ"],
+    "answer":"b",
+    "is_misconception": true,
+    "explain":"『開閉ドア』より、皮脂・詰まり・たるみで目立ち方が変化するのが本体。ある研究では見た目の差が**約20％**くらい動くことがある。",
+    "research_hint":"ある研究では、毛穴の“見え方”が条件で**約20％**程度変動する例。",
+    "funny_ok":"毛穴に“開閉ボタン”は付いてない、正解。",
+    "funny_ng":"毛穴を自動ドア扱い…建築費かかる。"
+  },
+  {
+    "id":"q3",
+    "text":"黒ずみ（いちご鼻）の“本体”に近いのは？",
+    "choices":["A) 表面の汚れが主犯","B) 角栓（皮脂＋角質）の詰まり","C) 菌の塊"],
+    "answer":"b",
+    "is_misconception": true,
+    "explain":"角栓は皮脂＋角質の詰まり。こすりすぎはバリアを崩して逆効果になりやすい。ある研究ではバリア指標が**約20％**悪化した例。",
+    "research_hint":"ある研究では、強い摩擦で皮膚バリア指標が**約20％**悪化した例。",
+    "funny_ok":"汚れ扱いしないの、かなり賢い。",
+    "funny_ng":"洗いで殴ると、肌が反乱を起こす。"
+  },
+  {
+    "id":"q4",
+    "text":"鼻の白い点は全部取るべき角栓？",
+    "choices":["A) 見えたら全部“敵”なので取る","B) 正常なものも混ざることがある","C) だいたい炎症のサイン"],
+    "answer":"b",
+    "is_misconception": true,
+    "explain":"白い点は『皮脂の通り道』のことも多い。敵扱いで攻撃し続けると荒れやすい。ある研究では赤みが**約20％**増えた例。",
+    "research_hint":"ある研究では、刺激が続くと赤み指標が**約20％**増えた例。",
+    "funny_ok":"敵味方識別できてる。えらい。",
+    "funny_ng":"味方まで処刑すると、治安が悪化する。"
+  },
+  {
+    "id":"q5",
+    "text":"鼻パック（角栓抜き）の“実態”はどれが近い？",
+    "choices":["A) 使うほど根本解決に近づく","B) 見た目は変わるが戻りやすい","C) 使えば使うほど永久に減る"],
+    "answer":"b",
+    "is_misconception": true,
+    "explain":"抜けるのは本当でも『戻る』が起きやすい。刺激が出る人もいる。ある研究では赤みなどが**約10〜20％**出た例。",
+    "research_hint":"ある研究では、強い剥離刺激で赤み等が**約10〜20％**出た例。",
+    "funny_ok":"その場の勝利に酔わないの、強い。",
+    "funny_ng":"一発芸を“永久就職”させないで。"
+  },
+  {
+    "id":"q6",
+    "text":"角栓対策の“主力”として一番近いのは？",
+    "choices":["A) 洗顔回数を増やす","B) 角質ケアを継続する","C) 押し出して物理除去"],
+    "answer":"b",
+    "is_misconception": false,
+    "explain":"『発生率を下げる』のが勝ち筋。角質ケアで黒ずみ指標が**約10％**改善した報告がある。",
+    "research_hint":"ある研究では、角質ケアで黒ずみ関連指標が**約10％**改善した報告。",
+    "funny_ok":"地味な継続が勝つ。美容あるある。",
+    "funny_ng":"物理で押すと、物理で返される。"
+  },
+  {
+    "id":"q7",
+    "text":"歯磨き粉をニキビに塗るのは？",
+    "choices":["A) 刺激で荒れる","B) 乾かせば効く","C) ニキビ対策の定番級"],
+    "answer":"a",
+    "is_misconception": true,
+    "explain":"刺激性成分で皮膚炎っぽくなることがある。ある研究では刺激で炎症が**約10％**増えた例。",
+    "research_hint":"ある研究では、刺激性成分で炎症指標が**約10％**増えた例。",
+    "funny_ok":"口の武器を顔に持ち込まない、正解。",
+    "funny_ng":"それ、ニキビじゃなくて肌が怒ってる。"
+  },
+  {
+    "id":"q8",
+    "text":"レモン汁を肌に塗る“天然ケア”、どれが近い？",
+    "choices":["A) 使い方次第で差が出る","B) 光と組むとトラブルが出やすい","C) 毎日塗るほど近道"],
+    "answer":"b",
+    "is_misconception": true,
+    "explain":"柑橘成分は光と組むと炎症や色素沈着を起こしうる。ある研究では光関連反応が**約10％**台の報告も。",
+    "research_hint":"ある研究では、柑橘由来の光関連反応が**10％台**で報告された例。",
+    "funny_ok":"太陽と組ませない判断、天才。",
+    "funny_ng":"レモンは料理に。肌は戦場にしない。"
+  },
+  {
+    "id":"q9",
+    "text":"酢を原液で塗るスキンケアは？",
+    "choices":["A) 刺激が強い","B) 弱酸だから安心","C) 毎日塗るほど良い"],
+    "answer":"a",
+    "is_misconception": true,
+    "explain":"酸は濃度で『事故』になる。ある研究では強刺激でバリア指標が**約20〜30％**落ちた例。",
+    "research_hint":"ある研究では、強い酸刺激でバリア指標が**約20〜30％**低下した例。",
+    "funny_ok":"酸は“濃さ”で性格変わる。見抜いた。",
+    "funny_ng":"原液は美容じゃなくて事件。"
+  },
+  {
+    "id":"q10",
+    "text":"日焼け止めは体に悪いから避けるべき？",
+    "choices":["A) 使うのが正解","B) 避けるべき","C) 夏だけで十分"],
+    "answer":"a",
+    "is_misconception": true,
+    "explain":"紫外線の害は強い。日焼け止めのメリットは太い。ある研究では毎日使用群で皮膚がんが**約50％**少ない方向が示された。",
+    "research_hint":"ある研究では、日焼け止め常用群で皮膚がんが**約50％**少ない方向が示された例。",
+    "funny_ok":"守りの選択、将来の自分が礼を言う。",
+    "funny_ng":"紫外線は遠慮しない。こっちだけ遠慮するな。"
+  },
+  {
+    "id":"q11",
+    "text":"日焼け止めの“運用”として近いのは？",
+    "choices":["A) 塗り直しが要る","B) 朝の1回で足りる","C) 量さえ多ければ塗り直し不要"],
+    "answer":"a",
+    "is_misconception": true,
+    "explain":"汗・摩擦・皮脂で落ちる。塗り直しで効きを維持。ある研究では光老化の進行が**約20％**抑えられた報告も。",
+    "research_hint":"ある研究では、日焼け止め運用で光老化の進行が**約20％**抑えられた報告。",
+    "funny_ok":"塗って終わりじゃなく、運用まで見てる。",
+    "funny_ng":"朝だけの守りは、夕方に崩壊する。"
+  },
+  {
+    "id":"q12",
+    "text":"肌の光ダメージ、画面と日光のどっちが強い？",
+    "choices":["A) 画面の光が強い","B) 日光のほうが強い","C) 同じくらい強い"],
+    "answer":"b",
+    "is_misconception": true,
+    "explain":"日光の影響と『画面』は別格。ある研究では画面由来は日光比で**約1％未満級**と見積もられることがある。",
+    "research_hint":"ある研究では、画面由来の影響が日光比で**1％未満級**と見積もられる例。",
+    "funny_ok":"ラスボスを見誤らなかった。",
+    "funny_ng":"画面にヘイト集めると、太陽が笑う。"
+  },
+  {
+    "id":"q13",
+    "text":"飲むコラーゲン、どれが一番近い？",
+    "choices":["A) 効く人もいるが差が出やすい","B) 誰でも必ず効く","C) 全部思い込み"],
+    "answer":"a",
+    "is_misconception": true,
+    "explain":"メタ分析で肌水分などが上向くまとめがある一方、製品差も大きい。ある研究では肌水分が**約10〜20％**改善した例がある。",
+    "research_hint":"ある研究では、経口コラーゲンで肌水分が**約10〜20％**改善した例。",
+    "funny_ok":"白黒つけずに見るの、研究者の目。",
+    "funny_ng":"断言しすぎると、貧乏神がニヤける。"
+  },
+  {
+    "id":"q14",
+    "text":"飲むヒアルロン酸、どれが一番近い？",
+    "choices":["A) 効く人もいるが万能ではない","B) 意味はゼロ","C) 飲めば保湿はいらない"],
+    "answer":"a",
+    "is_misconception": true,
+    "explain":"経口で保湿指標が動く研究はある（万能ではない）。ある研究では保湿指標が**約10％**改善した例。",
+    "research_hint":"ある研究では、経口ヒアルロン酸で保湿指標が**約10％**改善した例。",
+    "funny_ok":"万能信仰を回避。肌が平和。",
+    "funny_ng":"水不要ルート、文明崩壊エンド。"
+  },
+  {
+    "id":"q15",
+    "text":"ニキビの主犯はチョコ？",
+    "choices":["A) 甘い食生活が主犯","B) チョコが主犯","C) 食事は基本関係しない"],
+    "answer":"a",
+    "is_misconception": true,
+    "explain":"単体チョコより『高糖負荷』が本筋になりやすい。ある研究では食事介入で重症度が**約20〜30％**下がった例がある。",
+    "research_hint":"ある研究では、食事介入でニキビ重症度が**約20〜30％**低下した例。",
+    "funny_ok":"犯人を単独逮捕しない捜査、優秀。",
+    "funny_ng":"チョコだけ逮捕…証拠が薄い。"
+  }
+]
+  }
+  </script>
+
+  <script>
+  (() => {
+    "use strict";
+    const $ = (sel, root=document) => root.querySelector(sel);
+
+    const data = JSON.parse($("#data").textContent);
+
+    // refs
+    const pageTitle = $("#pageTitle");
+    const pageSub = $("#pageSub");
+    const heroImg = $("#heroImg");
+    const tagRow = $("#tagRow");
+    const minsLine = $("#minsLine");
+    const proTitle = $("#proTitle");
+    const proText = $("#proText");
+
+    const prologueEl = $("#prologue");
+    const startBtn = $("#startBtn");
+    const prevScoreBtn = $("#prevScoreBtn");
+    const prevScoreBox = $("#prevScoreBox");
+
+    const quizWrap = $("#quizWrap");
+    const quizEl = $("#quiz");
+    const resultEl = $("#result");
+
+    const progEl = $("#prog");
+    const countLine = $("#countLine");
+
+    const retryBtn = $("#retry");
+    const resImgEl = $("#resImg");
+    const resCopyEl = $("#resCopy");
+    const resResearchText = $("#resResearchText");
+    const scorePctEl = $("#scorePct");
+    const scoreFracEl = $("#scoreFrac");
+    const scoreFillEl = $("#scoreFill");
+
+    // persist last score (localStorage)
+    const LS_KEY = `quiz:lastScore:${data.slug}`;
+    let lastScore = null; // {correct,total,pct,when}
+    try{ lastScore = JSON.parse(localStorage.getItem(LS_KEY) || "null"); }
+    catch(e){ lastScore = null; }
+
+    function syncPrevScoreBtn(){
+      prevScoreBtn.textContent = lastScore ? `前回：${lastScore.pct}％` : "前回のスコア";
+    }
+
+    // quiz run state (re-created each run)
+    let state = null;
+
+    function makeState(){
+      return { answered: new Set(), correct: 0, total: (data.questions || []).length };
+    }
+
+    function esc(s){
+      return String(s).replace(/</g,"&lt;").replace(/>/g,"&gt;")
+        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    }
+
+    // 改行の表記ゆれ（\n /n n/）を吸収
+    function fixNL(s){
+      return String(s ?? "")
+        .replace(/\\n/g, "\n")
+        .replace(/\/n/g, "\n")
+        .replace(/n\//g, "\n");
+    }
+
+    function shuffle(arr){
+      const a = arr.slice();
+      for (let i=a.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]] = [a[j],a[i]];
+      }
+      return a;
+    }
+
+    function updateProgress(){
+      const done = state ? state.answered.size : 0;
+      const total = state ? state.total : 0;
+      const pct = total ? Math.round((done/total)*100) : 0;
+      progEl.style.width = pct + "%";
+      countLine.textContent = `${done}/${total}`;
+    }
+
+    function scrollToBlock(el){
+      if (!el) return;
+      const sticky = document.querySelector(".sticky");
+      const stickyH = sticky ? sticky.getBoundingClientRect().height : 0;
+      const top = el.getBoundingClientRect().top + window.pageYOffset - stickyH - 12;
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    }
+
+    function tierByRate(rate){
+      if (rate >= 0.8) return 1;
+      if (rate >= 0.4) return 2;
+      return 3;
+    }
+
+    function normalizeHint(h){
+      let s = fixNL(h || "").trim().replace(/\n+/g," ");
+      s = s.replace(/^ある研究では、?\s*/,"");
+      s = s.replace(/^研究では、?\s*/,"");
+      s = s.replace(/^報告では、?\s*/,"");
+      s = s.replace(/^[・\-]\s*/,"");
+      return s;
+    }
+
+    function showPrevScore(){
+      syncPrevScoreBtn();
+      prevScoreBox.hidden = false;
+      if (!lastScore){
+        prevScoreBox.innerHTML = `まだありません。<br>先に<strong>開始する</strong>で一周どうぞ。`;
+        return;
+      }
+      prevScoreBox.innerHTML = `
+        <strong>前回：</strong>${lastScore.pct}％（${lastScore.correct}/${lastScore.total}）
+        <span style="color:var(--muted)">・${lastScore.when}</span>
+      `;
+    }
+
+    function hidePrevScore(){
+      prevScoreBox.hidden = true;
+      prevScoreBox.textContent = "";
+    }
+
+    function renderQuizFresh(){
+      // DOMを毎回 “完全に捨てて作り直す”
+      quizEl.replaceChildren();
+
+      const qs = data.questions || [];
+      state.total = qs.length;
+
+      qs.forEach((q, idx) => {
+        const fs = document.createElement("fieldset");
+        fs.className = "q";
+        fs.id = `fs_${q.id}`;
+
+        const lg = document.createElement("legend");
+        lg.textContent = `Q${idx+1}：${q.text}`;
+        fs.appendChild(lg);
+
+        const parsed = q.choices.map(c => {
+          const m = String(c).match(/^\s*([ABC])\)\s*(.+)\s*$/);
+          if (!m) return { key:"?", text:String(c) };
+          return { key:m[1].toLowerCase(), text:m[2] };
+        });
+
+        const shuffled = shuffle(parsed).map((o, i) => ({
+          ...o,
+          disp: String.fromCharCode("A".charCodeAt(0)+i)
+        }));
+
+        const opts = document.createElement("div");
+        opts.className = "opts";
+
+        shuffled.forEach((c, i) => {
+          const row = document.createElement("div");
+          row.className = "opt";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = q.id;
+          input.value = c.key;
+          input.id = `${q.id}_${i}`;
+          input.setAttribute("aria-describedby", `${q.id}_fb`);
+
+          const label = document.createElement("label");
+          label.setAttribute("for", input.id);
+
+          const b = document.createElement("span");
+          b.className = "badge";
+          b.textContent = c.disp;
+
+          const txt = document.createElement("span");
+          txt.textContent = c.text;
+
+          label.appendChild(b);
+          label.appendChild(txt);
+
+          row.appendChild(input);
+          row.appendChild(label);
+          opts.appendChild(row);
+        });
+
+        fs.appendChild(opts);
+
+        const fb = document.createElement("div");
+        fb.className = "fb";
+        fb.id = `${q.id}_fb`;
+        fb.setAttribute("aria-live","polite");
+        fb.innerHTML = `<div class="mini">未回答</div>`;
+        fs.appendChild(fb);
+
+        const nextRow = document.createElement("div");
+        nextRow.className = "nextRow";
+        nextRow.hidden = true;
+
+        const nextBtn = document.createElement("button");
+        nextBtn.type = "button";
+        nextBtn.className = "btn";
+        nextBtn.textContent = (idx === qs.length-1) ? "結果へ" : "次へ";
+        nextRow.appendChild(nextBtn);
+        fs.appendChild(nextRow);
+
+        nextBtn.addEventListener("click", () => {
+          if (idx === qs.length-1){
+            if (resultEl.hidden) finish();
+            scrollToBlock(resultEl);
+            return;
+          }
+          const nextFs = document.getElementById(`fs_${qs[idx+1].id}`);
+          if (nextFs) scrollToBlock(nextFs);
+        });
+
+        fs.addEventListener("change", (ev) => {
+          const t = ev.target;
+          if (!(t instanceof HTMLInputElement)) return;
+          if (t.type !== "radio") return;
+          if (state.answered.has(q.id)) return;
+
+          const picked = t.value;
+          const isOk = picked === q.answer;
+
+          const chosenRow = t.closest(".opt");
+          if (chosenRow){
+            chosenRow.classList.add(isOk ? "picked-ok" : "picked-ng");
+            fs.querySelectorAll(".opt").forEach(row => {
+              if (row !== chosenRow) row.classList.add("opt-dim");
+            });
+          }
+
+          state.answered.add(q.id);
+          if (isOk) state.correct += 1;
+
+          // lock
+          fs.querySelectorAll(`input[name="${q.id}"]`).forEach(r => r.disabled = true);
+
+          fb.innerHTML = `
+            <div class="line1">${isOk ? "<span class='ok'>✅正解</span>" : "<span class='ng'>❌惜しい</span>"}：${esc(isOk ? q.funny_ok : q.funny_ng)}</div>
+            <div class="mini">${esc(q.explain || "")}</div>
+          `;
+          nextRow.hidden = false;
+
+          updateProgress();
+
+          if (state.answered.size === state.total){
+            finish(); // 表示するだけ。勝手に飛ばない
+          }
+        }, {passive:true});
+
+        quizEl.appendChild(fs);
+      });
+
+      updateProgress();
+    }
+
+    function finish(){
+      const rate = state.total ? (state.correct/state.total) : 0;
+      const tier = tierByRate(rate);
+      const pct = Math.round(rate * 100);
+
+      scorePctEl.textContent = `${pct}％`;
+      scoreFracEl.textContent = `${state.correct}/${state.total}`;
+      scoreFillEl.style.width = `${pct}%`;
+
+      resImgEl.src = data.results_images?.[tier-1] || "";
+      resImgEl.alt = tier === 1 ? "美容の神様" : (tier === 2 ? "美容の神様見習い" : "汚い貧乏神");
+
+      const copy = (tier === 1 ? data.result_copy.t1 : tier === 2 ? data.result_copy.t2 : data.result_copy.t3);
+      const copyFixed = fixNL(copy);
+      resCopyEl.innerHTML = esc(copyFixed).replace(/\n/g,"<br>");
+
+      // 研究メモ：同じ言い回しの連打を避ける（prefix削り＋短く抽出）
+      const hints = (data.questions || [])
+        .map(q => q.research_hint)
+        .filter(Boolean)
+        .map(normalizeHint);
+
+      const picks = shuffle(hints).slice(0, Math.min(5, hints.length));
+      resResearchText.innerHTML = picks.length
+        ? picks.map(s => `・${esc(s)}`).join("<br>")
+        : "・（メモ未設定）";
+
+      lastScore = {
+        correct: state.correct,
+        total: state.total,
+        pct,
+        when: new Date().toLocaleString("ja-JP", {hour12:false})
+      };
+      try{ localStorage.setItem(LS_KEY, JSON.stringify(lastScore)); }catch(e){}
+
+      syncPrevScoreBtn();
+      resultEl.hidden = false;
+    }
+
+    function goPrologueFresh(){
+      state = makeState();
+
+      // UI reset
+      resultEl.hidden = true;
+      resImgEl.removeAttribute("src");
+      scorePctEl.textContent = "0％";
+      scoreFracEl.textContent = `${state.correct}/${state.total}`;
+      scoreFillEl.style.width = "0%";
+      resCopyEl.textContent = "";
+      resResearchText.textContent = "";
+
+      hidePrevScore();
+      syncPrevScoreBtn();
+
+      prologueEl.hidden = false;
+      quizWrap.hidden = true;
+
+      renderQuizFresh();
+      updateProgress();
+
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+
+    function startQuiz(){
+      prologueEl.hidden = true;
+      quizWrap.hidden = false;
+      scrollToBlock(quizWrap);
+      const first = quizEl.querySelector("input");
+      if (first) first.focus({preventScroll:true});
+    }
+
+    // init page
+    document.body.id = data.slug || document.body.id;
+    pageTitle.textContent = data.title;
+    pageSub.textContent = "神様派？それとも貧乏神の儀式派？選択した瞬間に判定。";
+    minsLine.textContent = `${data.mins ?? 6}分`;
+    if (data.hero_image) heroImg.src = data.hero_image;
+
+    if (data.prologue?.title) proTitle.textContent = data.prologue.title;
+    if (data.prologue?.text) {
+      const _t = fixNL(data.prologue.text);
+      proText.innerHTML = esc(_t).replace(/\n/g,"<br>");
+    }
+
+    tagRow.innerHTML = "";
+    (data.tags || []).forEach(t => {
+      const s = document.createElement("span");
+      s.className = "chip";
+      s.textContent = `#${t}`;
+      tagRow.appendChild(s);
+    });
+
+    // boot
+    syncPrevScoreBtn();
+    goPrologueFresh();
+
+    // events
+    startBtn.addEventListener("click", startQuiz);
+    prevScoreBtn.addEventListener("click", () => {
+      if (prevScoreBox.hidden) showPrevScore();
+      else hidePrevScore();
+    });
+    retryBtn.addEventListener("click", () => {
+      goPrologueFresh();
+    });
+  })();
+  </script>
+</body>
+</html>

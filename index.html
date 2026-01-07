@@ -1,288 +1,1513 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>知識の水槽｜遊びながら知が泳ぐ</title>
-<meta name="description" content="海のように広がる知識を、検索とタグでサッと探索。スマホ最適のカード一覧で学べます。">
-<meta name="theme-color" content="#f0f6ff">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>知識の水槽｜研究クイズセレクター</title>
+<meta name="description" content="知識の水槽。研究ベースのクイズを、おすすめ・お気に入り・未挑戦からサッと選べる入口サイト。">
+<meta name="theme-color" content="#051622">
+
+<!-- OG -->
 <meta property="og:title" content="知識の水槽">
-<meta property="og:description" content="海のように広がる知識を、検索とタグでサッと探索。スマホ最適のカード一覧で学べます。">
+<meta property="og:description" content="研究ベースのクイズを、おすすめ・お気に入り・未挑戦からサッと選べる入口サイト。">
 <meta property="og:url" content="https://haisuikounozarigani.github.io/quiz/">
 <meta property="og:image" content="https://haisuikounozarigani.github.io/quiz/assets/hero/t01.webp">
 <link rel="preload" as="image" href="/quiz/assets/hero/t01.webp">
+
 <style>
 :root{
-  /* ── 青ベース（心の標本と同構成） ── */
-  --bg1:#f6fbff; --bg2:#eef4ff; --card:#fff; --line:#dbe8ff; --fg:#1f2a3a; --muted:#5b6a75;
-  --accent:#4aa8ff; --accent2:#a48bff; --chip:#eaf3ff; --chipb:#dfe8ff;
+  --bg1:#e6f7ff;      /* 水面の淡い青 */
+  --bg2:#edf7ff;      /* 背景グラデの下地 */
+  --card:#ffffff;     /* カードは白で読みやすく */
+  --line:#cfe8ff;     /* 境界線を水色に */
+  --fg:#102a43;       /* 文字は深い青 */
+  --muted:#5b7f97;    /* サブ文 */
+  --accent:#2aa7ff;   /* メイン青 */
+  --accent2:#22d3ee;  /* シアン */
+  --pill:#eaf7ff;     /* ピル背景 */
+  --pillb:#d8f3ff;    /* ピル差し色 */
 }
-*{box-sizing:border-box} html,body{height:100%} html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{margin:0;color:var(--fg);font-family:"Noto Sans JP",system-ui,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2))}
+*{box-sizing:border-box}
+html,body{height:100%}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%} 
+body{
+  margin:0;
+  font-family:"Noto Sans JP",system-ui,sans-serif;
+  color:var(--fg);
+  background:radial-gradient(1200px 700px at 50% 0,#dff6ff,var(--bg2));
+}
 .hidden{display:none!important}
 
-/* Splash */
-.splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;cursor:pointer}
-.splash::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.55) 70%,rgba(255,255,255,.8))}
-.splash .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(1.05)}
-.splash .fallback{position:absolute;inset:0;background:radial-gradient(1200px 600px at 50% 30%, #e9f4ff, #eef0ff)}
-.splash .hero{position:relative;z-index:1;text-align:center;padding:22px}
-h1{margin:0 0 6px;font-size:clamp(22px,6vw,34px);letter-spacing:.02em;text-wrap:balance}
-.sub{margin:0;color:var(--muted)}
-.tap{margin-top:14px;font-size:.95em;color:#6a7580}
-.splash.closing{opacity:0;transition:opacity .28s ease;pointer-events:auto}
-
-/* Main */
-.wrap{max-width:980px;margin:20px auto 28px;padding:0 14px max(28px,env(safe-area-inset-bottom));opacity:0;transform:translateY(12px);transition:opacity .35s ease,transform .35s ease}
-.wrap.show{opacity:1;transform:none}
-
-/* Controls */
-.controls{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin:6px 0 10px;box-shadow:0 8px 22px rgba(74,168,255,.10)}
-.controls .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-input[type="search"]{flex:1;padding:12px 14px;border:1px solid #cfe2ff;border-radius:12px;font-size:16px}
-.btn{appearance:none;border:1px solid #cfe2ff;background:#fff;border-radius:12px;padding:10px 12px;font-size:14px;cursor:pointer}
-.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));border-color:transparent;color:#fff}
-.btn:focus-visible, .chip:focus-visible{outline:3px solid #98bfff;outline-offset:2px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.chip{padding:8px 12px;border:1px solid #cfe2ff;border-radius:999px;background:var(--chip);cursor:pointer;user-select:none;color:#234;line-height:1.2}
-.chip.active{background:var(--chipb);box-shadow:inset 0 0 0 2px #7aa7ff;border-color:transparent}
-
-/* Switcher */
-.switcher{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
-.segbtn{
-  appearance:none;border:1px solid #cfe2ff;background:#fff;border-radius:999px;
-  padding:10px 14px;font-size:14px;line-height:1;text-decoration:none;color:inherit;
-  display:inline-flex;align-items:center;gap:8px;min-height:44px
+/* Splash：キービジュをタップして開く */
+.splash{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  cursor:pointer;
 }
-.segbtn.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(74,168,255,.18)}
+.splash::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.45) 70%,rgba(255,255,255,.78));
+}
+.splash .bg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:saturate(1.05);
+}
+.splash .fallback{
+  position:absolute;
+  inset:0;
+  background:radial-gradient(1200px 700px at 50% 30%, #dff6ff, #dbeafe);
+}
+.splash .hero{
+  position:relative;
+  z-index:1;
+  text-align:center;
+  padding:22px;
+}
+.splash h1{
+  margin:0 0 6px;
+  font-size:clamp(22px,6vw,34px);
+  letter-spacing:.05em;
+}
+.splash p.sub{
+  margin:0 0 10px;
+  color:var(--muted);
+  font-size:.9rem;
+}
+
+/* 追加：スプラッシュの「開く」ボタン（背景を邪魔しない半透明） */
+.splash .open-btn{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+
+  padding:12px 18px;
+  border-radius:999px;
+  font-weight:900;
+  letter-spacing:.02em;
+  font-size:clamp(.95rem, 3.6vw, 1.05rem);
+
+  color:#1f1a1d;
+  background:rgba(255,255,255,.72);
+  box-shadow:
+    0 14px 30px rgba(0,0,0,.16),
+    0 0 0 1px rgba(255,255,255,.55) inset;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.splash .open-btn:hover{
+  transform:translateY(-1px);
+}
+
+.splash .open-btn:active{
+  transform:translateY(0);
+}
+
+.splash .open-btn:focus-visible{
+  outline:3px solid rgba(182,156,255,.45);
+  outline-offset:4px;
+}
+.site-switch{
+  display:inline-flex;
+  gap:6px;
+  padding:4px;
+  border-radius:999px;
+  background:rgba(255,255,255,.92);
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
+  margin:0 auto 12px;
+}
+.site-pill{
+  min-width:0;
+  padding:7px 14px;
+  border-radius:999px;
+  font-size:.82rem;
+  text-decoration:none;
+  border:none;
+  background:transparent;
+  color:#7a5a6a;
+  white-space:nowrap;
+}
+.site-pill.is-active{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#fff;
+  box-shadow:0 6px 16px rgba(182,156,255,.7);
+}
+
+/* Main wrap */
+.wrap{
+  max-width:980px;
+  margin:20px auto 28px;
+  padding:0 14px max(28px,env(safe-area-inset-bottom));
+  opacity:0;
+  transform:translateY(12px);
+  transition:opacity .35s ease,transform .35s ease;
+}
+.wrap.show{
+  opacity:1;
+  transform:none;
+}
+
+
+
+/* Page head */
+.page-head{
+  margin:6px 0 12px;
+}
+
+/* タイトル：スタイル切替（bodyのclassで選ぶ） */
+.page-title{
+  margin:0;
+  line-height:1.05;
+}
+.page-title-main{
+  position:relative;
+  display:inline-block;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-indent:.08em;
+  font-size:clamp(1.55rem, 4.8vw, 2.35rem);
+  line-height:1.15;
+}
+
+/* 起動中だけ“光ってる感” */
+.page-title.booting .page-title-main{
+  filter: drop-shadow(0 0 14px rgba(140,107,255,.55));
+}
+.page-title.booting .page-title-main::after{
+  content:'';
+  position:absolute;
+  inset:-.25em -.35em;
+  border-radius:16px;
+  background:linear-gradient(90deg,
+    rgba(255,255,255,0),
+    rgba(255,255,255,.22),
+    rgba(255,255,255,0)
+  );
+  animation:bootShine .8s linear infinite;
+  pointer-events:none;
+}
+@keyframes bootShine{
+  from{ transform:translateX(-35%); }
+  to  { transform:translateX(35%); }
+}
+
+/* ========== 1) 標本ラベル（title-style-1） ========== */
+body.title-style-1 .page-title-main{
+  padding:10px 14px;
+  border-radius:16px;
+  color:#201427;
+  background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.78));
+  border:1px solid rgba(255,255,255,.92);
+  box-shadow:0 12px 26px rgba(143,116,255,.18), 0 4px 10px rgba(0,0,0,.08);
+}
+body.title-style-1 .page-title-main::before{
+  content:"";
+  position:absolute;
+  left:10px;
+  top:-7px;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,1) 0 40%, rgba(180,160,255,.75) 60%, rgba(0,0,0,0) 62%);
+  box-shadow:0 0 0 3px rgba(255,255,255,.75), 0 8px 18px rgba(0,0,0,.08);
+}
+body.title-style-1 .page-title-main::after{
+  content:"SPECIMEN";
+  position:absolute;
+  right:10px;
+  bottom:-11px;
+  font-size:.62rem;
+  letter-spacing:.22em;
+  color:rgba(32,20,39,.55);
+  padding:2px 6px;
+  border-radius:999px;
+  background:rgba(255,255,255,.72);
+  border:1px dashed rgba(143,116,255,.35);
+}
+
+/* ========== 2) ネオンしゅわしゅわ（title-style-2） ========== */
+body.title-style-2 .page-title-main{
+  padding:4px 0;
+  color:transparent;
+  background:linear-gradient(90deg,#0ea5e9,#38bdf8,#22d3ee,#2dd4bf,#0ea5e9);
+  background-size:220% 100%;
+  -webkit-background-clip:text;
+  background-clip:text;
+  text-shadow:0 0 10px rgba(255,210,235,.65);
+  animation:titleShine 6s linear infinite;
+}
+body.title-style-2 .page-title-main::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:100%;
+  height:10px;
+  border-radius:999px;
+  background:linear-gradient(90deg, rgba(255,83,166,.35), rgba(167,242,255,.35), rgba(143,116,255,.35));
+  filter:blur(.2px);
+}
+body.title-style-2 .page-title-main::before{
+  content:"✦";
+  position:absolute;
+  right:-14px;
+  top:-12px;
+  font-size:.85rem;
+  color:#fff;
+  text-shadow:0 0 10px rgba(255,255,255,.95), 0 0 18px rgba(143,116,255,.55);
+  animation:titleTwinkle 1.8s ease-in-out infinite;
+}
+
+/* ========== 3) インクスタンプ（title-style-3） ========== */
+body.title-style-3 .page-title-main{
+  color:#201427;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.75),
+    2px 2px 0 rgba(255,79,168,.22),
+    -2px 2px 0 rgba(143,116,255,.22),
+    0 10px 24px rgba(0,0,0,.10);
+}
+body.title-style-3 .page-title-main::before{
+  content:"OPEN";
+  position:absolute;
+  left:-10px;
+  top:-18px;
+  font-size:.78rem;
+  letter-spacing:.22em;
+  padding:3px 8px;
+  border-radius:6px;
+  color:rgba(255,255,255,.95);
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transform:rotate(-10deg);
+  box-shadow:0 10px 18px rgba(255,79,168,.22);
+}
+body.title-style-3 .page-title-main::after{
+  content:"";
+  position:absolute;
+  left:-6px;
+  right:-6px;
+  bottom:-10px;
+  height:2px;
+  background:repeating-linear-gradient(90deg, rgba(32,20,39,.35) 0 6px, rgba(32,20,39,0) 6px 12px);
+  opacity:.65;
+}
+
+@keyframes titleShine{
+  0%{ background-position:0% 50%; }
+  100%{ background-position:220% 50%; }
+}
+@keyframes titleTwinkle{
+  0%,100%{ transform:translateY(0) scale(1); opacity:.85; }
+  50%{ transform:translateY(-2px) scale(1.12); opacity:1; }
+}
+
+.page-sub{
+  margin:10px 0 0;
+  color:var(--muted);
+  font-size:.95rem;
+  line-height:1.5;
+}
+
+.page-stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+/* Pill（こころLvなど） */
+.page-stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+}
+
+/* 基本ピル */
+.hero-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 11px;
+  border-radius:999px;
+  border:1px solid rgba(236,205,232,.9);
+  background:rgba(255,255,255,.96);
+  box-shadow:0 3px 10px rgba(0,0,0,.03);
+  font-size:.85rem;
+  backdrop-filter: blur(6px);
+}
+.hero-pill strong{ font-size:1.05rem; }
+.hero-pill-link{ text-decoration:none; color:inherit; }
+.hero-pill-main{ white-space:nowrap; }
+.hero-pill-note{
+  font-size:.78rem;
+  color:var(--muted);
+  margin-left:6px;
+}
+
+/* こころLvの称号バッジ（Lv表示を“ひと味”） */
+.lv-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:.25em;
+  margin-left:.55em;
+  padding:.18em .55em;
+  border-radius:999px;
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  color:#1a0d12;
+  background:linear-gradient(90deg,#ffd05b,#ff9bd4);
+  border:1px solid rgba(0,0,0,.12);
+  box-shadow:0 8px 18px rgba(255,160,210,.25);
+  white-space:nowrap;
+}
+
+/* タイトル＝押せる（導入文チェンジ） */
+.page-title[role="button"]{
+  cursor:pointer;
+  user-select:none;
+}
+.page-title[role="button"]:focus-visible{
+  outline:2px solid rgba(143,116,255,.75);
+  outline-offset:6px;
+  border-radius:14px;
+}
+
+.page-title-main.title-booting{
+  filter:saturate(1.25) contrast(1.08);
+}
+.page-title-main.title-booted{
+  animation:titleFlash .7s ease both;
+}
+@keyframes titleFlash{
+  0%{ transform:translateY(0); filter:brightness(1); }
+  25%{ transform:translateY(-1px); filter:brightness(1.1); }
+  100%{ transform:translateY(0); filter:brightness(1); }
+}
+
+.page-sub.intro-pop{
+  animation:introPop .35s ease both;
+}
+@keyframes introPop{
+  from{ transform:translateY(2px); opacity:.55; filter:blur(.3px); }
+  to{ transform:translateY(0); opacity:1; filter:blur(0); }
+}
+
+/* こころLv：金で“格”を出す（問い合わせと色が被らない） */
+.hero-pill-lv{
+  border:1px solid rgba(255,196,80,.68);
+  background:linear-gradient(90deg, rgba(255,232,170,.45), rgba(255,255,255,.94));
+  box-shadow:0 10px 24px rgba(255,196,80,.18);
+}
+.hero-pill-lv strong{
+  padding:1px 8px;
+  border-radius:999px;
+  background:rgba(255,196,80,.20);
+  border:1px solid rgba(255,196,80,.30);
+}
+
+/* 問い合わせ：右上固定のド派手CTA（こころLvと被らない濃さ） */
+.hero-pill-cta{
+  position:fixed;
+  top:max(12px, env(safe-area-inset-top));
+  right:max(12px, env(safe-area-inset-right));
+  z-index:80;
+
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.55);
+  background:linear-gradient(90deg,#ff4fa8,#8f74ff);
+  color:#fff;
+  font-weight:900;
+  letter-spacing:.02em;
+
+  box-shadow:
+    0 14px 30px rgba(0,0,0,.20),
+    0 0 0 1px rgba(255,255,255,.25) inset,
+    0 0 22px rgba(34,211,238,.40);
+  transform:translateZ(0);
+}
+.hero-pill-cta:hover{ transform:translateY(-1px); }
+.hero-pill-cta:active{ transform:translateY(0); }
+.hero-pill-cta:focus-visible{
+  outline:4px solid rgba(182,156,255,.35);
+  outline-offset:4px;
+}
+.hero-pill-cta::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:999px;
+  background:radial-gradient(60% 120% at 20% 0%, rgba(255,255,255,.55), rgba(255,255,255,0) 60%);
+  pointer-events:none;
+  mix-blend-mode:soft-light;
+}
+
+@media (max-width:420px){
+  .hero-pill-cta{ padding:9px 10px; font-size:.84rem; }
+}
+
+/* Panel */
+.panel{
+  background:var(--card);
+  border-radius:18px;
+  border:1px solid var(--line);
+  padding:12px 12px 14px;
+  margin-bottom:12px;
+  box-shadow:0 10px 26px rgba(0,0,0,.04);
+}
+
+/* Rank box */
+
+.rank-head{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+.rank-emo{
+  font-size:1.3rem;
+}
+.rank-name{
+  font-weight:700;
+}
+.rank-pct{
+  margin-left:auto;
+  font-size:.9rem;
+  color:var(--muted);
+}
+.rank-bar{
+  position:relative;
+  height:10px;
+  border-radius:999px;
+  background:#eaf7ff;
+  border:1px solid #cfe8ff;
+  overflow:hidden;
+  margin-bottom:6px;
+}
+#rkFill{
+  display:block;
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#8fd3ff,#c9c9ff);
+  filter:drop-shadow(0 0 6px rgba(255,255,255,.6));
+  transition:width .35s ease;
+}
+.rank-next,
+.rank-msg{
+  margin:2px 0;
+  font-size:.8rem;
+  color:#7b6571;
+}
+.rankbox.pop{
+  animation:rk-pop .5s;
+}
+@keyframes rk-pop{
+  0%{transform:scale(.98)}
+  50%{transform:scale(1.02)}
+  100%{transform:scale(1)}
+}
+
+/* nir（ニア）：軽量（擬似要素なし・1回だけ定義） */
+/* nir（ニア）：読みやすく＋装飾しっかり版 */
+.nir-line{
+  margin-top:12px;
+  width:100%;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px;
+
+  padding:12px 14px;
+  border-radius:18px;
+
+  /* グラデ枠（border-box）＋中身（padding-box） */
+  border:1px solid transparent;
+  background:
+    linear-gradient(180deg,#ffffff,#fff7fc) padding-box,
+    linear-gradient(90deg, rgba(255,158,207,.65), rgba(182,156,255,.65)) border-box;
+
+  box-shadow:
+    0 12px 26px rgba(140,107,255,.12),
+    0 2px 0 rgba(255,255,255,.8) inset;
+
+  color:#2e1a28;
+  cursor:pointer;
+  appearance:none;
+  transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+}
+
+.nir-line:hover{
+  transform:translateY(-1px);
+  box-shadow:
+    0 16px 34px rgba(140,107,255,.16),
+    0 2px 0 rgba(255,255,255,.85) inset;
+}
+
+.nir-line:active{
+  transform:translateY(0px);
+}
+
+.nir-line:focus-visible{
+  outline:3px solid rgba(182,156,255,.35);
+  outline-offset:3px;
+}
+
+.nir-label{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  font-weight:900;
+  padding:6px 10px;
+  border-radius:999px;
+
+  background:linear-gradient(90deg, var(--accent), var(--accent2));
+  color:#fff;
+
+  font-size:clamp(.85rem, 3.2vw, .95rem);
+  line-height:1;
+  box-shadow:0 8px 18px rgba(182,156,255,.25);
+}
+
+.nir-text{
+  flex:1 1 auto;
+  min-width:0;
+
+  font-size:clamp(.98rem, 3.4vw, 1.08rem); /* ←文字サイズUP */
+  line-height:1.55;
+  font-weight:600;
+  color:rgba(46,26,40,.92);
+}
+
+.nir-more{
+  flex:0 0 auto;
+  display:inline-grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+  border-radius:999px;
+
+  background:rgba(182,156,255,.16);
+  color:rgba(46,26,40,.72);
+
+  font-size:1.25rem;
+  line-height:1;
+}
+
+/* iPhone幅：ラベル左／矢印右／本文は下に回す */
+@media (max-width:520px){
+  .nir-label{order:1}
+  .nir-more{order:2; margin-left:auto}
+  .nir-text{order:3; flex-basis:100%}
+  .nir-line{padding:12px 12px}
+}
+
+/* サイト切替（心の標本 / 知識の水槽 / 試練の鳥籠） */
+.switcher{
+  display:flex;
+  gap:8px;
+  margin:6px 0 4px;
+}
+
+.segbtn{
+  flex:1 1 0;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  padding:7px 8px;
+  border-radius:999px;
+  border:1px solid #ead6f0;
+  font-size:.78rem;
+  line-height:1.2;
+  text-align:center;
+  text-decoration:none;
+  color:#6a5160;
+  background:#fff;
+  white-space:nowrap; /* 1行でそろえる */
+}
+
+.segbtn.active{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#fff;
+  border-color:transparent;
+  box-shadow:0 6px 18px rgba(182,156,255,.4);
+}
+
+/* 切り替え下の一言説明 */
+.switch-note{
+  margin:0 2px 6px;
+  font-size:.75rem;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+/* Tabs + search */
+.tab-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:8px;
+}
+
+.tab-btn{
+  flex:1 1 0;
+  min-width:0;
+  appearance:none;
+  border-radius:999px;
+  border:1px solid #ead6f0;
+  padding:9px 12px;          /* ほんの少しだけ上下を広げて中央寄せ */
+  background:#fff;
+  font-size:.85rem;
+  line-height:1;             /* アイコン＋文字をきっちり中央に */
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;                   /* 絵文字との間隔をちょっとだけ狭く */
+  cursor:pointer;
+  color:#6a5160;
+  white-space:nowrap;        /* ボタン内で改行させない */
+}
+.tab-btn.active{
+  border-color:transparent;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#fff;
+  box-shadow:0 7px 18px rgba(182,156,255,.45);
+}
+
+.search-row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.search-row input[type="search"]{
+  flex:1;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid #ead6f0;
+  font-size:.9rem;
+}
+.search-row button{
+  appearance:none;
+  border-radius:12px;
+  border:1px solid #ead6f0;
+  background:#fff;
+  font-size:.8rem;
+  padding:9px 10px;
+  cursor:pointer;
+}
 
 /* Cards */
-.links{display:grid;gap:12px;margin-top:10px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
-a.link{
-  display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--fg);
-  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;
-  box-shadow:0 6px 18px rgba(74,168,255,.12);transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+  gap:10px;
 }
-a.link:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(164,139,255,.18);border-color:#d7e6ff}
-a.link .emo{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;font-size:22px;line-height:1;flex:0 0 auto}
-a.link > div{flex:1 1 auto;min-width:0}
-.ttl{
-  font-weight:800;margin:0;display:block;line-height:1.35;letter-spacing:.01em;text-wrap:balance;
-  font-size:clamp(15px,3.8vw,17px);
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden
+.card{
+  position:relative;
+  display:flex;
+  gap:10px;
+  padding:11px 12px 12px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:var(--card);
+  text-decoration:none;
+  color:var(--fg);
+  box-shadow:0 8px 20px rgba(255,158,207,.15);
+  transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease,background .12s ease;
 }
-.mini{font-size:.72em;padding:2px 6px;border-radius:8px;border:1px solid #dfe7ff;background:#fff;display:inline-flex;align-items:center;line-height:1;vertical-align:middle;white-space:nowrap}
-.mini.new{background:linear-gradient(90deg,#d6ebff,#e0dbff);color:#2b3b4a;border-color:transparent}
-.sub2{
-  color:var(--muted);font-size:.92em;margin:4px 0 0;line-height:1.5;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 26px rgba(182,156,255,.24);
+  border-color:#efd7ff;
 }
-.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-.pill{padding:4px 8px;border-radius:999px;font-size:.8em;border:1px solid #dbe8ff;background:#fff;color:#3b4d5e;display:inline-flex;align-items:center;line-height:1;vertical-align:middle}
-.badge{margin-left:auto;padding:8px 12px;border-radius:999px;font-weight:700;font-size:.9em;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;display:inline-flex;align-items:center;line-height:1;vertical-align:middle}
+.card-emo{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:32px;
+  height:32px;
+  font-size:1.4rem;
+}
+.card-body{
+  flex:1 1 auto;
+  min-width:0;
+}
+.card-title{
+  font-weight:800;
+  font-size:.95rem;
+  line-height:1.4;
+  letter-spacing:.02em;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.badge-new{
+  margin-left:4px;
+  font-size:.7rem;
+  padding:2px 6px;
+  border-radius:999px;
+  border:1px solid #f0d8ea;
+  background:linear-gradient(90deg,#ffd6ea,#e7dbff);
+  color:#624c4c;
+}
+.card-sub{
+  margin:3px 0 5px;
+  font-size:.82rem;
+  color:var(--muted);
+  line-height:1.5;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.pill{
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid #efdeea;
+  background:#fff;
+  font-size:.75rem;
+  color:#7b6571;
+}
 
-/* Footer */
-.note{color:var(--muted);text-align:center;margin:18px 0}
-.footerbar{position:sticky;bottom:0;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;padding:10px;background:rgba(255,255,255,.82);
-  backdrop-filter:blur(6px) saturate(1.05);border-top:1px solid #e6eefb}
-.footerbar a{padding:12px 14px;border:1px solid #dbe8ff;border-radius:999px;text-decoration:none;color:#14202b;background:#fff;cursor:pointer;flex:0 0 auto;white-space:nowrap;line-height:1;display:inline-flex;align-items:center;min-height:44px}
 
-@media (max-width:400px){
-  .links{grid-template-columns:1fr}
-  a.link{padding:12px}
-  .badge{display:none}
+
+.card-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  align-items:center;
 }
 
-/***** Quiz view counter (inline stats) *****/
-.stats-inline{justify-content:flex-end;gap:10px;margin-top:6px;display:flex;flex-wrap:wrap}
-.stats-inline .mini{
-  color:var(--muted);font-size:.9em;
-  border:1px solid var(--line);border-radius:999px;
-  padding:4px 8px;background:#fff;line-height:1.6
+/* 追加：並び順調整 */
+.card-meta .pill{
+  order:1;
+}
+.card-go{
+  margin-left:auto;
+  font-size:.8rem;
+  padding:6px 9px;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#fff;
+  border:none;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  order:3;
 }
 
-/* === ランクボックス（心の標本と同形式） === */
-.rankbox{
-  margin:12px 0 8px; padding:12px;
-  border:1px solid var(--line); border-radius:12px; background:#fff;
-  box-shadow:0 1px 0 #f2e6f0;
-}
-.rankbox.pop{animation:rk-pop .5s}
-@keyframes rk-pop{0%{transform:scale(.98)}50%{transform:scale(1.01)}100%{transform:scale(1)}}
-.rk-head{display:flex;align-items:center;gap:8px}
-.rk-emo{font-size:1.25em}
-.rk-name{font-weight:700}
-.rk-pct{margin-left:auto;color:var(--muted);font-size:.9em}
-.rk-bar{height:10px;border-radius:999px;background:#f6edf5;border:1px solid #eed8ea;overflow:hidden;margin:8px 0}
-.rk-bar #rkFill{display:block;height:100%;width:0;background:#dfe3ff;transition:width .4s, filter .2s}
-.rk-next{font-size:.9em;color:#7b6571}
-.rk-next .rk-desc{display:block;margin-bottom:4px;color:#6b5f6b}
+/* 済カード用：メタ行に独立ピルを出す */
+/* 済カード用ピル：完了感がわかりやすい色＋絵文字 */
+.card[data-done="1"] .card-meta::after{
+  content:"🎀 済";
+  order:2;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:3px 10px;
+  border-radius:999px;
 
-/* --- done marker（既に受けた表示：済バッジ） --- */
-a.link[data-done]{position:relative;opacity:.9}
-a.link[data-done]::after{
-  content:"済"; position:absolute; top:8px; right:8px;
-  font-weight:800; font-size:.8rem; line-height:1;
-  padding:4px 8px; border-radius:999px;
-  background:linear-gradient(90deg,#c3ffd6,#d8eaff);
-  color:#233; border:1px solid #dce9f0; box-shadow:0 3px 10px rgba(0,0,0,.06)
+  /* 他のピルと被らないように、ミント×レモン寄りのやさしいグラデ */
+  border:1px solid #cfe8d6;
+  background:linear-gradient(90deg,#e9fff3,#fff9e9);
+
+  font-size:.72rem;
+  letter-spacing:.08em;
+  color:#345344;
+
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.95),
+    0 3px 7px rgba(0,0,0,.05);
 }
-/* 済カードではNEWバッジ隠す */
-a.link[data-done] .mini[data-new]{display:none}
+
+/* 推しハート（丸いかわいいボタン） */
+.fav-toggle{
+  position:absolute;
+  top:6px;
+  right:6px;
+  width:32px;
+  height:32px;
+  border-radius:999px;
+  border:1px solid #f3d7eb;
+  background:rgba(255,255,255,.98);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.1rem;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+  cursor:pointer;
+  user-select:none;
+  transition:transform .1s ease,box-shadow .1s ease,background .1s ease,border-color .1s ease;
+}
+.fav-toggle::before{
+  content:"♡";
+  transform:translateY(-0.5px);
+}
+.fav-toggle[aria-pressed="true"]{
+  background:radial-gradient(circle at 30% 25%,#ffe5f4,#ff9ecf);
+  border-color:#ff9ecf;
+  box-shadow:0 6px 14px rgba(255,158,207,.65);
+}
+.fav-toggle[aria-pressed="true"]::before{
+  content:"♥";
+  color:#fff;
+}
+.fav-toggle:active{
+  transform:scale(.9);
+}
+
+
+/* Small note */
+.small-note{
+  margin-top:6px;
+  font-size:.75rem;
+  color:var(--muted);
+}
+
+/* Feedback form */
+.feedback h2{
+  margin:0 0 4px;
+  font-size:1.02rem;
+}
+.feedback p{
+  margin:0 0 10px;
+  font-size:.86rem;
+  color:var(--muted);
+}
+.feedback form{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.feedback label{
+  font-size:.8rem;
+  color:#6a5160;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+.feedback input,
+.feedback textarea,
+.feedback select{
+  border-radius:10px;
+  border:1px solid #ead6f0;
+  padding:7px 9px;
+  font-size:.85rem;
+}
+.feedback textarea{
+  min-height:80px;
+  resize:vertical;
+}
+.feedback button[type="submit"]{
+  margin-top:4px;
+  align-self:flex-start;
+  appearance:none;
+  border-radius:999px;
+  border:none;
+  padding:9px 16px;
+  font-size:.85rem;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#fff;
+  box-shadow:0 8px 18px rgba(182,156,255,.5);
+  cursor:pointer;
+}
+
+.feedback .hint{
+  font-size:.74rem;
+  color:var(--muted);
+}
+
+/* ▼送信完了・エラー時にだけ立ち上がるカード風メッセージ */
+.feedback .hint.is-success{
+  margin-top:10px;
+  padding:8px 10px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#ffe9f7,#f2e9ff);
+  color:#4b3344;
+  font-size:.8rem;
+  box-shadow:0 6px 16px rgba(182,156,255,.35);
+  border:1px solid #f2d6ec;
+}
+
+.feedback .hint.is-error{
+  margin-top:10px;
+  padding:8px 10px;
+  border-radius:12px;
+  background:#fff5f5;
+  color:#7b3a3a;
+  font-size:.8rem;
+  box-shadow:0 5px 14px rgba(0,0,0,.12);
+  border:1px solid #f0c5c5;
+}
+
+/* Legal */
+.note{
+  margin:14px 0 4px;
+  font-size:.8rem;
+  color:var(--muted);
+}
+.note h2{
+  font-size:.95rem;
+  margin:0 0 6px;
+}
+.note ul{
+  margin:0;
+  padding-left:1.1em;
+}
+.note li{
+  margin-bottom:4px;
+  line-height:1.6;
+}
+
+/* Footer links */
+.footerbar{
+  position:sticky;
+  bottom:0;
+  z-index:10;
+
+  margin-top:18px;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+
+  display:flex;
+  flex-wrap:nowrap;          /* ← 折り返し禁止 */
+  gap:10px;
+  justify-content:center;
+  align-items:center;
+
+  overflow-x:auto;           /* ← 収まらない分は横スクロール */
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;      /* Firefox */
+  
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+
+  border-top:1px solid rgba(255,255,255,.65);
+  box-shadow:
+    0 -14px 40px rgba(140,107,255,.14),
+    0 -6px 18px rgba(255,143,199,.10);
+}
+.footerbar::-webkit-scrollbar{ display:none; } /* iOS/Chrome */
+.footerbar::before{
+  content:"";
+  position:absolute;
+  left:12px;
+  right:12px;
+  top:0;
+  height:2px;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--accent,#8c6bff),var(--accent2,#ff8fc7));
+  opacity:.95;
+}
+
+.footerbar .ft-btn{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  
+flex:0 0 auto;
+  white-space:nowrap;
+  
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid rgba(140,107,255,.18);
+  background:linear-gradient(180deg,#fff,rgba(255,255,255,.86));
+  color:#1f1a1d;
+  text-decoration:none;
+
+  font-size:.86rem;
+  font-weight:800;
+  letter-spacing:.01em;
+
+  box-shadow:0 10px 22px rgba(0,0,0,.07);
+  position:relative;
+  overflow:hidden;
+  transform:translateZ(0);
+}
+.footerbar .ft-btn::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:linear-gradient(120deg, transparent 0%, rgba(255,255,255,.55) 45%, transparent 70%);
+  transform:translateX(-120%);
+  animation:ftShine 5.2s linear infinite;
+  opacity:.18;
+  pointer-events:none;
+}
+@keyframes ftShine{
+  0%{transform:translateX(-120%)}
+  100%{transform:translateX(120%)}
+}
+.footerbar .ft-btn:active{
+  transform:scale(.98);
+}
+
+.footerbar .ico{
+  width:1.25em;
+  text-align:center;
+  filter:drop-shadow(0 6px 14px rgba(140,107,255,.22));
+}
+.footerbar .lbl{ opacity:.95; }
+
+/* ちょい差別化（任意） */
+.footerbar .ft-ig{ border-color: rgba(255,143,199,.28); }
+.footerbar .ft-line{ border-color: rgba(140,107,255,.24); }
+.footerbar .ft-me{ border-color: rgba(180,180,180,.22); }
+
+/* Responsive tweaks */
+@media (max-width:480px){
+  .cards{grid-template-columns:1fr}
+}
+@media (max-width:420px){
+  .footerbar{ gap:8px; padding:8px 10px calc(8px + env(safe-area-inset-bottom)); }
+  .footerbar .ft-btn{ padding:9px 10px; font-size:.82rem; }
+  .footerbar .ico{ width:1.15em; }
+}
+
+/* 3つのエリアの簡単な説明カード */
+.modes-panel{
+  margin-top:10px;
+}
+
+.mode-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:8px;
+  margin-top:6px;
+}
+
+.mode-item{
+  display:block;
+  border-radius:14px;
+  border:1px solid #f0d8ea;
+  background:rgba(255,255,255,.95);
+  padding:8px 10px;
+  box-shadow:0 4px 12px rgba(0,0,0,.03);
+  font-size:.78rem;
+  color:var(--muted);
+  text-decoration:none;
+}
+
+.mode-item:hover{
+  box-shadow:0 6px 16px rgba(255,158,207,.25);
+  border-color:#ffb6dd;
+  transform:translateY(-1px);
+}
+
+.mode-item.is-main{
+  border-color:#ffb6dd;
+  box-shadow:0 6px 16px rgba(255,158,207,.25);
+}
+
+.mode-ttl{
+  font-size:.82rem;
+  font-weight:700;
+  margin-bottom:3px;
+  color:#5a4250;
+}
+
+.mode-desc{
+  margin:0;
+  line-height:1.6;
+}
+
+
+
+
+.feedback .hint.is-success .mini-note{
+  display:block;
+  margin-top:4px;
+  font-size:.75rem;
+  opacity:.85;
+}
+
 </style>
 </head>
-<body>
+<body class="title-style-2">
 
-<!-- Splash -->
+<!-- Splash：キービジュをタップして開く -->
 <section id="splash" class="splash" aria-label="知識の水槽の入口" tabindex="0" role="button">
   <div class="fallback" aria-hidden="true"></div>
-  <img class="bg" alt="知識の水槽のキービジュアル"
-       src="/quiz/assets/hero/t01.webp"
-       onerror="this.src='/quiz/assets/hero/01.png'">
+  <img class="bg" src="/quiz/assets/hero/t01.webp" alt="知識の水槽のキービジュアル">
   <div class="hero">
-    <h1>知識の水槽</h1>
-    <p class="sub">タップ（またはEnter/Space）で入口が開きます。</p>
+    <button class="open-btn" id="splashOpenBtn" type="button" aria-label="タップして入口を開く">
+  タップして開く
+</button>
   </div>
 </section>
 
-<main id="content" class="wrap" aria-live="polite" aria-label="知識の入口" tabindex="-1" inert>
-  <!-- Controls -->
-  <section class="controls" aria-label="検索とタグ">
-    <!-- サイト切替：現在ページを強調 -->
-    <div class="row switcher" aria-label="サイト切替">
-      <a class="segbtn" href="/shindan/" rel="noopener">🌟 心の標本</a>
-      <a class="segbtn active" href="/quiz/" aria-current="page">🔎 知識の水槽</a>
-    </div>
+<main id="content" class="wrap" aria-label="知識の水槽インデックス" aria-live="polite" tabindex="-1" inert>
+  <header class="page-head">
+  <div class="head-row">
+    <h1 class="page-title" id="titleTap" role="button" tabindex="0" aria-label="導入文を切り替える">
+      <span class="page-title-main" id="siteTitle">知識の水槽</span>
+    </h1>
 
-    <div class="row">
-      <input id="q" type="search" placeholder="キーワード or #タグ（例：#海 / #心理）" aria-label="検索">
-      <button id="btnNew" class="btn" type="button" aria-pressed="false" aria-label="未挑戦だけ表示">未挑戦だけ</button>
-      <button id="clearBtn" class="btn" type="button" aria-label="検索とタグをクリア">クリア</button>
-    </div>
-    <div id="chips" class="chips" role="listbox" aria-multiselectable="false" aria-label="タグ（1つ選択で絞り込み）"></div>
+    <a class="hero-pill hero-pill-link hero-pill-cta" href="#feedback" aria-label="問い合わせフォームへ移動">
+  <span aria-hidden="true">💌</span><span>問い合わせ</span>
+</a>
+  </div>
 
-    <!-- ローカル＋全体の「知識Lv」 -->
-    <div class="row stats-inline" aria-label="水槽カウンタ">
-      <span class="mini">📘 あなたの知識Lv <strong id="myOpenCount">0</strong></span>
-      <span class="mini">📚 みんなの知識Lv <strong id="allOpenCount">—</strong></span>
+<p class="page-sub" id="siteIntro">研究クイズの水槽。気になった問題から潜っていって。</p>
+
+  <div class="page-stats">
+      <div class="hero-pill hero-pill-main hero-pill-lv">
+        <span aria-hidden="true">🧠</span><span>知識Lv</span>
+        <strong id="myOpenCount">0</strong>
+        <span class="lv-badge" id="myLvTitle" aria-label="知識Lvの称号">見習い</span>
+        <span class="hero-pill-note">※閲覧数</span>
+      </div>
+
+      <a class="hero-pill hero-pill-link"
+         href="#feedback" aria-label="問い合わせフォームへ移動">
+        <span aria-hidden="true">💌</span><span>問い合わせ</span>
+      </a>
+  </div>
+</header>
+
+  <section class="panel modes-panel" aria-label="3つのエリアの説明">
+    <div class="mode-grid">
+      <a class="mode-item" href="/shindan/">
+        <div class="mode-ttl">🌟 心の標本</div>
+        <p class="mode-desc">ゆめかわ比喩で、心の癖を診断</p>
+      </a>
+      <a class="mode-item is-main" href="/quiz/">
+        <div class="mode-ttl">🔍 知識の水槽</div>
+        <p class="mode-desc">研究ベースのクイズで学ぶ場所</p>
+      </a>
+      <a class="mode-item" href="/game/">
+        <div class="mode-ttl">🎮 試練の鳥籠</div>
+        <p class="mode-desc">ゲーム寄りのチャレンジ用（準備中）</p>
+      </a>
+      <a class="mode-item" href="/nir/">
+        <div class="mode-ttl">📜 禁書の部屋</div>
+        <p class="mode-desc">???（準備中）</p>
+      </a>
     </div>
   </section>
-  
-  <!-- ★ 進捗ランク（コンプリート率） -->
-  <section id="rankbox" class="rankbox" aria-live="polite">
-    <div class="rk-head">
-      <span id="rkEmoji" class="rk-emo" aria-hidden="true">🔹</span>
-      <strong id="rkName" class="rk-name">水晶</strong>
-      <span class="rk-pct"><span id="rkPct">0</span>%</span>
-    </div>
+  <!-- ？？？にニアと話せたりギャラリー＋幻想生物＋ダーク＋物語 -->
 
-    <div class="rk-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="コンプリート進捗">
+  <!-- Rank / progress -->
+  <section class="panel rankbox" id="rankbox" aria-label="コンプリート進捗">
+
+    <div class="rank-head">
+      <span id="rkEmojiText" class="rank-emo" aria-hidden="true">🦠</span>
+<span class="rank-name" id="rkNameText">プランクトン</span>
+      <span class="rank-pct">潜水率 <span id="rkPctText">0</span>%</span>
+    </div>
+    <div class="rank-bar" role="progressbar"
+         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+         aria-label="クイズコンプリート率">
       <span id="rkFill"></span>
     </div>
-
-    <div id="rkNext" class="rk-next">あと <span id="rkRemain">1</span> 件でランクアップ</div>
+    <p class="rank-next" id="rkNext">
+      あと <span id="rkRemain">1</span> 件でランクアップ
+    </p>
+    <p class="rank-msg" id="rkMsg">
+      まずは1本だけ潜ろう。正解より「更新」を拾えば勝ち。
+    </p>
+<!-- nir（ニア）からのお知らせ＋認知の鳥籠への入口 -->
+    <button class="nir-line" id="nirRoomBtn" type="button"
+            aria-label="ニアからのお知らせと認知の鳥籠を開く">
+      <span class="nir-label">💌ニア</span>
+      <span class="nir-text" id="nirText">
+        美容デマ討伐クイズ（毛穴・水・日焼け止め）を追加
+       
+      </span>
+      <span class="nir-more" aria-hidden="true">›</span>
+    </button>
   </section>
 
-  <!-- Cards（クイズカード） -->
-  <nav class="links" id="list" aria-label="記事/クイズ一覧（検索結果）">
-    <!-- 以下、既存カード群はそのまま。例として3件だけ置いています（あなたの現行をここに全貼りでOK） -->
-    	
-    <!-- NEW: 冬の孤独クイズ -->
-<a class="link" href="/quiz/winter-loneliness.html"
+
+
+
+  <!-- Tabs + search -->
+  <section class="panel" aria-label="クイズの切り替えと検索">
+    <div class="tab-row" role="tablist" aria-label="クイズ一覧の並べ替え">
+  <button class="tab-btn" type="button" data-tab="reco" aria-selected="false">
+    ✨ おすすめ
+  </button>
+  <button class="tab-btn active" type="button" data-tab="all" aria-selected="true">
+    🌈 ぜんぶ
+  </button>
+  <button class="tab-btn" type="button" data-tab="fav" aria-selected="false">
+    💗 推し
+  </button>
+  <button class="tab-btn" type="button" data-tab="todo" aria-selected="false">
+    🌱 未挑戦
+  </button>
+</div>
+
+    <div class="search-row">
+      <input id="q" type="search" placeholder="キーワードでさがす（例：孤独 / 睡眠）"aria-label="クイズを検索">
+      <button id="clearBtn" type="button" aria-label="検索をクリア">クリア</button>
+    </div>
+    <p class="small-note" id="resultCount" aria-live="polite">
+      表示：<strong>0</strong>件
+    </p>
+  </section>
+
+  <section class="panel" aria-label="クイズ一覧">
+    <nav class="cards" id="list" aria-label="クイズカード一覧">
+      <!-- Cards：ここはあとで既存診断カードをコピペして差し替え -->
+      
+      <!-- 美容デマ討伐クイズ（毛穴・水・日焼け止め） -->
+<a href="/quiz/beauty-myth-battle.html?src=tank"
+   class="card"
+   data-id="beauty-myth-battle"
+   data-tags="クイズ,美容,生活,デマ対策"
+   data-mins="6"
+   data-updated="2026-01-04"
+   data-keywords="美容 デマ SNS 俗説 毛穴 角栓 黒ずみ いちご鼻 摩擦 バリア 角質ケア 日焼け止め UV 紫外線 塗り直し 光老化 ブルーライト コラーゲン ヒアルロン酸 ニキビ 糖負荷">
+  <span class="card-emo">🧴</span>
+  <div class="card-body">
+    <div class="card-title">
+      美容デマ討伐クイズ（毛穴・水・日焼け止め）
+      <span class="badge-new" data-new>NEW</span>
+    </div>
+    <div class="card-sub">美容に関する間違った迷信などを正すクイズ</div>
+    <div class="card-meta">
+      <span class="pill">⏱6分</span>
+      <span class="pill">美容</span>
+      <span class="pill">デマ対策</span>
+      <button class="card-go" type="button" aria-hidden="true">
+        クイズへ <span aria-hidden="true">›</span>
+      </button>
+    </div>
+  </div>
+  <span class="fav-toggle" role="button" aria-pressed="false"
+        aria-label="推しクイズに追加" tabindex="0"></span>
+</a>
+      
+
+  <!-- 冬の孤独クイズ -->
+<a href="/quiz/winter-loneliness.html?src=tank"
+   class="card"
    data-id="winter-loneliness"
    data-tags="クイズ,心理,生活"
    data-mins="6"
    data-updated="2025-11-02"
-   data-keywords="孤独 冬 SNS 反すう 認知行動 炎症 若年 AI パラソーシャル 友人の友人"
-  <span class="emo">❄️</span>
-  <div class="body">
-    <div class="ttl">冬の孤独クイズ</div>
-    <div class="sub2">“冬＝孤独”の思い込みをやさしく更新。選ぶとすぐ判定＆ひとこと解説の3択×15問。</div>
-    <div class="meta"></div>
+   data-keywords="孤独 冬 SNS 反すう 認知行動 炎症 若年 AI パラソーシャル 友人の友人">
+  <span class="card-emo">❄️</span>
+  <div class="card-body">
+    <div class="card-title">
+      冬の孤独クイズ
+      <span class="badge-new" data-new>NEW</span>
+    </div>
+    <div class="card-sub">“冬＝孤独”の思い込みをやさしく更新。選ぶとすぐ判定＆ひとこと解説の3択×15問。</div>
+    <div class="card-meta">
+      <span class="pill">⏱6分</span>
+      <span class="pill">心理</span>
+      <button class="card-go" type="button" aria-hidden="true">
+        クイズへ <span aria-hidden="true">›</span>
+      </button>
+    </div>
   </div>
-  <span class="badge" data-new>NEW</span>
+  <span class="fav-toggle" role="button" aria-pressed="false"
+        aria-label="推しクイズに追加" tabindex="0"></span>
 </a>
-    	
-    <!-- NEW: 秋の読書クイズ -->
-<a class="link" href="/quiz/aki-reading.html"
-   data-id="aki-reading" data-tags="クイズ,読書,心理,生活" data-mins="6"
+
+<!-- 秋の読書クイズ -->
+<a href="/quiz/aki-reading.html?src=tank"
+   class="card"
+   data-id="aki-reading"
+   data-tags="クイズ,読書,心理,生活"
+   data-mins="6"
    data-updated="2025-10-10"
    data-keywords="メラトニン 発光端末 E-ink ダークモード BGM 器楽 ノンカフェイン カフェ ノイズ 速読 RSVP フィクション 共感 正直 認知 学力 ボランティア">
-  <span class="emo">📚</span>
-  <div class="body">
-    <div class="ttl">秋の読書クイズ</div>
-    <div class="sub2">選ぶとすぐ判定。くすっと一言＋解説が出るA/B/C×15問。</div>
-    <div class="meta"></div>
+  <span class="card-emo">📚</span>
+  <div class="card-body">
+    <div class="card-title">
+      秋の読書クイズ
+      <span class="badge-new" data-new>NEW</span>
+    </div>
+    <div class="card-sub">選ぶとすぐ判定。くすっと一言＋解説が出るA/B/C×15問。</div>
+    <div class="card-meta">
+      <span class="pill">⏱6分</span>
+      <span class="pill">読書</span>
+      <button class="card-go" type="button" aria-hidden="true">
+        クイズへ <span aria-hidden="true">›</span>
+      </button>
+    </div>
   </div>
-  <span class="badge" data-new>NEW</span>
+  <span class="fav-toggle" role="button" aria-pressed="false"
+        aria-label="推しクイズに追加" tabindex="0"></span>
 </a>
 
-  <!-- NEW: 秋の食欲クイズ -->
-<a class="link" href="/quiz/aki-appetite.html"
-   data-id="aki-appetite" data-tags="クイズ,秋,生活,食欲" data-mins="6"
+<!-- 秋の食欲クイズ -->
+<a href="/quiz/aki-appetite.html?src=tank"
+   class="card"
+   data-id="aki-appetite"
+   data-reco="1"
+   data-tags="クイズ,秋,生活,食欲"
+   data-mins="6"
    data-updated="2025-10-02"
    data-keywords="超加工食品 マインドフル テトリス 睡眠不足 青色照明 たんぱく質 硬い食感 BGM ながら食べ 皿 ビュッフェ 酢 水 前菜 辛さ カトラリー アルコール 姿勢 写真撮影">
-  <span class="emo">🍽️</span>
-  <div class="body">
-    <div class="ttl">秋の食欲クイズ</div>
-    <div class="sub2">“増える/変わらない/減る”を見抜く3択×20問。選ぶとすぐ判定＆一言解説。</div>
-    <div class="meta"></div>
+  <span class="card-emo">🍽️</span>
+  <div class="card-body">
+    <div class="card-title">
+      秋の食欲クイズ
+      <span class="badge-new" data-new>NEW</span>
+    </div>
+    <div class="card-sub">“増える/変わらない/減る”を見抜く3択×20問。選ぶとすぐ判定＆一言解説。</div>
+    <div class="card-meta">
+      <span class="pill">⏱6分</span>
+      <span class="pill">食欲</span>
+      <button class="card-go" type="button" aria-hidden="true">
+        クイズへ <span aria-hidden="true">›</span>
+      </button>
+    </div>
   </div>
-  <span class="badge" data-new>NEW</span>
+  <span class="fav-toggle" role="button" aria-pressed="false"
+        aria-label="推しクイズに追加" tabindex="0"></span>
 </a>
 
-    <!-- NEW: 秋の贅沢クイズ -->
-    <a class="link" href="/quiz/aki-mix.html"
-       data-id="aki-mix" data-tags="クイズ,秋,雑学,心理,行事,食" data-mins="5"
-       data-updated="2025-09-24"
-       data-keywords="紅葉 中秋の名月 ハロウィン サンマ 焼き芋 栗 カーディガン 読書 錯視 スポーツの秋">
-      <span class="emo">🍁</span>
-      <div class="body">
-        <div class="ttl">秋の贅沢クイズ</div>
-        <div class="sub2">“秋あるある”を楽しく更新。選んだ瞬間に判定される3択×15問。</div>
-        <div class="meta"></div>
-      </div>
-      <span class="badge" data-new>NEW</span>
-    </a>
+<!-- 秋の贅沢クイズ -->
+<a href="/quiz/aki-mix.html?src=tank"
+   class="card"
+   data-id="aki-mix"
+   data-tags="クイズ,秋,雑学,心理,行事,食"
+   data-mins="5"
+   data-updated="2025-09-24"
+   data-keywords="紅葉 中秋の名月 ハロウィン サンマ 焼き芋 栗 カーディガン 読書 錯視 スポーツの秋">
+  <span class="card-emo">🍁</span>
+  <div class="card-body">
+    <div class="card-title">
+      秋の贅沢クイズ
+      <span class="badge-new" data-new>NEW</span>
+    </div>
+    <div class="card-sub">“秋あるある”を楽しく更新。選んだ瞬間に判定される3択×15問。</div>
+    <div class="card-meta">
+      <span class="pill">⏱5分</span>
+      <span class="pill">雑学</span>
+      <button class="card-go" type="button" aria-hidden="true">
+        クイズへ <span aria-hidden="true">›</span>
+      </button>
+    </div>
+  </div>
+  <span class="fav-toggle" role="button" aria-pressed="false"
+        aria-label="推しクイズに追加" tabindex="0"></span>
+</a>
 
-    <!-- NEW: 猫と犬の心理研究クイズ -->
-    <a class="link" href="/quiz/inu-neko-quiz.html"
-       data-id="inu-neko-quiz" data-tags="クイズ,心理,猫,犬" data-mins="3"
-       data-updated="2025-09-21"
-       data-keywords="犬派 猫派 性格 オキシトシン 名前 指差し しっぽ 瞬き 散歩">
-      <span class="emo">🐾</span>
-      <div class="body">
-        <div class="ttl">猫と犬の心理研究クイズ</div>
-        <div class="sub2">選んだ瞬間に結果が出る、直感と研究のズレを楽しむ10問。</div>
-        <div class="meta"></div>
-      </div>
-      <span class="badge" data-new>NEW</span>
-    </a>
+<!-- 猫と犬の心理研究クイズ -->
+<a href="/quiz/inu-neko-quiz.html?src=tank"
+   class="card"
+   data-id="inu-neko-quiz"
+   data-tags="クイズ,心理,猫,犬"
+   data-mins="3"
+   data-updated="2025-09-21"
+   data-keywords="犬派 猫派 性格 オキシトシン 名前 指差し しっぽ 瞬き 散歩">
+  <span class="card-emo">🐾</span>
+  <div class="card-body">
+    <div class="card-title">
+      猫と犬の心理研究クイズ
+      <span class="badge-new" data-new>NEW</span>
+    </div>
+    <div class="card-sub">選んだ瞬間に結果が出る、直感と研究のズレを楽しむ10問。</div>
+    <div class="card-meta">
+      <span class="pill">⏱3分</span>
+      <span class="pill">猫/犬</span>
+      <button class="card-go" type="button" aria-hidden="true">
+        クイズへ <span aria-hidden="true">›</span>
+      </button>
+    </div>
+  </div>
+  <span class="fav-toggle" role="button" aria-pressed="false"
+        aria-label="推しクイズに追加" tabindex="0"></span>
+</a>
 
-    
-  </nav>
+    </nav>
+  </section>
 
-<section id="legal-note" role="note" aria-label="ご利用にあたって" class="note">
-  <h2 style="font-size:1.05em;margin:18px 0 10px">ご利用にあたって</h2>
-  <ul style="margin:0 0 10px 18px;padding:0;line-height:1.7">
-    <li><strong>独自制作：</strong>各クイズ・豆知識は公開資料や研究一般をもとにした<strong>一般向け要約</strong>で、原著の検査や採点法とは<strong>別物</strong>です。</li>
-    <li><strong>正確性の限界：</strong>解説や数値は<strong>公開時点</strong>の情報に基づきますが、完全性・最新性は保証できません。重要な判断（医療/投資/法律等）には使わないでください。</li>
-    <li><strong>プライバシー：</strong>回答処理は<strong>端末内</strong>で完結します。結果表示時に<strong>匿名の件数カウント</strong>のみ送信する場合があります。</li>
-    <li><strong>表現：</strong>比喩・ゲーム的表現を含みます。他者の断定・ラベリングを目的としません。</li>
-  </ul>
-</section>
+  <!-- Feedback -->
+  <section class="panel feedback" id="feedback" aria-label="ご意見フォーム">
+    <h2>❤ご意見・甘やかし＆ラブレター❤</h2>
+    <p>バグ報告・感想・「こんな診断ほしい」から、作者を甘やかすラブレターまで、なんでもゆるく投げ込める箱です。</p>
+    <form id="feedbackForm"
+      action="https://formspree.io/f/mdkqgynb"
+      method="POST">
+      <label>
+        お名前 / ニックネーム（任意）
+        <input type="text" name="name" autocomplete="name">
+      </label>
+      <label>
+        連絡先（任意｜返信が必要な場合だけ）
+        <input type="email" name="email" inputmode="email" autocomplete="email">
+      </label>
+      <label>
+        種別
+        <select name="type">
+          <option value="impression">クイズの感想・ご意見</option>
+          <option value="bug">バグ報告</option>
+          <option value="request">こんなクイズがほしい</option>
+          <option value="love">作者を甘やかす・沼報告</option>
+          <option value="other">その他</option>
+        </select>
+      </label>
+      <label>
+        メッセージ
+        <textarea name="message" required></textarea>
+      </label>
+      <button type="submit">送信する</button>
+      <p class="hint">
+      ※ お名前・連絡先は空欄でも送信できます。<strong>匿名OK</strong>のゆるいポストです。<br>
+        ※ 送信内容は Formspree 経由で制作者に届きます。返信はお約束できませんが、すべてゆっくり目を通します。<br>
+        ※ 研究メモや説明が実際の論文と違う場合もあります。そのときは、ゆるく教えてもらえると助かります。
+      </p>
+    </form>
+  </section>
+
+  <!-- Legal -->
+  <section id="legal-note" class="note" role="note" aria-label="ご利用にあたって">
+    <h2>ご利用にあたって</h2>
+    <ul>
+      <li><strong>非公式コンテンツ：</strong>ここに並んでいるクイズは、公開研究などの知見に<strong>ゆるくヒントを得た個人制作</strong>です。各種公式心理検査そのものではなく、権利者の承認・提携・推奨を意味しません。</li>
+      <li><strong>医療用途ではありません：</strong>あくまで<span style="white-space:nowrap">「娯楽＋自己理解のきっかけ」</span>を目的としたセルフチェックです。強い苦痛・体調不良が続く場合は、医療機関や専門家へご相談ください。</li>
+      <li><strong>プライバシー：</strong>回答内容は<strong>ブラウザ内（あなたの端末内）で処理・保存</strong>されます。サーバーに個人が特定できる情報が送信されることはありません。</li>
+      <li><strong>表示ラベルの扱い：</strong>サイト内の呼び名（タイプ名・職業名・「サイコパス」など）は、すべて<strong>比喩・ジョーク・ゲーム的表現</strong>です。内容をもとにした他者へのラベリングや差別的な扱いはしないようお願いします。</li>
+      <li><strong>免責：</strong>法令で認められる範囲で、本サイトの利用により生じたいかなる損失・損害についても、制作者は責任を負いません。</li>
+      <li><strong>ご注意：</strong>このサイトの内容は、できるだけ正確を心がけていますが、読みやすさ重視で省略や意訳をしているため、実際の研究や現実の状況と違う場合があります。あくまで「参考・遊び」としてゆるく楽しんでもらい、最終的な判断や行動はご自身の責任でお願いします。</li>
+     
+    </ul>
+  </section>
 </main>
 
 <!-- Footer -->
-<nav class="footerbar" aria-label="フッターナビ">
-  <a href="https://x.com/oki2a?s=21" target="_blank" rel="noopener">X</a>
-  <a href="https://www.instagram.com/zariganitabetai7?igsh=MTdzc245MDJrdWZzYw%3D%3D&utm_source=qr" target="_blank" rel="noopener">Instagram</a>
-  <a href="https://line.me/ti/p/JO0O0lvpKY" target="_blank" rel="noopener">LINE</a>
-  <a href="/shindan/seikaku.html">自己紹介</a>
+<nav class="footerbar" aria-label="サービスリンク">
+  <a class="ft-btn ft-x" href="https://x.com/oki2a?s=21" target="_blank" rel="noopener" aria-label="Xを開く">
+    <span class="ico" aria-hidden="true">𝕏</span><span class="lbl"></span>
+  </a>
+  <a class="ft-btn ft-ig" href="https://www.instagram.com/zariganitabetai7/" target="_blank" rel="noopener" aria-label="Instagramを開く">
+    <span class="ico" aria-hidden="true">📷</span><span class="lbl">Instagram</span>
+  </a>
+  <a class="ft-btn ft-line" href="https://line.me/ti/p/JO0O0lvpKY" target="_blank" rel="noopener" aria-label="LINEを開く">
+    <span class="ico" aria-hidden="true">💬</span><span class="lbl">LINE</span>
+  </a>
+  <a class="ft-btn ft-me" href="/shindan/seikaku.html" aria-label="自己紹介へ">
+    <span class="ico" aria-hidden="true">🪪</span><span class="lbl">自己紹介</span>
+  </a>
 </nav>
 
 <noscript>
-  <div style="max-width:980px;margin:16px auto;padding:0 14px max(28px,env(safe-area-inset-bottom));color:#6b7b86">
-    JavaScriptが無効です。<a href="/quiz/">一覧はこちら</a>。
+  <div style="max-width:980px;margin:16px auto;padding:0 14px;color:#7a6a77">
+    JavaScriptが無効です。<a href="/quiz/">クイズ一覧はこちら</a>
   </div>
 </noscript>
 
@@ -291,329 +1516,675 @@ a.link[data-done] .mini[data-new]{display:none}
   const $  = (q,root=document)=>root.querySelector(q);
   const $$ = (q,root=document)=>[...root.querySelectorAll(q)];
 
-  const splash  = $('#splash');
-  const content = $('#content');
-  const vibrate = (ms=10)=>('vibrate' in navigator)&&navigator.vibrate(ms);
+  // Splash（キービジュ押したら開く）
+  const splash      = document.getElementById('splash');
+  const splashOpenBtn = document.getElementById('splashOpenBtn');
+  const contentRoot = document.getElementById('content');
+  const vibrate     = (ms=10)=>('vibrate' in navigator)&&navigator.vibrate(ms);
 
-  // Splash open
-  const GUARD_MS=600, HIDE_DELAY=300; let opened=false, guardUntil=0;
-  function startClickGuard(){
-    guardUntil=performance.now()+GUARD_MS;
-    const guard=(e)=>{ if(performance.now()<guardUntil){ e.stopPropagation(); e.preventDefault(); } else { window.removeEventListener('click',guard,true); } };
-    window.addEventListener('click',guard,true);
-    content.style.pointerEvents='none'; setTimeout(()=>{content.style.pointerEvents='';},GUARD_MS);
+  // タイトル起動演出＆導入文チェンジ（占いっぽく煽る）
+  const titleTapEl = document.getElementById('titleTap') || document.querySelector('.page-title');
+  const titleMain  = document.getElementById('siteTitle') || document.querySelector('.page-title-main');
+  const introEl    = document.getElementById('siteIntro') || document.querySelector('.page-sub');
+
+  const INTRO_POOL = [
+  'くるみはオメガ3が多め。脳の炎症マーカーが下がった報告もある。',
+  '運動は脳にも効く。記憶に関わる領域が育ちやすい、という研究が多い。',
+  '睡眠は“保存ボタン”。寝たあとに思い出しやすくなる現象がある。',
+  'コーヒー＋短い昼寝（10〜20分）の組み合わせ、集中が上がる説がある。',
+  '新しいことを学ぶとき、1回長くより“間隔を空けて複数回”が強い。',
+  '「思い出す練習」（テスト形式）は、読み直しより定着しやすい傾向。',
+  '噛む回数が増えると、注意が戻りやすいという観察もある。',
+  '自然の音（波・雨）で雑念が減った、という報告がある。',
+  'スマホ通知は脳の作業メモリを削る。見てなくても影響する説がある。',
+  '二言語環境は、切り替えの練習になって実行機能が鍛えられる説がある。',
+  '青い光は眠気を遅らせやすい。夜の脳にはわりと敵。',
+  '学ぶ前に「何が知りたいか」を1行書くと、理解が伸びやすいらしい。',
+];
+  let introIdx = -1;
+
+  function swapIntro(){
+    if(!introEl) return;
+    if(INTRO_POOL.length === 0) return;
+    let next = introIdx;
+    for(let i=0;i<6;i++){
+      const cand = Math.floor(Math.random()*INTRO_POOL.length);
+      if(cand !== introIdx){ next = cand; break; }
+      next = cand;
+    }
+    introIdx = next;
+    introEl.textContent = INTRO_POOL[introIdx];
+    introEl.classList.remove('intro-pop');
+    void introEl.offsetWidth;
+    introEl.classList.add('intro-pop');
   }
-  function reveal(ev){
-    if(opened) return; opened=true;
-    if(ev){ try{ ev.preventDefault(); ev.stopPropagation(); }catch{} }
-    startClickGuard();
-    splash.classList.add('closing'); splash.setAttribute('aria-hidden','true');
-    content.classList.add('show'); vibrate(12);
-    setTimeout(()=>{ splash.classList.add('hidden'); splash.classList.remove('closing'); try{ content.removeAttribute('inert'); content.focus({preventScroll:true}); }catch{} }, Math.max(HIDE_DELAY,GUARD_MS));
+
+  // タイトル文字の「スロット」演出（何回でも呼べる）
+  function slotTitleFx(duration=520){
+    if(!titleMain) return;
+    if(titleMain.dataset.slotting === '1') return;
+
+    const base = titleMain.dataset.baseTitle || titleMain.textContent || '';
+    if(!titleMain.dataset.baseTitle) titleMain.dataset.baseTitle = base;
+
+    titleMain.dataset.slotting = '1';
+    const pool = '✦✧◇◆☆★知識水槽クイズ'.split('');
+    const start = (performance.now ? performance.now() : Date.now());
+
+    const timer = setInterval(()=>{
+      const now = (performance.now ? performance.now() : Date.now());
+      const out = base.split('').map(ch=>{
+        return (Math.random() < 0.62) ? pool[(Math.random()*pool.length)|0] : ch;
+      }).join('');
+      titleMain.textContent = out;
+
+      if(now - start > duration){
+        clearInterval(timer);
+        titleMain.textContent = base;
+        delete titleMain.dataset.slotting;
+      }
+    }, 55);
   }
-  splash.addEventListener('pointerup', e=>{ if(e?.target?.closest?.('a,button,input,label')) return; reveal(e); });
-  splash.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); reveal(e); } });
 
-  // NEWバッジ（21日以内）
-  const today=new Date();
-  $$('#list a.link').forEach(a=>{
-    const badge=a.querySelector('[data-new]'); const ds=a.dataset.updated;
-    if(badge && ds){ const diff=(today - new Date(ds+'T00:00:00'))/86400000; badge.style.display=(diff<=21)?'inline-flex':'none'; }
-  });
+  // 初回の長め起動演出（スプラッシュを開いた直後に1回だけ）
+  function bootTitleFx(){
+    if(!titleMain) return;
+    if(titleMain.dataset.booted === '1') return;
+    titleMain.dataset.booted = '1';
+    slotTitleFx(950);
+  }
 
-  // data-thumb → サムネ（未使用：data-thumbがあれば有効）
-  $$('#list a.link').forEach(a=>{
-    const src=a.dataset.thumb; if(!src) return;
-    a.classList.add('with-thumb');
-    const fg=document.createElement('figure'); fg.className='thumb';
-    const img=new Image(); img.loading='lazy'; img.src=src; img.alt=(a.querySelector('.ttl')?.textContent||'記事')+'のサムネイル';
-    fg.appendChild(img); a.insertBefore(fg,a.firstChild);
-  });
+  if(titleTapEl){
+    const onTap = (e)=>{
+      e.preventDefault();
+      try{ vibrate(8); }catch(_){}
+      slotTitleFx(520);   // ← h1タップでスロット演出
+      swapIntro();        // ← 導入文チェンジも維持
+    };
 
-  // 検索・タグ（単一選択）
-  const q=$('#q'), chipsWrap=$('#chips'), btnNew=$('#btnNew'), clearBtn=$('#clearBtn');
-
-  // 「未挑戦だけ」トグル
-  let todoOnly=false;
-  btnNew.addEventListener('click', ()=>{
-    todoOnly=!todoOnly;
-    btnNew.classList.toggle('primary',todoOnly);
-    btnNew.setAttribute('aria-pressed', String(todoOnly));
-    btnNew.textContent = todoOnly ? '未挑戦だけ（解除）' : '未挑戦だけ';
-    apply();
-  });
-
-  // エイリアス・タグ順
-  const ALIAS={ '性格':'こころ', '短時間':'さくっと' };
-  const ORDER=['海','心理','脳','生活','クイズ','診断','こころ','セルフケア','認知','仕事','占い','ゲーム風','さくっと','ふつう','しっかり','適性'];
-
-  // カードのタグ正規化 + メタ整形
-  $$('#list a.link').forEach(a=>{
-    const tags=(a.dataset.tags||'').split(',').map(s=>s.trim()).filter(Boolean).map(t=>ALIAS[t]||t);
-    a.dataset.tags=[...new Set(tags)].join(',');
-    const meta=a.querySelector('.meta'); meta.innerHTML='';
-    const mins=a.dataset.mins; if(mins){ const s=document.createElement('span'); s.className='pill'; s.textContent=`⏱${mins}分`; meta.appendChild(s); }
-  });
-
-  // タグ候補（存在するもののみ）
-  const counts={};
-  $$('#list a.link').forEach(a=>{
-    (a.dataset.tags||'').split(',').filter(Boolean).forEach(t=>{ counts[t]=(counts[t]||0)+1; });
-  });
-  const tagsSorted=Object.keys(counts).sort((a,b)=>{
-    const ai=ORDER.indexOf(a), bi=ORDER.indexOf(b);
-    if(ai!==-1 || bi!==-1){ return (ai===-1?999:ai) - (bi===-1?999:bi); }
-    return a.localeCompare(b,'ja');
-  });
-
-  // チップ生成（単一選択）
-  let activeTag=null; const chipMap=new Map();
-  tagsSorted.forEach(tag=>{
-    const b=document.createElement('button');
-    b.type='button'; b.className='chip'; b.textContent='#'+tag; b.dataset.tag=tag;
-    b.setAttribute('role','option'); b.setAttribute('aria-selected','false');
-    b.addEventListener('click',()=> setActiveTag(activeTag===tag? null : tag));
-    b.addEventListener('keydown',e=>{
-      if(e.key===' '||e.key==='Enter'){ e.preventDefault(); b.click(); }
-      if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
-        e.preventDefault(); const chips=[...chipsWrap.querySelectorAll('.chip')];
-        const i=chips.indexOf(document.activeElement); if(i>-1){ chips[(i+(e.key==='ArrowRight'?1:-1)+chips.length)%chips.length].focus(); }
+    titleTapEl.addEventListener('click', onTap);
+    titleTapEl.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){
+        onTap(e);
       }
     });
-    chipsWrap.appendChild(b); chipMap.set(tag,b);
-  });
-
-  function setActiveTag(tag){
-    activeTag=tag;
-    chipMap.forEach((btn,t)=>{ const on=(t===tag); btn.classList.toggle('active',on); btn.setAttribute('aria-selected',on?'true':'false'); });
-    if(tag){ history.replaceState({},'', '#tag='+encodeURIComponent(tag)); } else { history.replaceState({},'', location.pathname + location.search); }
-    apply();
   }
 
-  // 初期：#tag= or ?q=
-  const params=new URLSearchParams(location.search);
-  q.value=params.get('q')||'';
-  const initTag=location.hash.startsWith('#tag=') ? decodeURIComponent(location.hash.slice(5)) : '';
-  if(initTag && chipMap.has(initTag)) setActiveTag(initTag);
+  // こころLvに応じて称号が変わる
+  const myLvTitleEl = document.getElementById('myLvTitle');
+  function updateLvTitle(n){
+  if(!myLvTitleEl) return;
+  const v = Math.max(0, +n || 0);
 
-  // 入力：末尾 #タグ を同期
-  q.addEventListener('input', ()=>{
-    const m=q.value.match(/(^|\s)#([^\s#]+)$/);
-    if(m){ const t=m[2]; if(chipMap.has(t)) setActiveTag(t); }
-    apply();
+  // 開いた回数（閲覧数）ベースの称号（海×知性）
+let t = '水面の旅人';
+if(v >= 5)   t = '泡の収集家';
+if(v >= 15)  t = '波の観察者';
+if(v >= 30)  t = '群青の読解者';
+if(v >= 60)  t = '深層の解析者';
+if(v >= 100) t = '海溝の研究者';
+if(v >= 150) t = '深海の海王';
+if(v >= 220) t = 'アビスの探究者';
+
+  myLvTitleEl.textContent = t;
+}
+
+  let splashOpened = false;
+  // 戻る/履歴復元(bfcache)でも毎回スプラッシュを出す
+  window.addEventListener('pageshow', (ev) => {
+    if (!ev.persisted) return; // 復元時だけ
+    splashOpened = false;
+    if (splash) splash.classList.remove('hidden');
+    if (contentRoot) {
+      contentRoot.classList.remove('show');
+      contentRoot.setAttribute('inert', '');
+    }
+    try { window.scrollTo(0, 0); } catch (_) {}
   });
 
-  // クリア
-  clearBtn.addEventListener('click', ()=>{
-    q.value=''; setActiveTag(null);
-    if(location.hash) history.replaceState({},'', location.pathname + location.search);
-    apply();
-  });
+  function openSplash(){
+    if(splashOpened) return;
+    splashOpened = true;
+    if(splash) splash.classList.add('hidden');
+    if(contentRoot){
+      contentRoot.classList.add('show');
+      contentRoot.removeAttribute('inert');
+      try{ contentRoot.focus({preventScroll:true}); }catch(_){}
+/* runTitleBoot disabled */
+    }
+    // 起動演出（最初の1回だけ）
+    bootTitleFx();
+  }
 
-  // 済マーク復元（心の標本と同仕様）
-  const LS_BYID_KEY = "quiz:open:byid";
-  function getDoneMap(){ try{ return JSON.parse(localStorage.getItem(LS_BYID_KEY)||"{}"); }catch(e){ return {}; } }
-  function markDoneCards(){
-    const done = getDoneMap();
-    document.querySelectorAll('#list a.link').forEach(a=>{
-      const id=a.dataset.id; if(!id) return;
-      if(done[id]>0) a.setAttribute('data-done','1'); else a.removeAttribute('data-done');
+  if(splash){
+    splash.addEventListener('click', e=>{
+      e.preventDefault();
+      vibrate(10);
+      openSplash();
+    });
+    splash.addEventListener('keydown', e=>{
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        vibrate(10);
+        openSplash();
+      }
     });
   }
-  window.markDoneCards = markDoneCards;
+  // 追加：ボタンからも確実に開く（親のクリックに伝播させない）
+  if(splashOpenBtn){
+    splashOpenBtn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      vibrate(10);
+      openSplash();
+    });
+  }
 
-  // 進捗ランク
-  let lastRankName = null;
-  function updateCompletion(){
-    const cards = document.querySelectorAll('#list a.link');
-    const total = cards.length;
-    let doneMap = getDoneMap();
-    let done = 0;
-    cards.forEach(a=>{ const id=a.dataset.id; if(id && doneMap[id]>0) done++; });
-    const pct = total ? Math.round(done/total*100) : 0;
+  const listEl   = $('#list');
+  const q        = $('#q');
+  const clearBtn = $('#clearBtn');
+  const tabs     = $$('.tab-btn');
 
-    const ranks = [
-  // 観察者→思索者→探求者→創造者→覇者（オルカは🐋で代替）
-  {min:  0, name:'観察者', emo:'🐟', grad:'linear-gradient(90deg,#8fd3ff,#c9c9ff)',
-    desc:'まずは海面近くを回遊。気になったカードを1枚だけ味見しよう。'},
-  {min: 20, name:'思索者', emo:'🐠', grad:'linear-gradient(90deg,#7ed0ff,#b3b8ff)',
-    desc:'メモやスクショで“自分の言葉”にすると理解が深まる。'},
-  {min: 40, name:'探求者', emo:'🐬', grad:'linear-gradient(90deg,#6bc6ff,#a8b3ff)',
-    desc:'同じタグを連続して読むと、点が線になっていく。'},
-  {min: 60, name:'創造者', emo:'🦈', grad:'linear-gradient(90deg,#5fbaff,#9eabff)',
-    desc:'見つけた話題を誰かと共有。小さくアウトプットで定着。'},
-  {min: 85, name:'覇者',   emo:'🐋', grad:'linear-gradient(90deg,#55b1ff,#95a4ff)',
-    desc:'海域制覇。お気に入りを再読しつつ、新作をのんびり待とう。'}
+  const myLvEl   = $('#myOpenCount');
+  const rkBox    = $('#rankbox');
+  const rkEmoji  = $('#rkEmoji');
+  const rkEmoji2 = $('#rkEmojiText');
+  const rkName   = $('#rkName');
+  const rkName2  = $('#rkNameText');
+  const rkPct    = $('#rkPct');
+  const rkPct2   = $('#rkPctText');
+  const rkFill   = $('#rkFill');
+  const rkNext   = $('#rkNext');
+  const rkRemain = $('#rkRemain');
+  const rkMsg    = $('#rkMsg');
+  const nirText  = $('#nirText');
+  const nirRoomBtn = $('#nirRoomBtn');
+  const resultCountEl = $('#resultCount').querySelector('strong');
+const feedbackForm  = $('#feedbackForm');
+const feedbackHint  = document.querySelector('.feedback .hint');
+
+// 成功・エラー表示用のランダムメッセージ（文言はあとで差し替えOK）
+const FEEDBACK_SUCCESS_TEXTS = [
+  '📬 「また話そうね」と打って消して、「おやすみ」に変えた夜のほうが、ほんとは少しだけ話したかった。',
+  '📬 既読をつけない理由を並べてるあいだに、一番伝えたかった一文だけ、ゆっくり冷めていく。',
+  '📬 長文を書いて全部消して、スタンプひとつにしたとき、人間はだいたい本音から一歩下がっている。',
+  '📬 誰かのストーリーを眺めながら、今日の自分だけ透明だった気がする瞬間ってあるよね。',
+  '📬 通話を切ったあとに浮かぶ返事が、いつもいちばん正確で、いちばん遅い。',
+  '📬 「送る」か「下書き保存」かで迷った履歴だけが、ちゃっかり心の中にはログインし続けている。',
+  '📬 タイムラインを何周もスクロールして、けっきょく一番見ているのが自分の投稿だったりする。',
+  '📬 本音はツイートじゃなくて、消した下書きのほうでちゃんと生きている。'
 ];
 
-    let cur = ranks[0]; for(const r of ranks){ if(pct>=r.min) cur=r; }
-    const next = ranks.find(r=>r.min>pct);
+const FEEDBACK_ERROR_TEXTS = [
+  '⚠ うまく届かなかったみたい。大事なときほど世界はよく噛むから、少し時間を空けてもう一度だけ試してみて。',
+  '⚠ 今は回線の機嫌が悪いみたい。人間と同じで、ときどき理由もなくすねる。落ち着いたら、もう一度送ってあげて。',
+  '⚠ 途中でどこかが迷子になったみたい。ページを軽く更新して、もう一度だけ呼びかけてみて。'
+];
 
-    const box   = document.getElementById('rankbox');
-    const emo   = document.getElementById('rkEmoji');
-    const name  = document.getElementById('rkName');
-    const fill  = document.getElementById('rkFill');
-    const pctEl = document.getElementById('rkPct');
-    const nextEl= document.getElementById('rkNext');
-    if(!box||!emo||!name||!fill||!pctEl||!nextEl) return;
+function pickRandom(arr){
+  if(!arr || !arr.length) return '';
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
-    emo.textContent   = cur.emo;
-    name.textContent  = cur.name;
-    pctEl.textContent = pct;
-    fill.style.width  = pct + '%';
-    fill.style.background = cur.grad;
-    fill.style.filter = 'drop-shadow(0 0 6px rgba(255,255,255,.5))';
+/* ─────────────────────────────
+   タイトル起動演出（検体スキャン）
+   - スプラッシュを開いた“後”に走る想定（openSplash側から呼ぶ）
+   - タイトルをタップすると導入文が切り替わる
+───────────────────────────── */
+let __titleBooted = false;
+function runTitleBoot(){
+  if(__titleBooted) return;
 
-    if(next){
-  const needDone = Math.ceil((next.min/100)*total);
-  const remain   = Math.max(0, needDone - done);
-  nextEl.innerHTML = `<div class="rk-desc">${cur.desc}</div>`
-                    + `あと <span id="rkRemain">${remain}</span> 件でランクアップ`;
-}else{
-  nextEl.innerHTML = `<div class="rk-desc">${cur.desc}</div>`
-                    + `全海域コンプリート！お疲れさま。`;
+  const titleMain = document.querySelector('.page-title-main');
+  const titleWrap = document.querySelector('.page-title');
+  const sub       = document.querySelector('.page-sub');
+  if(!titleMain) return;
+
+  __titleBooted = true;
+
+  const text = (titleMain.getAttribute('data-title') || titleMain.textContent || '知識の水槽').trim();
+  if(text) titleMain.setAttribute('data-title', text);
+
+  const intro_pool = [
+  '【宇宙大当たり】今日の運勢、運営が手動で盛ってます。',
+  '【SSR大吉】初回10連で当てた顔していい日。',
+  '【伝説級】あなたの背後に“勝ち”がいる。たぶん猫。',
+  '【超大吉】空気が味方する。空気読まなくていい。',
+  '【大当たり】ラッキーフード：白米。理由：王だから。',
+  '【神吉】今日は「なんか知らんけど許される」バフ発動。',
+  '【中吉】運気は普通。だが君は面白い。優勝。',
+  '【凶】……に見せかけて【逆転大吉】。脚本が熱い。',
+  '【大吉】やる気が出ない？それ、充電中ってことにしとこ。',
+  '【爆アゲ】ラッキーアイテム：未開封の消しゴム。強い（未使用）。',
+  '【大当たり】今日の合言葉：『知らんけど』。最強の護符。',
+  '【極上吉】うまくいかなかったら“演出”って呼んでいい日。'
+];
+
+  if(sub){
+    const base = (sub.getAttribute('data-sub') || sub.textContent || '').trim();
+    if(base) sub.setAttribute('data-sub', base);
+    sub.textContent = pickRandom(intro_pool) || base || sub.textContent;
+  }
+
+  // スキャン演出（文字をガチャガチャ→確定）
+  const glyphs = '▢▣▤▥▦▧▨◆◇◈◉◌◍△▽◐◑◒◓✶✦✧✩✪✫';
+  const len    = text.length;
+  const dur    = 850;
+  const step   = 45;
+  const t0     = performance.now();
+
+  if(titleWrap) titleWrap.classList.add('booting');
+
+  const timer = setInterval(()=>{
+    const p = Math.min(1, (performance.now() - t0) / dur);
+    const reveal = Math.floor(p * len);
+    let out = '';
+    for(let i=0;i<len;i++){
+      out += (i < reveal) ? text[i] : glyphs[Math.floor(Math.random()*glyphs.length)];
+    }
+    titleMain.textContent = out;
+
+    if(p >= 1){
+      clearInterval(timer);
+      titleMain.textContent = text;
+      if(titleWrap) titleWrap.classList.remove('booting');
+    }
+  }, step);
+
+  // タイトルタップで導入文チェンジ（占いっぽく）
+  if(titleWrap && sub){
+    titleWrap.style.cursor = 'pointer';
+    titleWrap.addEventListener('click', ()=>{
+      const cur = (sub.textContent || '').trim();
+      let next = cur;
+      for(let i=0;i<8 && next===cur;i++){
+        next = pickRandom(intro_pool) || cur;
+      }
+      sub.textContent = next;
+      try{ vibrate(8); }catch(_){}
+      try{
+        sub.animate(
+          [{opacity:1, transform:'translateY(0)'},
+           {opacity:.6, transform:'translateY(-2px)'},
+           {opacity:1, transform:'translateY(0)'}],
+          {duration:220}
+        );
+      }catch(_){}
+    }, {passive:true});
+  }
+}
+
+  const LS_TOTAL_KEY = 'tank:open:total';
+  const LS_BYID_KEY  = 'tank:open:byid';
+  const LS_FAV_KEY   = 'tank:favs';
+  let activeTab = 'all';
+
+  function loadTotal(){
+    const n = +localStorage.getItem(LS_TOTAL_KEY) || 0;
+    return Number.isFinite(n)?n:0;
+  }
+  function saveTotal(n){
+    try{ localStorage.setItem(LS_TOTAL_KEY,String(n)); }catch(_){}
+  }
+  function loadById(){
+    try{
+      const m = JSON.parse(localStorage.getItem(LS_BYID_KEY)||'{}');
+      return m && typeof m === 'object' ? m : {};
+    }catch(_){ return {}; }
+  }
+  function saveById(map){
+    try{ localStorage.setItem(LS_BYID_KEY,JSON.stringify(map)); }catch(_){}
+  }
+  function loadFavs(){
+    try{
+      const arr = JSON.parse(localStorage.getItem(LS_FAV_KEY)||'[]');
+      return new Set(Array.isArray(arr)?arr:[]);
+    }catch(_){ return new Set(); }
+  }
+  function saveFavs(set){
+    try{ localStorage.setItem(LS_FAV_KEY,JSON.stringify([...set])); }catch(_){}
+  }
+
+  let favSet = loadFavs();
+  let doneMap = loadById();
+
+  // 初期：こころLv表示
+  const _lv0 = loadTotal();
+  myLvEl.textContent = _lv0;
+  updateLvTitle(_lv0);
+
+// カード初期化（済・推し）
+  const MS_PER_DAY = 24*60*60*1000;
+  const nowMs = Date.now();
+  const cards = $$('#list .card');
+  cards.forEach(card=>{
+    const id = card.dataset.id;
+    if(id && doneMap[id] > 0){
+      card.setAttribute('data-done','1');
+    }
+    if(id && favSet.has(id)){
+      const fav = card.querySelector('.fav-toggle');
+      if(fav){
+        fav.setAttribute('aria-pressed','true');
+        fav.setAttribute('aria-label','推しクイズから外す');
+      }
+      card.classList.add('is-fav');
+    }
+    // 所要時間ピルが無いときは自動生成（mins指定があれば）
+    const mins = card.dataset.mins;
+    const meta = card.querySelector('.card-meta');
+    if(mins && meta && !meta.querySelector('.pill')){
+      const span=document.createElement('span');
+      span.className='pill';
+      span.textContent = `⏱${mins}分`;
+      meta.insertBefore(span, meta.firstChild);
     }
 
-    if(lastRankName!==null && lastRankName!==cur.name){
-      box.classList.remove('pop'); void box.offsetWidth; box.classList.add('pop');
+    // NEWバッジの自動オフ（data-updated があるカードだけ対象）
+    const updated = card.getAttribute('data-updated');
+    if(updated){
+      const ts = Date.parse(updated);
+      if(!Number.isNaN(ts)){
+        const days = (nowMs - ts) / MS_PER_DAY;
+        if(days >= 21){
+          card.querySelectorAll('.badge-new,[data-new]').forEach(el=>el.remove());
+          card.removeAttribute('data-updated');
+        }
+      }
+    }
+  });
+
+  // ランクテーブル（ニア×ユーザー：水族館で生き物を見ながら会話／最初ツン→後半デレ／クイズには触れない）
+const RANKS = [
+  {
+    min:0,
+    name:'プランクトン',
+    emo:'🫧',
+    grad:'linear-gradient(90deg,#7dd3fc,#a7f3d0)',
+    msgs:[
+      'ほら、プランクトン。……地味でしょ。目を凝らさないと、存在してるかも分からない。',
+      'でも、こういうのがいないと海が始まらないの。……だから、見ておきなさい。'
+    ]
+  },
+  {
+    min:10,
+    name:'小魚',
+    emo:'🐟',
+    grad:'linear-gradient(90deg,#60a5fa,#34d399)',
+    msgs:[
+      '小魚って、ずっと忙しそう。……落ち着きがないのに、妙にきれい。',
+      '群れの動き、見て。……同じ方向に曲がる瞬間、ちょっとだけ鳥肌。'
+    ]
+  },
+  {
+    min:25,
+    name:'カニ',
+    emo:'🦀',
+    grad:'linear-gradient(90deg,#3b82f6,#22c55e)',
+    msgs:[
+      'カニ、絶対こっち見てる。……見てない？ いや、見てるって。',
+      '横歩きってさ、逃げてるみたいで……でも、あれはあれで強いよね。'
+    ]
+  },
+  {
+    min:45,
+    name:'タコ',
+    emo:'🐙',
+    grad:'linear-gradient(90deg,#2563eb,#a78bfa)',
+    msgs:[
+      'タコって、頭いい顔してる。……実際、頭いいけど。ずるい。',
+      'ほら、吸盤。触れたら持っていかれそう。……感情とかも。'
+    ]
+  },
+  {
+    min:70,
+    name:'イルカ',
+    emo:'🐬',
+    grad:'linear-gradient(90deg,#1d4ed8,#22d3ee)',
+    msgs:[
+      'イルカは……人気者。分かるけど、ちょっと悔しい。なんでだろ。',
+      'あなたが笑うと、水面が明るく見える。……今の、聞かなかったことにして。'
+    ]
+  },
+  {
+    min:100,
+    name:'シャチ',
+    emo:'🐋',
+    grad:'linear-gradient(90deg,#0ea5e9,#6366f1)',
+    msgs:[
+      'シャチ、来た。……怖いのに、目が離れない。たぶん、強いから。',
+      '隣にいてくれて助かる。……一人で見てたら、平気なふりが難しい。'
+    ]
+  }
+];
+  let lastRankName = null;
+
+  function updateRank(){
+    const totalCards = cards.length;
+    let done = 0;
+    cards.forEach(card=>{
+      const id = card.dataset.id;
+      if(id && doneMap[id] > 0) done++;
+    });
+    const pct = totalCards ? Math.round(done/totalCards*100) : 0;
+
+    let cur = RANKS[0];
+    for(const r of RANKS){
+      if(pct >= r.min) cur = r;
+    }
+    const next = RANKS.find(r=>r.min > pct);
+
+    [rkPct,rkPct2].forEach(el=>{ if(el) el.textContent = pct; });
+    if(rkRemain){
+      if(next){
+        const needDone = Math.ceil(next.min/100*totalCards);
+        const remain = Math.max(0, needDone - done);
+        rkRemain.textContent = remain;
+        rkNext.style.display = '';
+      }else{
+        rkNext.style.display = 'none';
+      }
+    }
+    [rkName,rkName2].forEach(el=>{ if(el) el.textContent = cur.name; });
+    if(rkEmoji)  rkEmoji.textContent  = cur.emo;
+    if(rkEmoji2) rkEmoji2.textContent = cur.emo;
+
+    rkFill.style.width = pct + '%';
+    rkFill.style.background = cur.grad;
+    if(rkMsg){
+      const msgs = cur.msgs || (cur.msg ? [cur.msg] : []);
+      if(msgs.length){
+        const idx = Math.floor(Math.random() * msgs.length);
+        rkMsg.textContent = msgs[idx];
+      }else{
+        rkMsg.textContent = '';
+      }
+    }
+    // nirText はランク連動ではなく「ニアからのお知らせ」用に使うので、ここでは変更しない。
+
+    if(lastRankName && lastRankName !== cur.name){
+      rkBox.classList.remove('pop');
+      void rkBox.offsetWidth;
+      rkBox.classList.add('pop');
     }
     lastRankName = cur.name;
   }
-  window.updateCompletion = updateCompletion;
 
-  // フィルタ本体
-  function apply(){
-    const kw=q.value.trim().toLowerCase().split(/\s+/).filter(Boolean).filter(t=>!t.startsWith('#'));
-    let shown=0;
-    $$('#list a.link').forEach(a=>{
-      const tags=(a.dataset.tags||'').split(',').filter(Boolean);
-      const text=(a.textContent+' '+(a.dataset.keywords||'')).toLowerCase();
-      const okTag  = activeTag ? tags.includes(activeTag) : true;
-      const okKw   = kw.length ? kw.every(w=>text.includes(w)) : true;
-      const okTodo = todoOnly ? !a.hasAttribute('data-done') : true;
-      const show   = okTag && okKw && okTodo;
-      a.style.display=show?'':'none'; if(show) shown++;
+  // フィルタ適用
+  function applyFilter(){
+    const kw = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    let visibleCount = 0;
+
+    const isRecoEmpty = !cards.some(c=>c.dataset.reco === '1');
+    const mode = (activeTab === 'reco' && isRecoEmpty) ? 'all' : activeTab;
+
+    cards.forEach(card=>{
+      const id   = card.dataset.id || '';
+      const reco = card.dataset.reco === '1';
+      const done = card.getAttribute('data-done') === '1';
+      const fav  = favSet.has(id);
+
+      // tab条件
+      let okTab = true;
+      if(mode === 'reco') okTab = reco;
+      else if(mode === 'fav') okTab = fav;
+      else if(mode === 'todo') okTab = !done;
+
+      // キーワード条件
+      let okKw = true;
+      if(kw.length){
+        const text = (
+          (card.querySelector('.card-title')?.textContent || '') + ' ' +
+          (card.querySelector('.card-sub')?.textContent || '') + ' ' +
+          (card.dataset.keywords || '')
+        ).toLowerCase();
+        okKw = kw.every(w => text.includes(w));
+      }
+
+      const show = okTab && okKw;
+      card.style.display = show ? '' : 'none';
+      if(show) visibleCount++;
     });
-    $('#list').setAttribute('aria-label', `記事/クイズ一覧（検索結果 ${shown} 件）`);
-    updateCompletion();
+
+    resultCountEl.textContent = visibleCount;
+    updateRank();
   }
 
-  // 初期反映
-  markDoneCards();
-  updateCompletion();
-  apply();
-
-  // 他タブ同期
-  window.addEventListener('storage', (e)=>{
-    if(e.key===LS_BYID_KEY){
-      markDoneCards();
-      updateCompletion();
-      apply();
-    }
+  // タブ操作
+  tabs.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const tab = btn.dataset.tab;
+      activeTab = tab;
+      tabs.forEach(b=>{
+        const on = b === btn;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-selected', on?'true':'false');
+      });
+      applyFilter();
+    });
   });
 
-  // Escで検索クリア
-  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ q.value=''; setActiveTag(null); apply(); } });
+  // 検索
+  q.addEventListener('input', applyFilter);
+  clearBtn.addEventListener('click', ()=>{
+    q.value = '';
+    applyFilter();
+    q.focus();
+  });
 
-  // 「済」更新後に再フィルタできるようイベント待ち受け
-  document.addEventListener('quiz-done', apply);
-
-  // 祝砲KF（無ければ追加）
-  (function addFadeUpKeyframes(){
-    const id='rkFadeUpKF';
-    if(document.getElementById(id)) return;
-    const st=document.createElement('style'); st.id=id;
-    st.textContent=`@keyframes fadeUp{0%{opacity:0;transform:translateY(6px) scale(.95)}60%{opacity:1}100%{opacity:.0;transform:translateY(-8px) scale(1.1)}}`;
-    document.head.appendChild(st);
-  })();
-})();
-</script>
-
-<!-- ▼ クイズ閲覧カウンタ（心の標本と同方式：クリックで加算＋済化） -->
-<script>
-(function(){
-  const myEl  = document.querySelector('#myOpenCount');
-  const allEl = document.querySelector('#allOpenCount');
-
-  // —— 設定（必要ならURLだけ差し替え） ——
-  const CF_WORKER_URL = "https://counter.asagikarin.workers.dev"; // 心と同じでOK
-  const GLOBAL_KEY    = "quiz_open_total"; // クイズ用・全体キー名
-
-  // LocalStorage keys（クイズ用）
-  const LS_TOTAL_KEY   = "quiz:open:total";
-  const LS_BYID_KEY    = "quiz:open:byid";
-  const LS_GLOBAL_LAST = "quiz:open:global:last";
-
-  // 表示ヘルパ
-  function setAll(val){
-    if(!allEl) return;
-    if (typeof val === "number" && Number.isFinite(val)) {
-      allEl.textContent = val.toLocaleString("ja-JP");
-      try{ localStorage.setItem(LS_GLOBAL_LAST, String(val)); }catch(e){}
-    } else {
-      const last = parseInt(localStorage.getItem(LS_GLOBAL_LAST) || "0", 10);
-      allEl.textContent = last ? last.toLocaleString("ja-JP") : "—";
+  // クリックでLv加算＆推しトグル
+  listEl.addEventListener('click', e=>{
+    const fav = e.target.closest('.fav-toggle');
+    if(fav){
+      e.preventDefault();
+      e.stopPropagation();
+      const card = e.target.closest('.card');
+      if(!card) return;
+      const id = card.dataset.id;
+      if(!id) return;
+      const current = fav.getAttribute('aria-pressed') === 'true';
+      const next = !current;
+      fav.setAttribute('aria-pressed', String(next));
+      fav.setAttribute('aria-label', next ? '推しクイズから外す' : '推しクイズに追加');
+      card.classList.toggle('is-fav', next);
+      if(next) favSet.add(id); else favSet.delete(id);
+      saveFavs(favSet);
+      applyFilter();
+      return;
     }
-  }
-  function getLocalTotal(){
-    const n = parseInt(localStorage.getItem(LS_TOTAL_KEY) || "0", 10);
-    return Number.isFinite(n) ? n : 0;
-  }
-  function setLocalTotal(n){ localStorage.setItem(LS_TOTAL_KEY, String(n)); }
-  function incLocalById(id){
-    const t = getLocalTotal() + 1;
-    setLocalTotal(t);
-    let map={}; try{ map=JSON.parse(localStorage.getItem(LS_BYID_KEY) || "{}"); }catch(e){}
-    map[id]=(map[id]||0)+1;
-    localStorage.setItem(LS_BYID_KEY, JSON.stringify(map));
-    if(myEl) myEl.textContent = t.toLocaleString("ja-JP");
-  }
 
-  // 全体取得
-  async function getGlobalCount(){
-    try{
-      const url = new URL(CF_WORKER_URL);
-      url.searchParams.set("key", GLOBAL_KEY);
-      const r = await fetch(url.toString(), {mode:"cors", cache:"no-store"});
-      const d = await r.json();
-      return (d && typeof d.value === "number") ? d.value : null;
-    }catch(e){ return null; }
-  }
+    const card = e.target.closest('.card');
+    if(!card) return;
 
-  // 全体+1（GET/keepalive）
-  function bumpGlobal(){
-    try{
-      const url = new URL(CF_WORKER_URL);
-      url.searchParams.set("key", GLOBAL_KEY);
-      url.searchParams.set("hit", "1");
-      fetch(url.toString(), { mode:"cors", cache:"no-store", keepalive:true }).catch(()=>{});
-    }catch(e){}
-  }
+    const id = card.dataset.id || 'unknown';
 
-  // 初期表示
-  if(myEl) myEl.textContent = getLocalTotal().toLocaleString("ja-JP");
-  setAll(null); // まず前回値/—を表示
-  getGlobalCount().then(val => setAll(val)).catch(()=>setAll(null));
+    // あなたのこころLv
+    const total = loadTotal() + 1;
+    saveTotal(total);
+    myLvEl.textContent = total;
+    updateLvTitle(total);
 
-  // 一覧クリックで計測（遷移前）
-  const list = document.querySelector('#list');
-  if(list){
-    list.addEventListener('click', function(e){
-      const a = e.target.closest('a.link');
-      if(!a) return;
-      const id = a.dataset.id || "unknown";
-      incLocalById(id);      // あなたの知識Lv +1
-      bumpGlobal();          // みんなの知識Lv +1
-      // 済バッジ付与＋ランク更新＋表示再適用
-      try{ a.setAttribute('data-done','1'); }catch(_){}
-      if (window.updateCompletion) window.updateCompletion();
-      document.dispatchEvent(new CustomEvent('quiz-done'));
-      // 楽観更新（チラつき防止）
-      const cur = parseInt(localStorage.getItem(LS_GLOBAL_LAST) || "0", 10) || 0;
-      setAll(cur + 1);
-    }, {capture:true});
+    // byId（済フラグも）
+    doneMap[id] = (doneMap[id] || 0) + 1;
+    saveById(doneMap);
+    card.setAttribute('data-done','1');
+    updateRank();
+  }, {capture:true});
+
+  // 初回反映
+  updateRank();
+  applyFilter();
+
+  // nirの部屋への入口：吹き出しタップで「🕯 ???」と同じ場所へ
+  if(nirRoomBtn){
+    nirRoomBtn.addEventListener('click', ()=>{
+      try{ navigator.vibrate && navigator.vibrate(10); }catch(_){}
+      // 上のスイッチャーの中から「🕯 ???」リンクを探す
+      const nirLink = document.querySelector('.mode-grid a[href="/nir/"]');
+      if(nirLink && nirLink.href){
+        window.location.href = nirLink.href;
+      }else{
+        // 念のためのフォールバック
+        window.location.href = '/nir/';
+      }
+    });
   }
-})();
+  
+// フィードバックフォーム：ページ遷移なしで送信＋サンクスメッセージ表示（軽量）
+  if(feedbackForm){
+    let feedbackBusy = false;
+
+    feedbackForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      if(feedbackBusy) return;
+      feedbackBusy = true;
+
+      const form = e.target;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalLabel = submitBtn ? submitBtn.textContent : '送信する';
+
+      if(submitBtn){ submitBtn.disabled = true; submitBtn.textContent = '送信中…'; }
+
+      try{
+        const res = await fetch(form.action, {
+          method:'POST',
+          body:new FormData(form),
+          headers:{'Accept':'application/json'}
+        });
+        if(!res.ok) throw new Error('bad response');
+
+        form.reset();
+
+        if(feedbackHint){
+          feedbackHint.classList.remove('is-error');
+          feedbackHint.classList.add('is-success');
+          feedbackHint.setAttribute('role','status');
+          const msg = pickRandom(FEEDBACK_SUCCESS_TEXTS) || '📬 送信完了。';
+          feedbackHint.innerHTML = msg + '<br><span class="mini-note">※ メッセージは正常に送信されました。</span>';
+          feedbackHint.scrollIntoView({behavior:'smooth', block:'center'});
+        }
+
+        if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = 'もう一度送る'; }
+      }catch(_){
+        if(feedbackHint){
+          feedbackHint.classList.remove('is-success');
+          feedbackHint.classList.add('is-error');
+          feedbackHint.setAttribute('role','status');
+          const msg = pickRandom(FEEDBACK_ERROR_TEXTS) ||
+            '⚠ 通信エラーで送信できませんでした。<br>少し時間を空けて、もう一度試してみてください。';
+          feedbackHint.innerHTML = msg;
+          feedbackHint.scrollIntoView({behavior:'smooth', block:'center'});
+        }
+        if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = originalLabel; }
+      }finally{
+        feedbackBusy = false;
+      }
+    });
+  }
+  
+  })();
+
+
 </script>
 
 </body>
