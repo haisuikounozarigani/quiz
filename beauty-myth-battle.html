@@ -231,6 +231,32 @@
     .nextRow[hidden]{display:none}
 
     /* result */
+    .resMedia{flex:0 0 auto}
+    .resGallery{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:10px;
+      max-width:100%;
+    }
+    .gBtn{
+      width:56px;height:56px; /* 48px以上 */
+      border-radius:14px;
+      border:1px solid rgba(20,22,37,.12);
+      background: rgba(255,255,255,.92);
+      overflow:hidden;
+      padding:0;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .gBtn img{width:100%;height:100%;object-fit:cover;display:block}
+    .gBtn[aria-current="true"]{
+      border-color: rgba(140,107,255,.55);
+      box-shadow: 0 0 0 3px rgba(140,107,255,.18);
+    }
+    .gBtn:active{transform:translateY(1px)}
     #result[hidden]{display:none}
     .resTop{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
     .resImg{
@@ -277,6 +303,34 @@
       #prog{transition:none}
       #scoreFill{transition:none}
     }
+    .galDetails{ margin-top:10px; }
+.galSummary{
+  list-style:none;
+  cursor:pointer;
+  user-select:none;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid rgba(20,22,37,.12);
+  background: rgba(255,255,255,.92);
+  font-weight:700;
+}
+.galSummary::-webkit-details-marker{ display:none; }
+
+.galSummary::after{
+  content:"›";
+  display:inline-block;
+  transform: rotate(90deg);
+  opacity:.7;
+  transition: transform .15s ease;
+}
+.galDetails[open] .galSummary::after{
+  transform: rotate(-90deg);
+}
+
+.galDetails .resGallery{ margin-top:10px; }
   </style>
 </head>
 
@@ -340,7 +394,9 @@
     <!-- Result -->
     <section id="result" class="card" hidden aria-label="結果">
       <div class="resTop">
-        <div class="resImg" aria-hidden="true"><img id="resImg" alt="" loading="lazy"></div>
+        <div class="resMedia">
+  <div class="resImg"><img id="resImg" alt="" loading="lazy"></div>
+</div>
         <div style="min-width:240px;flex:1 1 280px">
           <div class="scoreBox" aria-label="スコア">
             <div class="scoreMain">
@@ -355,6 +411,11 @@
           <div id="resResearch">
             <div class="cap">研究メモ（目安）</div>
             <div class="txt" id="resResearchText"></div>
+
+<details class="galDetails" style="margin-top:12px">
+  <summary class="galSummary">他の画像を見る</summary>
+  <div class="resGallery" id="resGallery" aria-label="画像ギャラリー"></div>
+</details>
           </div>
 
           <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
@@ -388,7 +449,6 @@
       "/quiz/assets/results/beauty-myth-battle/t03.webp"
     ],
     "prologue": {
-      "title": ""prologue": {
       "title": "鏡前あるある選手権：開幕",
       "text": "鏡の前って、なぜかテンションが極端になる。\\n『今日は完璧』か、『今日はもう無理』の二択になりがち。\\n\\n気づけば増えてる：\\n・使い切れないアイテム\\n・“良さそう”で買ったやつ\\n・夜だけやる予定だったやつ\\n・なぜか1回で満足したやつ\\n\\nこのクイズは、そういう“美容あるある脳”をゆるく整えるゲーム。\\n三択をポンッと選ぶだけで、すぐ判定が出る。\\n当たっても外しても、命は減らない。安心して踏め。\\n\\n目標はひとつ。\\n『それっぽさ』に振り回されず、続く選択を拾うこと。\\nさあ、鏡の前の自分にツッコミ入れに行こう。"
     },
@@ -597,6 +657,7 @@
 
     const retryBtn = $("#retry");
     const resImgEl = $("#resImg");
+    const resGalleryEl = $("#resGallery");
     const resCopyEl = $("#resCopy");
     const resResearchText = $("#resResearchText");
     const scorePctEl = $("#scorePct");
@@ -656,6 +717,47 @@
       const stickyH = sticky ? sticky.getBoundingClientRect().height : 0;
       const top = el.getBoundingClientRect().top + window.pageYOffset - stickyH - 12;
       window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    }
+
+    function setActiveThumb(src){
+      if (!resGalleryEl) return;
+      resGalleryEl.querySelectorAll(".gBtn").forEach(btn => {
+        const on = btn.dataset.src === src;
+        btn.setAttribute("aria-current", on ? "true" : "false");
+      });
+    }
+
+    function buildResultGallery(){
+      if (!resGalleryEl) return;
+
+      resGalleryEl.replaceChildren();
+
+      const items = [];
+      if (data.hero_image) items.push({ src: data.hero_image, label: "ヒーロー" });
+      (data.results_images || []).forEach((src, i) => items.push({ src, label: `結果${i+1}` }));
+
+      items.forEach(it => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "gBtn";
+        b.dataset.src = it.src;
+        b.setAttribute("aria-label", `${it.label}画像を見る`);
+        b.setAttribute("aria-current", "false");
+
+        const img = document.createElement("img");
+        img.src = it.src;
+        img.alt = "";
+        img.loading = "lazy";
+        b.appendChild(img);
+
+        b.addEventListener("click", () => {
+          // メイン画像だけ差し替え（スコア等は触らない）
+          resImgEl.src = it.src;
+          setActiveThumb(it.src);
+        });
+
+        resGalleryEl.appendChild(b);
+      });
     }
 
     function tierByRate(rate){
@@ -832,6 +934,7 @@
       scoreFillEl.style.width = `${pct}%`;
 
       resImgEl.src = data.results_images?.[tier-1] || "";
+      setActiveThumb(resImgEl.src);
       resImgEl.alt = tier === 1 ? "美容の神様" : (tier === 2 ? "美容の神様見習い" : "汚い貧乏神");
 
       const copy = (tier === 1 ? data.result_copy.t1 : tier === 2 ? data.result_copy.t2 : data.result_copy.t3);
@@ -867,6 +970,7 @@
       // UI reset
       resultEl.hidden = true;
       resImgEl.removeAttribute("src");
+      setActiveThumb("");
       scorePctEl.textContent = "0％";
       scoreFracEl.textContent = `${state.correct}/${state.total}`;
       scoreFillEl.style.width = "0%";
@@ -916,6 +1020,7 @@
 
     // boot
     syncPrevScoreBtn();
+    buildResultGallery();
     goPrologueFresh();
 
     // events
